@@ -12,11 +12,13 @@ import {
 	getPrimaryRubric,
 	getReadingTimeLabel,
 	getToneClass,
+	getVisiblePosts,
 	sortPosts,
 } from '../lib/site';
 
-const posts = sortPosts(await getCollection('posts'));
+const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
 const leadPost = posts[0];
+const latestDateLabel = posts[0]?.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' }) ?? '';
 const tickerPosts = posts.slice(0, 6);
 const latestPosts = posts.slice(1, 5);
 const digestPosts = posts.slice(0, 4);
@@ -170,7 +172,7 @@ const timeline = buildTimeline(posts);
 			<section class="surface-section">
 				<div class="section-head">
 					<div>
-						<p class="section-kicker">Обновлено по импортированному архиву</p>
+						<p class="section-kicker">Обновлено {latestDateLabel}</p>
 						<h2>Последние публикации</h2>
 					</div>
 					<a href="/blog">Все новости</a>
@@ -342,7 +344,7 @@ const timeline = buildTimeline(posts);
 					<p class="section-kicker">Реестр публикаций</p>
 					<h2>Полный архив с фильтрами и контекстом</h2>
 					<p>
-						Каждая публикация уже лежит в Astro-коллекции и готова для дальнейшего перехода к рубричным страницам, дайджестам и более сильному архивному поиску.
+						Каждый материал снабжён рубрикой, форматом и темами. Архив пополняется регулярно — здесь удобно находить нужный контекст по событиям рынка ИИ.
 					</p>
 					<div class="registry-surface__chips">
 						{

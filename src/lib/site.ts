@@ -2,6 +2,48 @@ import type { CollectionEntry } from 'astro:content';
 
 export type PostEntry = CollectionEntry<'posts'>;
 
+const politicalNewsKeywords = [
+	'white house',
+	'pentagon',
+	'ukraine',
+	'zelenskyy',
+	'putin',
+	'negotiations',
+	'european union',
+	'viktor orban',
+	'sanctions',
+	'russian oil',
+	'loan',
+	'druzhba pipeline',
+];
+
+const politicalNewsTitleKeywords = [
+	'белый дом',
+	'пентагон',
+	'украине',
+	'киев',
+	'война',
+	'дипломатию',
+	'санкцион',
+	'нефти',
+];
+
+export const isPoliticalNews = (post: PostEntry) => {
+	if (post.data.articleType !== 'news') {
+		return false;
+	}
+
+	const title = post.data.title.toLowerCase();
+	const topics = post.data.topics.map((topic) => topic.toLowerCase());
+
+	return (
+		politicalNewsTitleKeywords.some((keyword) => title.includes(keyword)) ||
+		topics.some((topic) => politicalNewsKeywords.some((keyword) => topic.includes(keyword)))
+	);
+};
+
+export const getVisiblePosts = (posts: PostEntry[]) => posts.filter((post) => !isPoliticalNews(post));
+
 export const sortPosts = (posts: PostEntry[]) =>
 	[...posts].sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 

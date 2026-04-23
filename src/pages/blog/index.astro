@@ -11,10 +11,11 @@ import {
 	getPrimaryRubric,
 	getReadingTimeLabel,
 	getToneClass,
+	getVisiblePosts,
 	sortPosts,
 } from '../../lib/site';
 
-const posts = sortPosts(await getCollection('posts'));
+const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
 const rubricSummary = buildRubricSummary(posts).slice(0, 6);
 ---
 
@@ -29,10 +30,10 @@ const rubricSummary = buildRubricSummary(posts).slice(0, 6);
 			<section class="archive-hero">
 				<div>
 					<p class="section-kicker">Архив</p>
-					<h1>Все перенесённые публикации SCQR</h1>
+					<h1>Все публикации SCQR</h1>
 				</div>
 				<p>
-					Архив уже работает на статическом Astro-слое и может развиваться в полноценный registry surface с фильтрами по рубрикам, форматам и кластерам.
+					Новости, аналитика и колонки о рынке искусственного интеллекта. Каждый материал снабжён рубрикой, форматом и хронологией.
 				</p>
 			</section>
 
