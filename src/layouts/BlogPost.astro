@@ -5,79 +5,87 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import { getArticleTypeLabelFromValue } from '../lib/site';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'posts'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const {
+	title,
+	description,
+	pubDate,
+	updatedDate,
+	heroImage,
+	articleType,
+	rubrics = [],
+	rubricLabels = [],
+	topics = [],
+	sourceNote,
+} = Astro.props;
+
+const displayRubrics = rubricLabels.length > 0 ? rubricLabels : rubrics;
 ---
 
-<html lang="en">
+<html lang="ru">
 	<head>
 		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
 	</head>
 
 	<body>
 		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
+		<main class="main-shell">
+			<article class="article-shell">
+				<div class="article-frame">
+					<div class="article-meta-row">
+						<div class="article-chip-row">
+							{
+								displayRubrics.map((rubric) => (
+									<span class="article-chip">{rubric}</span>
+								))
+							}
+							<span class="article-chip article-chip-muted">{getArticleTypeLabelFromValue(articleType)}</span>
+						</div>
+						<div class="article-date-row">
 							<FormattedDate date={pubDate} />
 							{
 								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
+									<span class="article-updated">
+										Обновлено <FormattedDate date={updatedDate} />
+									</span>
 								)
 							}
 						</div>
-						<h1>{title}</h1>
-						<hr />
 					</div>
+					<h1 class="article-title">{title}</h1>
+					<p class="article-dek">{description}</p>
+				</div>
+
+				<div class="hero-image">
+					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
+				</div>
+
+				<div class="article-frame prose">
 					<slot />
+
+					{
+						(topics.length > 0 || sourceNote) && (
+							<div class="article-support">
+								{topics.length > 0 && (
+									<div class="article-support-block">
+										<h2>Темы</h2>
+										<div class="article-chip-row">
+											{topics.map((topic) => <span class="article-chip article-chip-muted">{topic}</span>)}
+										</div>
+									</div>
+								)}
+								{sourceNote && (
+									<div class="article-support-block">
+										<h2>Основание публикации</h2>
+										<p>{sourceNote}</p>
+									</div>
+								)}
+							</div>
+						)
+					}
 				</div>
 			</article>
 		</main>

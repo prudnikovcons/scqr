@@ -1,63 +1,56 @@
-# Astro Starter Kit: Blog
+# SCQR Frontend
 
-```sh
-npm create astro@latest -- --template blog
+SCQR is an Astro-based editorial frontend for a premium AI market publication. This repository now carries the static site layer intended for Git-based deployment on Vercel.
+
+## What is in scope
+
+- homepage as the main editorial surface
+- archive for imported SCQR materials
+- article template for reading and metadata support
+- content import flow from the legacy SCQR workspace
+- docs for operating model and Vercel deployment
+
+## Core commands
+
+```bash
+npm install
+npm run import:scqr
+npm run build
+npm run preview
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Vercel commands
 
-Features:
+```bash
+npm run vercel:pull
+npm run vercel:preview
+npm run vercel:prod
+```
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and Open Graph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## Project structure
 
 ```text
-├── public/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+src/
+  components/      Shared shell components
+  content/posts/   Imported SCQR materials
+  layouts/         Reading surfaces
+  lib/             Content and routing helpers
+  pages/           Homepage, archive, article routes
+docs/
+  agent-operating-model.md
+  vercel-runbook.md
+scripts/
+  import-scqr-content.mjs
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Operational notes
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+- Source content currently originates from `D:\CODEX\SCQR`.
+- Imported articles are written into `src/content/posts/`.
+- The design direction is based on the approved SCQR reference mockup supplied in `SCQR.zip`.
+- The site is designed to remain static-first unless new requirements justify dynamic behavior.
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+## Key docs
 
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+- [Operating Model](docs/agent-operating-model.md)
+- [Vercel Runbook](docs/vercel-runbook.md)

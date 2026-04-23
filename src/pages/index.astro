@@ -1,49 +1,380 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import {
+	buildRubricSummary,
+	buildTimeline,
+	getArticleTypeLabel,
+	getPostHref,
+	getPrimaryRubric,
+	getReadingTimeLabel,
+	getToneClass,
+	sortPosts,
+} from '../lib/site';
+
+const posts = sortPosts(await getCollection('posts'));
+const leadPost = posts[0];
+const tickerPosts = posts.slice(0, 6);
+const latestPosts = posts.slice(1, 5);
+const digestPosts = posts.slice(0, 4);
+const opinionPosts = posts.filter((post) => post.data.articleType !== 'news').slice(0, 5);
+const illustrationPosts = posts.slice(5, 10);
+const registryPosts = posts.slice(0, 6);
+const rubricSummary = buildRubricSummary(posts);
+const heroRubrics = rubricSummary.slice(0, 9);
+const trendPoints = rubricSummary.slice(0, 6).map((rubric, index) => ({
+	...rubric,
+	x: [16, 34, 52, 68, 78, 42][index] ?? 20,
+	y: [28, 18, 38, 24, 56, 72][index] ?? 30,
+	size: [84, 62, 96, 54, 72, 58][index] ?? 60,
+}));
+const timeline = buildTimeline(posts);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
 		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+
+		<div class="ticker-bar">
+			<div class="ticker-bar__inner">
+				<span class="ticker-bar__label">LIVE · СИГНАЛЫ</span>
+				<div class="ticker-bar__track">
+					{
+						tickerPosts.map((post) => (
+							<a href={getPostHref(post)}>
+								<span>{getPrimaryRubric(post)}</span>
+								<strong>{post.data.title}</strong>
+							</a>
+						))
+					}
+				</div>
+			</div>
+		</div>
+
+		<main class="main-shell">
+			<section class="hero-stage">
+				<div class="hero-stage__copy">
+					<p class="section-kicker">Главное</p>
+					<h1>
+						Понимаем, что меняет
+						<span>траекторию</span>
+						рынка ИИ
+					</h1>
+					<p class="hero-stage__summary">
+						{leadPost
+							? leadPost.data.description
+							: 'SCQR — это система сигналов и контекста. Мы соединяем события, решения и последствия, чтобы видеть картину рынка целиком.'}
+					</p>
+
+					<div class="hero-stage__editorial">
+						<p class="section-kicker">Фокус редакции</p>
+						{leadPost && (
+							<>
+								<a href={getPostHref(leadPost)} class="hero-stage__editorial-title">{leadPost.data.title}</a>
+								<p>{leadPost.data.sourceNote || 'Структурируем рынок ИИ через рубрики, события и повторяющиеся паттерны.'}</p>
+							</>
+						)}
+					</div>
+
+					<div class="hero-stage__stats">
+						<div>
+							<strong>{posts.length}</strong>
+							<span>материалов в архиве</span>
+						</div>
+						<div>
+							<strong>{rubricSummary.length}</strong>
+							<span>активных рубрик</span>
+						</div>
+						<div>
+							<strong>{posts.filter((post) => post.data.articleType === 'analysis').length}</strong>
+							<span>аналитических разборов</span>
+						</div>
+						<div>
+							<strong>{posts.filter((post) => post.data.articleType === 'column').length}</strong>
+							<span>колонок сейчас</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="hero-stage__visual">
+					<div class="hero-globe">
+						<div class="hero-globe__sphere"></div>
+						<div class="hero-globe__orbit hero-globe__orbit--one"></div>
+						<div class="hero-globe__orbit hero-globe__orbit--two"></div>
+						<div class="hero-globe__orbit hero-globe__orbit--three"></div>
+						<span class="hero-globe__node hero-globe__node--one"></span>
+						<span class="hero-globe__node hero-globe__node--two"></span>
+						<span class="hero-globe__node hero-globe__node--three"></span>
+					</div>
+
+					<div class="signal-card signal-card--top">
+						<p>{tickerPosts[0] ? getPrimaryRubric(tickerPosts[0]) : 'SCQR'}</p>
+						<strong>{tickerPosts[0]?.data.title}</strong>
+					</div>
+					<div class="signal-card signal-card--left">
+						<p>{tickerPosts[1] ? getPrimaryRubric(tickerPosts[1]) : 'SCQR'}</p>
+						<strong>{tickerPosts[1]?.data.title}</strong>
+					</div>
+					<div class="signal-card signal-card--bottom">
+						<p>{tickerPosts[2] ? getPrimaryRubric(tickerPosts[2]) : 'SCQR'}</p>
+						<strong>{tickerPosts[2]?.data.title}</strong>
+					</div>
+				</div>
+
+				<div class="rubric-strip" id="rubrics">
+					{
+						heroRubrics.map((rubric, index) => (
+							<a class="rubric-strip__item" href="/blog">
+								<span>{String(index + 1).padStart(2, '0')}</span>
+								<strong>{rubric.name}</strong>
+								<em>{rubric.count} публикаций</em>
+							</a>
+						))
+					}
+				</div>
+
+				<div class="signal-day">
+					<span>Сигнал дня</span>
+					{leadPost && <a href={getPostHref(leadPost)}>{leadPost.data.title}</a>}
+					<a href="/blog">Смотреть карту трендов</a>
+				</div>
+			</section>
+
+			<section class="surface-section">
+				<div class="section-head">
+					<div>
+						<p class="section-kicker">Обновлено по импортированному архиву</p>
+						<h2>Последние публикации</h2>
+					</div>
+					<a href="/blog">Все новости</a>
+				</div>
+
+				<div class="latest-grid">
+					{leadPost && (
+						<article class="feature-story">
+							<a href={getPostHref(leadPost)} class:list={['media-surface', `media-surface--${getToneClass(0)}`]}>
+								<span>{getPrimaryRubric(leadPost)}</span>
+							</a>
+							<div class="feature-story__meta">
+								<span class="content-tag">{getPrimaryRubric(leadPost)}</span>
+								<span>{getReadingTimeLabel(leadPost)}</span>
+							</div>
+							<h3><a href={getPostHref(leadPost)}>{leadPost.data.title}</a></h3>
+							<p>{leadPost.data.description}</p>
+						</article>
+					)}
+
+					<div class="feed-list" id="analysis">
+						{
+							latestPosts.map((post, index) => (
+								<a class="feed-list__item" href={getPostHref(post)}>
+									<div class:list={['feed-list__thumb', `media-surface--${getToneClass(index + 1)}`]}></div>
+									<div>
+										<div class="feed-list__meta">
+											<span>{getPrimaryRubric(post)}</span>
+											<em>{getReadingTimeLabel(post)}</em>
+										</div>
+										<strong>{post.data.title}</strong>
+									</div>
+								</a>
+							))
+						}
+					</div>
+
+					<aside class="digest-card" id="weekly-digest">
+						<div class="digest-card__head">
+							<p class="section-kicker">Weekly Digest</p>
+							<a href="/blog">Все выпуски</a>
+						</div>
+						<p class="digest-card__issue">№18 · текущая сборка недели</p>
+						<h3>Главное за неделю в мире ИИ</h3>
+						<div class="digest-wave"></div>
+						<ul>
+							{digestPosts.map((post) => <li>{post.data.title}</li>)}
+						</ul>
+						<a class="site-button site-button--full" href="/blog">Открыть архив</a>
+					</aside>
+				</div>
+			</section>
+
+			<section class="trend-surface">
+				<div class="trend-surface__copy">
+					<p class="section-kicker">Карта трендов</p>
+					<h2>Не шум, а связанная картина</h2>
+					<p>
+						Размер узла показывает объём материалов в рубрике. Яркие кластеры помогают быстро увидеть, где SCQR уже накапливает сильнейший контекст.
+					</p>
+				</div>
+				<div class="trend-surface__map">
+					{
+						trendPoints.map((point) => (
+							<div
+								class="trend-node"
+								style={`left:${point.x}%;top:${point.y}%;width:${point.size}px;height:${point.size}px;`}
+							>
+								<span>{point.name}</span>
+								<em>{point.count}</em>
+							</div>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="surface-section" id="columns">
+				<div class="section-head">
+					<div>
+						<p class="section-kicker">Мнения и разборы</p>
+						<h2>Колонки и аналитические линии</h2>
+					</div>
+					<a href="/blog">Все материалы</a>
+				</div>
+
+				<div class="opinion-grid">
+					{
+						opinionPosts.map((post, index) => (
+							<article class="opinion-card">
+								<div class="opinion-card__author">
+									<div class="opinion-card__avatar">S</div>
+									<div>
+										<strong>SCQR Signals Desk</strong>
+										<span>{getArticleTypeLabel(post)}</span>
+									</div>
+								</div>
+								<a href={getPostHref(post)} class:list={['media-surface', `media-surface--${getToneClass(index)}`]}></a>
+								<h3><a href={getPostHref(post)}>{post.data.title}</a></h3>
+								<div class="opinion-card__meta">
+									<span>{post.data.pubDate.toLocaleDateString('ru-RU')}</span>
+									<span>{getReadingTimeLabel(post)}</span>
+								</div>
+							</article>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="surface-section surface-section--soft">
+				<div class="section-head">
+					<div>
+						<p class="section-kicker">Визуальная аналитика</p>
+						<h2>Иллюстрации и схемы</h2>
+					</div>
+					<a href="/blog">Все поверхности</a>
+				</div>
+
+				<div class="illustration-grid">
+					{
+						illustrationPosts.map((post, index) => (
+							<a class="illustration-card" href={getPostHref(post)}>
+								<div class:list={['media-surface', `media-surface--${getToneClass(index + 2)}`]}></div>
+								<strong>{post.data.title}</strong>
+							</a>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="surface-section">
+				<div class="section-head">
+					<div>
+						<p class="section-kicker">Хроника недели</p>
+						<h2>Последовательность сигналов</h2>
+					</div>
+					<a href="/blog">Весь архив</a>
+				</div>
+
+				<div class="timeline-grid">
+					{
+						timeline.map((day) => (
+							<div class="timeline-day">
+								<p>{day.date.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' })}</p>
+								<div class="timeline-day__dot"></div>
+								<div class="timeline-day__entries">
+									{
+										day.entries.map((entry) => (
+											<a href={getPostHref(entry)}>{entry.data.title}</a>
+										))
+									}
+								</div>
+							</div>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="registry-surface" id="registry">
+				<div class="registry-surface__intro">
+					<p class="section-kicker">Реестр публикаций</p>
+					<h2>Полный архив с фильтрами и контекстом</h2>
+					<p>
+						Каждая публикация уже лежит в Astro-коллекции и готова для дальнейшего перехода к рубричным страницам, дайджестам и более сильному архивному поиску.
+					</p>
+					<div class="registry-surface__chips">
+						{
+							['новости', 'аналитика', 'колонки', 'реестр', 'дайджест'].map((chip) => (
+								<span class="content-tag">{chip}</span>
+							))
+						}
+					</div>
+					<a class="site-button" href="/blog">Перейти в архив</a>
+				</div>
+
+				<div class="registry-table">
+					<div class="registry-table__head">
+						<span>Дата</span>
+						<span>Рубрика</span>
+						<span>Заголовок</span>
+						<span>Тип</span>
+					</div>
+					{
+						registryPosts.map((post) => (
+							<a class="registry-table__row" href={getPostHref(post)}>
+								<span>{post.data.pubDate.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' })}</span>
+								<span>{getPrimaryRubric(post)}</span>
+								<strong>{post.data.title}</strong>
+								<em>{getArticleTypeLabel(post)}</em>
+							</a>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="about-grid">
+				<div class="about-grid__block">
+					<p class="section-kicker">О проекте</p>
+					<h3>SCQR — независимое медиа о рынке искусственного интеллекта</h3>
+					<p>
+						Мы исследуем рынок ИИ как систему: от инфраструктуры и капитала до регулирования, корпоративных стратегий и локальных сдвигов в России.
+					</p>
+					<a href="/about">Подробнее о проекте</a>
+				</div>
+				<div class="about-grid__block about-grid__block--mark">
+					<div class="mark-grid">
+						{
+							Array.from({ length: 36 }).map((_, index) => (
+								<span class:list={['mark-grid__dot', index % 5 === 0 && 'is-accent']}></span>
+							))
+						}
+					</div>
+				</div>
+				<div class="about-grid__block" id="subscription">
+					<p class="section-kicker">Подписка на обновления</p>
+					<h3>Главное на почту</h3>
+					<form class="subscribe-form">
+						<input type="email" placeholder="ваш@email" />
+						<button type="button">Подписаться</button>
+					</form>
+					<p class="subscribe-meta">Никакого спама. Только сильные сигналы, новые тексты и спокойный weekly rhythm.</p>
+				</div>
+			</section>
 		</main>
+
 		<Footer />
 	</body>
 </html>

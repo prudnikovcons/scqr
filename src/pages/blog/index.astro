@@ -1,112 +1,73 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import {
+	buildRubricSummary,
+	getArticleTypeLabel,
+	getPostHref,
+	getPrimaryRubric,
+	getReadingTimeLabel,
+	getToneClass,
+	sortPosts,
+} from '../../lib/site';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = sortPosts(await getCollection('posts'));
+const rubricSummary = buildRubricSummary(posts).slice(0, 6);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
+		<BaseHead title={`${SITE_TITLE} — Архив`} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
 		<Header />
-		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
+		<main class="main-shell">
+			<section class="archive-hero">
+				<div>
+					<p class="section-kicker">Архив</p>
+					<h1>Все перенесённые публикации SCQR</h1>
+				</div>
+				<p>
+					Архив уже работает на статическом Astro-слое и может развиваться в полноценный registry surface с фильтрами по рубрикам, форматам и кластерам.
+				</p>
+			</section>
+
+			<section class="archive-summary-grid">
+				<div class="archive-summary-card">
+					<strong>{posts.length}</strong>
+					<span>материалов импортировано</span>
+				</div>
+				{
+					rubricSummary.map((rubric) => (
+						<div class="archive-summary-card">
+							<strong>{rubric.name}</strong>
+							<span>{rubric.count} публикаций</span>
+						</div>
+					))
+				}
+			</section>
+
+			<section class="archive-feed">
+				{
+					posts.map((post, index) => (
+						<article class="archive-feed__item">
+							<a href={getPostHref(post)} class:list={['archive-feed__thumb', `media-surface--${getToneClass(index)}`]}></a>
+							<div>
+								<div class="archive-feed__meta">
+									<span class="content-tag">{getPrimaryRubric(post)}</span>
+									<span>{getArticleTypeLabel(post)}</span>
+									<span>{getReadingTimeLabel(post)}</span>
+								</div>
+								<h2><a href={getPostHref(post)}>{post.data.title}</a></h2>
+								<p>{post.data.description}</p>
+							</div>
+						</article>
+					))
+				}
 			</section>
 		</main>
 		<Footer />
