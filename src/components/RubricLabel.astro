@@ -1,0 +1,10 @@
+---
+interface Props {
+	name: string;
+}
+const { name } = Astro.props;
+const hasAI = name.endsWith(' ИИ');
+const base = hasAI ? name.slice(0, -3) : name;
+---
+
+<span class="rubric-label"><span class="rubric-label__base">{base}</span>{hasAI && <span class="rubric-label__ai"> ИИ</span>}</span>

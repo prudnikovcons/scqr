@@ -916,8 +916,7 @@ blockquote {
 	line-height: 1.25;
 }
 
-.opinion-card__author span,
-.subscribe-meta {
+.opinion-card__author span {
 	color: var(--muted);
 }
 
@@ -1057,9 +1056,24 @@ blockquote {
 	text-transform: uppercase;
 }
 
+.rubric-label {
+	display: inline;
+}
+
+.rubric-label__base {
+	text-transform: uppercase;
+	font-weight: inherit;
+	letter-spacing: inherit;
+}
+
+.rubric-label__ai {
+	color: var(--accent-deep);
+	text-transform: uppercase;
+}
+
 .about-grid {
 	display: grid;
-	grid-template-columns: 1.1fr 0.8fr 1fr;
+	grid-template-columns: 1.4fr 0.7fr;
 	gap: 18px;
 }
 
@@ -1109,30 +1123,6 @@ blockquote {
 	opacity: 1;
 }
 
-.subscribe-form {
-	display: flex;
-	margin-top: 18px;
-	border: 1px solid var(--line);
-	border-radius: var(--radius-md);
-	overflow: hidden;
-	background: var(--paper-soft);
-}
-
-.subscribe-form input {
-	flex: 1;
-	padding: 14px 16px;
-	border: 0;
-	background: transparent;
-	font: inherit;
-}
-
-.subscribe-form button {
-	padding: 14px 16px;
-	border: 0;
-	background: var(--accent);
-	font: inherit;
-	font-weight: 700;
-}
 
 .archive-hero {
 	display: grid;
@@ -1255,6 +1245,15 @@ blockquote {
 		linear-gradient(135deg, #0f110c, #23261f);
 }
 
+.article-meta-row {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 14px;
+	margin-bottom: 4px;
+}
+
 .article-shell {
 	display: grid;
 	gap: 18px;
@@ -1323,6 +1322,70 @@ blockquote {
 
 .prose p + p {
 	margin-top: 18px;
+}
+
+.prose h2 {
+	margin: 36px 0 14px;
+	font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.prose h3 {
+	margin: 28px 0 10px;
+	font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+}
+
+.prose h4 {
+	margin: 22px 0 8px;
+	font-size: 1.1rem;
+}
+
+.prose ul,
+.prose ol {
+	margin: 18px 0;
+	padding-left: 22px;
+	color: var(--ink-2);
+}
+
+.prose li + li {
+	margin-top: 8px;
+}
+
+.prose li {
+	line-height: 1.6;
+}
+
+.prose strong {
+	color: var(--ink);
+	font-weight: 700;
+}
+
+.prose em {
+	font-style: italic;
+}
+
+.prose a {
+	color: var(--accent-deep);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.prose a:hover {
+	color: var(--ink);
+}
+
+.prose hr {
+	margin: 32px 0;
+	border: 0;
+	border-top: 1px solid var(--line);
+}
+
+.article-frame.prose {
+	font-size: 16px;
+	line-height: 1.68;
+}
+
+.article-frame.prose p + p {
+	margin-top: 22px;
 }
 
 .article-support {

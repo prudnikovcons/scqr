@@ -5,6 +5,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import RubricLabel from '../components/RubricLabel.astro';
 import { getArticleTypeLabelFromValue } from '../lib/site';
 
 type Props = CollectionEntry<'posts'>['data'];
@@ -39,7 +40,7 @@ const displayRubrics = rubricLabels.length > 0 ? rubricLabels : rubrics;
 						<div class="article-chip-row">
 							{
 								displayRubrics.map((rubric) => (
-									<span class="article-chip">{rubric}</span>
+									<span class="article-chip"><RubricLabel name={rubric} /></span>
 								))
 							}
 							<span class="article-chip article-chip-muted">{getArticleTypeLabelFromValue(articleType)}</span>

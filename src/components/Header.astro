@@ -1,5 +1,6 @@
 ---
 import { SITE_TITLE } from '../consts';
+import RubricLabel from './RubricLabel.astro';
 
 const primaryLinks = [
 	{ href: '/blog', label: 'Новости' },
@@ -41,14 +42,13 @@ const rubrics = [
 		<div class="site-tools">
 			<a class="site-tool" href="/rss.xml" aria-label="RSS">RSS</a>
 			<a class="site-tool" href="/about" aria-label="О проекте">О проекте</a>
-			<a class="site-button" href="/#subscription">Подписка</a>
 		</div>
 	</div>
 
 	<div class="site-header__rubrics">
 		{
 			rubrics.map((rubric) => (
-				<a href="/#rubrics">{rubric}</a>
+				<a href="/#rubrics"><RubricLabel name={rubric} /></a>
 			))
 		}
 	</div>

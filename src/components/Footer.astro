@@ -4,15 +4,28 @@ const year = new Date().getFullYear();
 const columns = [
 	{
 		title: 'Разделы',
-		items: ['Новости', 'Аналитика', 'Колонки', 'Дайджест'],
+		items: [
+			{ label: 'Новости', href: '/blog' },
+			{ label: 'Аналитика', href: '/#analysis' },
+			{ label: 'Колонки', href: '/#columns' },
+			{ label: 'Дайджест', href: '/#weekly-digest' },
+		],
 	},
 	{
-		title: 'Поверхности',
-		items: ['Главная', 'Реестр', 'Архив', 'RSS'],
+		title: 'Навигация',
+		items: [
+			{ label: 'Главная', href: '/' },
+			{ label: 'Реестр', href: '/#registry' },
+			{ label: 'Архив', href: '/blog' },
+			{ label: 'RSS', href: '/rss.xml' },
+		],
 	},
 	{
 		title: 'Проект',
-		items: ['О проекте', 'Операционная модель', 'Vercel runbook'],
+		items: [
+			{ label: 'О проекте', href: '/about' },
+			{ label: 'Рубрики', href: '/#rubrics' },
+		],
 	},
 ];
 ---
@@ -31,7 +44,9 @@ const columns = [
 				<div>
 					<p class="site-footer__heading">{column.title}</p>
 					<ul class="site-footer__list">
-						{column.items.map((item) => <li>{item}</li>)}
+						{column.items.map((item) => (
+							<li><a href={item.href}>{item.label}</a></li>
+						))}
 					</ul>
 				</div>
 			))
@@ -41,6 +56,5 @@ const columns = [
 	<div class="site-footer__meta">
 		<span>© {year} SCQR</span>
 		<span>Signal × Context × Quality × Reach</span>
-		<span>Статический frontend для Vercel</span>
 	</div>
 </footer>

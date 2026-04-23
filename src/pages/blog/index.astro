@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
+import RubricLabel from '../../components/RubricLabel.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import {
 	buildRubricSummary,
@@ -45,7 +46,7 @@ const rubricSummary = buildRubricSummary(posts).slice(0, 6);
 				{
 					rubricSummary.map((rubric) => (
 						<div class="archive-summary-card">
-							<strong>{rubric.name}</strong>
+							<strong><RubricLabel name={rubric.name} /></strong>
 							<span>{rubric.count} публикаций</span>
 						</div>
 					))
@@ -59,7 +60,7 @@ const rubricSummary = buildRubricSummary(posts).slice(0, 6);
 							<a href={getPostHref(post)} class:list={['archive-feed__thumb', `media-surface--${getToneClass(index)}`]}></a>
 							<div>
 								<div class="archive-feed__meta">
-									<span class="content-tag">{getPrimaryRubric(post)}</span>
+									<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
 									<span>{getArticleTypeLabel(post)}</span>
 									<span>{getReadingTimeLabel(post)}</span>
 								</div>

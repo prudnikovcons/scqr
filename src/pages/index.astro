@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import RubricLabel from '../components/RubricLabel.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import {
 	buildRubricSummary,
@@ -89,7 +90,7 @@ const timeline = buildTimeline(posts);
 						{leadPost && (
 							<>
 								<a href={getPostHref(leadPost)} class="hero-stage__editorial-title">{leadPost.data.title}</a>
-								<p>{leadPost.data.sourceNote || 'Структурируем рынок ИИ через рубрики, события и повторяющиеся паттерны.'}</p>
+								<p>{leadPost.data.description}</p>
 							</>
 						)}
 					</div>
@@ -117,7 +118,7 @@ const timeline = buildTimeline(posts);
 						{
 							notePosts.map((post) => (
 								<a class="hero-note" href={getPostHref(post)}>
-									<span>{getPrimaryRubric(post)}</span>
+									<span><RubricLabel name={getPrimaryRubric(post)} /></span>
 									<strong>{post.data.title}</strong>
 								</a>
 							))
@@ -136,18 +137,24 @@ const timeline = buildTimeline(posts);
 						<span class="hero-globe__node hero-globe__node--three"></span>
 					</div>
 
-					<div class="signal-card signal-card--top">
-						<p>{tickerPosts[0] ? getPrimaryRubric(tickerPosts[0]) : 'SCQR'}</p>
-						<strong>{tickerPosts[0]?.data.title}</strong>
-					</div>
-					<div class="signal-card signal-card--left">
-						<p>{tickerPosts[1] ? getPrimaryRubric(tickerPosts[1]) : 'SCQR'}</p>
-						<strong>{tickerPosts[1]?.data.title}</strong>
-					</div>
-					<div class="signal-card signal-card--bottom">
-						<p>{tickerPosts[2] ? getPrimaryRubric(tickerPosts[2]) : 'SCQR'}</p>
-						<strong>{tickerPosts[2]?.data.title}</strong>
-					</div>
+					{tickerPosts[0] && (
+						<a href={getPostHref(tickerPosts[0])} class="signal-card signal-card--top">
+							<p><RubricLabel name={getPrimaryRubric(tickerPosts[0])} /></p>
+							<strong>{tickerPosts[0].data.title}</strong>
+						</a>
+					)}
+					{tickerPosts[1] && (
+						<a href={getPostHref(tickerPosts[1])} class="signal-card signal-card--left">
+							<p><RubricLabel name={getPrimaryRubric(tickerPosts[1])} /></p>
+							<strong>{tickerPosts[1].data.title}</strong>
+						</a>
+					)}
+					{tickerPosts[2] && (
+						<a href={getPostHref(tickerPosts[2])} class="signal-card signal-card--bottom">
+							<p><RubricLabel name={getPrimaryRubric(tickerPosts[2])} /></p>
+							<strong>{tickerPosts[2].data.title}</strong>
+						</a>
+					)}
 				</div>
 
 				<div class="rubric-strip" id="rubrics">
@@ -155,7 +162,7 @@ const timeline = buildTimeline(posts);
 						heroRubrics.map((rubric, index) => (
 							<a class="rubric-strip__item" href="/blog">
 								<span>{String(index + 1).padStart(2, '0')}</span>
-								<strong>{rubric.name}</strong>
+								<strong><RubricLabel name={rubric.name} /></strong>
 								<em>{rubric.count} публикаций</em>
 							</a>
 						))
@@ -182,10 +189,10 @@ const timeline = buildTimeline(posts);
 					{leadPost && (
 						<article class="feature-story">
 							<a href={getPostHref(leadPost)} class:list={['media-surface', `media-surface--${getToneClass(0)}`]}>
-								<span>{getPrimaryRubric(leadPost)}</span>
+								<span><RubricLabel name={getPrimaryRubric(leadPost)} /></span>
 							</a>
 							<div class="feature-story__meta">
-								<span class="content-tag">{getPrimaryRubric(leadPost)}</span>
+								<span class="content-tag"><RubricLabel name={getPrimaryRubric(leadPost)} /></span>
 								<span>{getReadingTimeLabel(leadPost)}</span>
 							</div>
 							<h3><a href={getPostHref(leadPost)}>{leadPost.data.title}</a></h3>
@@ -205,7 +212,7 @@ const timeline = buildTimeline(posts);
 									<div class:list={['feed-list__thumb', `media-surface--${getToneClass(index + 1)}`]}></div>
 									<div>
 										<div class="feed-list__meta">
-											<span>{getPrimaryRubric(post)}</span>
+											<span><RubricLabel name={getPrimaryRubric(post)} /></span>
 											<em>{getReadingTimeLabel(post)}</em>
 										</div>
 										<strong>{post.data.title}</strong>
@@ -220,7 +227,11 @@ const timeline = buildTimeline(posts);
 							<p class="section-kicker">Weekly Digest</p>
 							<a href="/blog">Все выпуски</a>
 						</div>
-						<p class="digest-card__issue">№18 · текущая сборка недели</p>
+						<p class="digest-card__issue">
+							{digestPosts[digestPosts.length - 1]?.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}
+							{' — '}
+							{digestPosts[0]?.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}
+						</p>
 						<h3>Главное за неделю в мире ИИ</h3>
 						<div class="digest-wave"></div>
 						<ul>
@@ -271,12 +282,9 @@ const timeline = buildTimeline(posts);
 					{
 						opinionPosts.map((post, index) => (
 							<article class="opinion-card">
-								<div class="opinion-card__author">
-									<div class="opinion-card__avatar">S</div>
-									<div>
-										<strong>SCQR Signals Desk</strong>
-										<span>{getArticleTypeLabel(post)}</span>
-									</div>
+								<div class="feed-list__meta">
+									<RubricLabel name={getPrimaryRubric(post)} />
+									<span>{getArticleTypeLabel(post)}</span>
 								</div>
 								<a href={getPostHref(post)} class:list={['media-surface', `media-surface--${getToneClass(index)}`]}></a>
 								<h3><a href={getPostHref(post)}>{post.data.title}</a></h3>
@@ -367,7 +375,7 @@ const timeline = buildTimeline(posts);
 						registryPosts.map((post) => (
 							<a class="registry-table__row" href={getPostHref(post)}>
 								<span>{post.data.pubDate.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' })}</span>
-								<span>{getPrimaryRubric(post)}</span>
+								<span><RubricLabel name={getPrimaryRubric(post)} /></span>
 								<strong>{post.data.title}</strong>
 								<em>{getArticleTypeLabel(post)}</em>
 							</a>
@@ -393,15 +401,6 @@ const timeline = buildTimeline(posts);
 							))
 						}
 					</div>
-				</div>
-				<div class="about-grid__block" id="subscription">
-					<p class="section-kicker">Подписка на обновления</p>
-					<h3>Главное на почту</h3>
-					<form class="subscribe-form">
-						<input type="email" placeholder="ваш@email" />
-						<button type="button">Подписаться</button>
-					</form>
-					<p class="subscribe-meta">Никакого спама. Только сильные сигналы, новые тексты и спокойный weekly rhythm.</p>
 				</div>
 			</section>
 		</main>
