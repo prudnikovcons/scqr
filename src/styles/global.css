@@ -1067,8 +1067,8 @@ blockquote {
 }
 
 .rubric-label__ai {
-	color: var(--accent-deep);
 	text-transform: uppercase;
+	color: var(--accent-deep);
 }
 
 .about-grid {
