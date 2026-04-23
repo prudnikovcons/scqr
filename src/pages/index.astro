@@ -23,8 +23,10 @@ const digestPosts = posts.slice(0, 4);
 const opinionPosts = posts.filter((post) => post.data.articleType !== 'news').slice(0, 5);
 const illustrationPosts = posts.slice(5, 10);
 const registryPosts = posts.slice(0, 6);
+const notePosts = posts.slice(2, 5);
 const rubricSummary = buildRubricSummary(posts);
-const heroRubrics = rubricSummary.slice(0, 9);
+const heroRubrics = rubricSummary.slice(0, 6);
+const tickerLoop = [...tickerPosts, ...tickerPosts];
 const trendPoints = rubricSummary.slice(0, 6).map((rubric, index) => ({
 	...rubric,
 	x: [16, 34, 52, 68, 78, 42][index] ?? 20,
@@ -46,14 +48,16 @@ const timeline = buildTimeline(posts);
 			<div class="ticker-bar__inner">
 				<span class="ticker-bar__label">LIVE · СИГНАЛЫ</span>
 				<div class="ticker-bar__track">
-					{
-						tickerPosts.map((post) => (
-							<a href={getPostHref(post)}>
-								<span>{getPrimaryRubric(post)}</span>
-								<strong>{post.data.title}</strong>
-							</a>
-						))
-					}
+					<div class="ticker-bar__marquee">
+						{
+							tickerLoop.map((post) => (
+								<a href={getPostHref(post)}>
+									<span>{getPrimaryRubric(post)}</span>
+									<strong>{post.data.title}</strong>
+								</a>
+							))
+						}
+					</div>
 				</div>
 			</div>
 		</div>
@@ -72,6 +76,11 @@ const timeline = buildTimeline(posts);
 							? leadPost.data.description
 							: 'SCQR — это система сигналов и контекста. Мы соединяем события, решения и последствия, чтобы видеть картину рынка целиком.'}
 					</p>
+
+					<div class="hero-stage__actions">
+						{leadPost && <a class="site-button" href={getPostHref(leadPost)}>Читать главный материал</a>}
+						<a class="site-button site-button--ghost" href="/blog">Открыть архив</a>
+					</div>
 
 					<div class="hero-stage__editorial">
 						<p class="section-kicker">Фокус редакции</p>
@@ -100,6 +109,17 @@ const timeline = buildTimeline(posts);
 							<strong>{posts.filter((post) => post.data.articleType === 'column').length}</strong>
 							<span>колонок сейчас</span>
 						</div>
+					</div>
+
+					<div class="hero-stage__notes">
+						{
+							notePosts.map((post) => (
+								<a class="hero-note" href={getPostHref(post)}>
+									<span>{getPrimaryRubric(post)}</span>
+									<strong>{post.data.title}</strong>
+								</a>
+							))
+						}
 					</div>
 				</div>
 
@@ -168,6 +188,11 @@ const timeline = buildTimeline(posts);
 							</div>
 							<h3><a href={getPostHref(leadPost)}>{leadPost.data.title}</a></h3>
 							<p>{leadPost.data.description}</p>
+							<div class="feature-story__footer">
+								<span>{leadPost.data.pubDate.toLocaleDateString('ru-RU')}</span>
+								<span>{getArticleTypeLabel(leadPost)}</span>
+								<span>{getReadingTimeLabel(leadPost)}</span>
+							</div>
 						</article>
 					)}
 
@@ -211,6 +236,10 @@ const timeline = buildTimeline(posts);
 					<p>
 						Размер узла показывает объём материалов в рубрике. Яркие кластеры помогают быстро увидеть, где SCQR уже накапливает сильнейший контекст.
 					</p>
+					<div class="trend-surface__legend">
+						<span>яркие узлы — активные рубрики</span>
+						<span>размер круга — плотность покрытия</span>
+					</div>
 				</div>
 				<div class="trend-surface__map">
 					{
