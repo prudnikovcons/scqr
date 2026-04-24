@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
+import PostThumbnail from '../../components/PostThumbnail.astro';
 import RubricLabel from '../../components/RubricLabel.astro';
 import TickerBar from '../../components/TickerBar.astro';
 import { SITE_TITLE } from '../../consts';
@@ -38,6 +39,8 @@ const { slug, posts } = Astro.props;
 const config = getClusterConfig(slug);
 const title = config?.title ?? slug;
 const description = config?.description ?? 'Материалы, развивающие одну историю.';
+const firstPost = posts[0];
+const latestPost = posts[posts.length - 1];
 
 const roleLabel = (index: number, total: number) => {
 	if (index === 0) return 'Первая публикация';
@@ -49,7 +52,7 @@ const roleLabel = (index: number, total: number) => {
 <!doctype html>
 <html lang="ru">
 	<head>
-		<BaseHead title={`${title} — ${SITE_TITLE}`} description={description} />
+		<BaseHead title={`${title} — ${SITE_TITLE}`} description={description} image={latestPost?.data.heroImage} />
 	</head>
 	<body>
 		<Header />
@@ -65,6 +68,30 @@ const roleLabel = (index: number, total: number) => {
 				</div>
 			</section>
 
+			<section class="signal-board cluster-summary-grid">
+				<div class="signal-board__grid">
+					{firstPost && (
+						<a class="signal-board__item" href={getPostHref(firstPost)}>
+							<span class="signal-board__kicker">С чего началось</span>
+							<strong>{firstPost.data.title}</strong>
+							<p>{firstPost.data.description}</p>
+						</a>
+					)}
+					{latestPost && (
+						<a class="signal-board__item" href={getPostHref(latestPost)}>
+							<span class="signal-board__kicker">Где сюжет сейчас</span>
+							<strong>{latestPost.data.title}</strong>
+							<p>{latestPost.data.description}</p>
+						</a>
+					)}
+					<div class="signal-board__item">
+						<span class="signal-board__kicker">Что изменилось</span>
+						<strong>{posts.length} публикаций в одной линии</strong>
+						<p>{description}</p>
+					</div>
+				</div>
+			</section>
+
 			<section class="cluster-timeline">
 				{posts.map((post, index) => (
 					<article class="cluster-timeline__item">
@@ -75,6 +102,7 @@ const roleLabel = (index: number, total: number) => {
 							<span class="cluster-timeline__role">{roleLabel(index, posts.length)}</span>
 						</div>
 						<div class="cluster-timeline__body">
+							<PostThumbnail post={post} className="cluster-timeline__thumb" />
 							<div class="archive-feed__meta">
 								<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
 								<span>{getArticleTypeLabel(post)}</span>

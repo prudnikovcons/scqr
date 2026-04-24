@@ -8,11 +8,13 @@ import RubricLabel from '../../components/RubricLabel.astro';
 import TickerBar from '../../components/TickerBar.astro';
 import { SITE_TITLE } from '../../consts';
 import {
+	buildRubricSummary,
 	RUBRIC_CONFIG,
 	getArticleTypeLabel,
 	getPostHref,
 	getPrimaryRubric,
 	getReadingTimeLabel,
+	getRubricHref,
 	getToneClass,
 	getVisiblePosts,
 	sortPosts,
@@ -21,6 +23,7 @@ import {
 export async function getStaticPaths() {
 	const allPosts = await getCollection('posts');
 	const posts = sortPosts(getVisiblePosts(allPosts));
+	const relatedRubrics = buildRubricSummary(posts);
 
 	return RUBRIC_CONFIG.map((rubric) => {
 		const rubricPosts = posts.filter((post) =>
@@ -29,13 +32,19 @@ export async function getStaticPaths() {
 		);
 		return {
 			params: { slug: rubric.slug },
-			props: { rubric, posts: rubricPosts },
+			props: { rubric, posts: rubricPosts, relatedRubrics },
 		};
 	});
 }
 
-const { rubric, posts } = Astro.props;
+const { rubric, posts, relatedRubrics } = Astro.props;
 const { tone } = rubric;
+const leadPost = posts[0];
+const featurePosts = posts.slice(1, 4);
+const feedPosts = posts.slice(4);
+const rubricLinks = relatedRubrics
+	.filter((item) => item.slug && item.slug !== rubric.slug)
+	.slice(0, 4);
 ---
 
 <!doctype html>
@@ -44,6 +53,8 @@ const { tone } = rubric;
 		<BaseHead
 			title={`${rubric.label} — ${SITE_TITLE}`}
 			description={rubric.description}
+			image={leadPost?.data.heroImage}
+			rssUrl={`/rubric/${rubric.slug}/rss.xml`}
 		/>
 	</head>
 	<body>
@@ -58,32 +69,94 @@ const { tone } = rubric;
 				<p class="rubric-hero__desc">{rubric.description}</p>
 				<div class="rubric-hero__meta">
 					<span class="rubric-hero__count">{posts.length} материалов</span>
+					<a href={`/rubric/${rubric.slug}/rss.xml`} class="rubric-hero__back">RSS</a>
 					<a href="/blog" class="rubric-hero__back">← Архив</a>
 				</div>
 			</section>
 
 			{posts.length > 0 ? (
-				<section class="archive-feed">
-					{posts.map((post, index) => (
-						<article class="archive-feed__item">
-							<PostThumbnail post={post} className="archive-feed__thumb" toneClass={getToneClass(index)} />
-							<div>
-								<div class="archive-feed__meta">
+				<>
+					{leadPost && (
+						<article class="lead-story lead-story--rubric">
+							<PostThumbnail post={leadPost} className="lead-story__media" toneClass={getToneClass(0)} />
+							<div class="lead-story__body">
+								<div class="lead-story__meta">
 									<span class="content-tag">
-										<RubricLabel name={getPrimaryRubric(post)} />
+										<RubricLabel name={getPrimaryRubric(leadPost)} />
 									</span>
-									<span>{getArticleTypeLabel(post)}</span>
-									<span>{getReadingTimeLabel(post)}</span>
-									<span>{post.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+									<span>{getArticleTypeLabel(leadPost)}</span>
+									<span>{getReadingTimeLabel(leadPost)}</span>
 								</div>
-								<h2 class="archive-feed__item-title">
-									<a href={getPostHref(post)}>{post.data.title}</a>
+								<h2 class="lead-story__title">
+									<a href={getPostHref(leadPost)}>{leadPost.data.title}</a>
 								</h2>
-								<p>{post.data.description}</p>
+								<p class="lead-story__desc">{leadPost.data.description}</p>
 							</div>
 						</article>
-					))}
-				</section>
+					)}
+
+					{featurePosts.length > 0 && (
+						<section class="frontline-grid frontline-grid--rubric">
+							{featurePosts.map((post, index) => (
+								<article class="frontline-card">
+									<PostThumbnail post={post} className="frontline-card__media" toneClass={getToneClass(index + 1)} />
+									<div class="frontline-card__body">
+										<div class="frontline-card__meta">
+											<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
+											<span>{getArticleTypeLabel(post)}</span>
+										</div>
+										<h2 class="frontline-card__title">
+											<a href={getPostHref(post)}>{post.data.title}</a>
+										</h2>
+										<p class="frontline-card__desc">{post.data.description}</p>
+									</div>
+								</article>
+							))}
+						</section>
+					)}
+
+					{feedPosts.length > 0 && (
+						<section class="archive-feed">
+							{feedPosts.map((post, index) => (
+								<article class="archive-feed__item">
+									<PostThumbnail post={post} className="archive-feed__thumb" toneClass={getToneClass(index)} />
+									<div>
+										<div class="archive-feed__meta">
+											<span class="content-tag">
+												<RubricLabel name={getPrimaryRubric(post)} />
+											</span>
+											<span>{getArticleTypeLabel(post)}</span>
+											<span>{getReadingTimeLabel(post)}</span>
+											<span>{post.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+										</div>
+										<h2 class="archive-feed__item-title">
+											<a href={getPostHref(post)}>{post.data.title}</a>
+										</h2>
+										<p>{post.data.description}</p>
+									</div>
+								</article>
+							))}
+						</section>
+					)}
+
+					{rubricLinks.length > 0 && (
+						<section class="rubric-crosslinks">
+							<div class="section-head">
+								<h2>Соседние рубрики</h2>
+								<a href="/blog">Весь архив</a>
+							</div>
+							<div class="signal-board__grid">
+								{rubricLinks.map((item) => (
+									<a class="signal-board__item" href={getRubricHref(item.slug!)}>
+										<span class="signal-board__kicker">Рубрика</span>
+										<strong>{item.name}</strong>
+										<p>{item.count} материалов в соседнем разделе архива.</p>
+									</a>
+								))}
+							</div>
+						</section>
+					)}
+				</>
 			) : (
 				<section class="rubric-empty">
 					<p>Материалов по этой рубрике пока нет.</p>
