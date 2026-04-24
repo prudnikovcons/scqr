@@ -74,6 +74,9 @@ export const getToneClass = (index: number) => {
 	return tones[index % tones.length];
 };
 
+export const getRubricSlugFromLabel = (label: string) =>
+	RUBRIC_CONFIG.find((r) => r.label === label)?.slug ?? null;
+
 export const buildRubricSummary = (posts: PostEntry[]) => {
 	const map = new Map<string, number>();
 
@@ -84,9 +87,36 @@ export const buildRubricSummary = (posts: PostEntry[]) => {
 	}
 
 	return [...map.entries()]
-		.map(([name, count]) => ({ name, count }))
+		.map(([name, count]) => ({
+			name,
+			count,
+			slug: getRubricSlugFromLabel(name),
+		}))
 		.sort((a, b) => b.count - a.count);
 };
+
+export interface RubricConfig {
+	slug: string;
+	label: string;
+	description: string;
+	tone: 'warm' | 'graph' | 'paper' | 'dark';
+}
+
+export const RUBRIC_CONFIG: RubricConfig[] = [
+	{ slug: 'trajectories', label: 'Траектории', description: 'Долгосрочные тренды, стратегические сдвиги и сценарии развития рынка ИИ.', tone: 'dark' },
+	{ slug: 'generations', label: 'Генерации', description: 'Фронтирные модели, их возможности, ограничения и гонка лабораторий.', tone: 'graph' },
+	{ slug: 'automations', label: 'Автоматизации', description: 'Агенты, инструменты и последствия автоматизации для рынка труда.', tone: 'warm' },
+	{ slug: 'innovations', label: 'Новации', description: 'Технологические прорывы, инфраструктура и цепочки поставок вычислений.', tone: 'paper' },
+	{ slug: 'illusions', label: 'Иллюзии', description: 'Хайп, завышенные ожидания, риски и провалы в мире ИИ.', tone: 'dark' },
+	{ slug: 'russia', label: 'В России', description: 'Отечественный рынок ИИ, регулирование и корпоративные стратегии.', tone: 'warm' },
+	{ slug: 'regulations', label: 'Регуляции', description: 'Законодательство, политика и регуляторные инициативы в области ИИ.', tone: 'paper' },
+	{ slug: 'theories', label: 'Теории', description: 'Исследования, концепции и аргументы о природе и будущем ИИ.', tone: 'graph' },
+	{ slug: 'tendencies', label: 'Тенденции', description: 'Рыночная динамика, инвестиции и структурные сдвиги в отрасли.', tone: 'warm' },
+];
+
+export const getRubricConfig = (slug: string) => RUBRIC_CONFIG.find((r) => r.slug === slug);
+
+export const getRubricHref = (slug: string) => `/rubric/${slug}/`;
 
 export const buildTimeline = (posts: PostEntry[], maxDays = 7) => {
 	const grouped = new Map<string, PostEntry[]>();

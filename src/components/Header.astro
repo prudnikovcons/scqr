@@ -1,5 +1,6 @@
 ---
 import { SITE_TITLE } from '../consts';
+import { RUBRIC_CONFIG } from '../lib/site';
 import RubricLabel from './RubricLabel.astro';
 
 const primaryLinks = [
@@ -11,17 +12,6 @@ const primaryLinks = [
 	{ href: '/about', label: 'О проекте' },
 ];
 
-const rubrics = [
-	'Траектории',
-	'Генерации',
-	'Автоматизации',
-	'Новации',
-	'Иллюзии',
-	'В России',
-	'Регуляции',
-	'Теории',
-	'Тенденции',
-];
 ---
 
 <header class="site-header">
@@ -47,8 +37,8 @@ const rubrics = [
 
 	<div class="site-header__rubrics">
 		{
-			rubrics.map((rubric) => (
-				<a href="/#rubrics"><RubricLabel name={rubric} /></a>
+			RUBRIC_CONFIG.map((rubric) => (
+				<a href={`/rubric/${rubric.slug}/`}><RubricLabel name={rubric.label} /></a>
 			))
 		}
 	</div>

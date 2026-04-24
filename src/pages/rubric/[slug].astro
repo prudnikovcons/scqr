@@ -1,0 +1,97 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import RubricLabel from '../../components/RubricLabel.astro';
+import { SITE_TITLE } from '../../consts';
+import {
+	RUBRIC_CONFIG,
+	getArticleTypeLabel,
+	getPostHref,
+	getPrimaryRubric,
+	getReadingTimeLabel,
+	getToneClass,
+	getVisiblePosts,
+	sortPosts,
+} from '../../lib/site';
+
+export async function getStaticPaths() {
+	const allPosts = await getCollection('posts');
+	const posts = sortPosts(getVisiblePosts(allPosts));
+
+	return RUBRIC_CONFIG.map((rubric) => {
+		const rubricPosts = posts.filter((post) =>
+			post.data.rubrics.includes(rubric.slug) ||
+			post.data.rubricLabels.includes(rubric.label)
+		);
+		return {
+			params: { slug: rubric.slug },
+			props: { rubric, posts: rubricPosts },
+		};
+	});
+}
+
+const { rubric, posts } = Astro.props;
+const { tone } = rubric;
+---
+
+<!doctype html>
+<html lang="ru">
+	<head>
+		<BaseHead
+			title={`${rubric.label} — ${SITE_TITLE}`}
+			description={rubric.description}
+		/>
+	</head>
+	<body>
+		<Header />
+		<main class="main-shell">
+
+			<section class:list={['rubric-hero', `rubric-hero--${tone}`]}>
+				<div class="rubric-hero__top">
+					<a href="/blog" class="rubric-hero__back">← Все публикации</a>
+					<span class="rubric-hero__count">{posts.length} материалов</span>
+				</div>
+				<h1 class="rubric-hero__title">
+					<RubricLabel name={rubric.label} />
+				</h1>
+				<p class="rubric-hero__desc">{rubric.description}</p>
+			</section>
+
+			{posts.length > 0 ? (
+				<section class="archive-feed">
+					{posts.map((post, index) => (
+						<article class="archive-feed__item">
+							<a
+								href={getPostHref(post)}
+								class:list={['archive-feed__thumb', `media-surface--${getToneClass(index)}`]}
+							></a>
+							<div>
+								<div class="archive-feed__meta">
+									<span class="content-tag">
+										<RubricLabel name={getPrimaryRubric(post)} />
+									</span>
+									<span>{getArticleTypeLabel(post)}</span>
+									<span>{getReadingTimeLabel(post)}</span>
+									<span>{post.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+								</div>
+								<h2 class="archive-feed__item-title">
+									<a href={getPostHref(post)}>{post.data.title}</a>
+								</h2>
+								<p>{post.data.description}</p>
+							</div>
+						</article>
+					))}
+				</section>
+			) : (
+				<section class="rubric-empty">
+					<p>Материалов по этой рубрике пока нет.</p>
+					<a href="/blog" class="site-button">Открыть архив</a>
+				</section>
+			)}
+
+		</main>
+		<Footer />
+	</body>
+</html>

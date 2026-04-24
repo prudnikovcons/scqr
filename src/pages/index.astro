@@ -13,6 +13,7 @@ import {
 	getPrimaryRubric,
 	getReadingTimeLabel,
 	getToneClass,
+	getRubricHref,
 	getVisiblePosts,
 	sortPosts,
 } from '../lib/site';
@@ -160,7 +161,7 @@ const timeline = buildTimeline(posts);
 				<div class="rubric-strip" id="rubrics">
 					{
 						heroRubrics.map((rubric, index) => (
-							<a class="rubric-strip__item" href="/blog">
+							<a class="rubric-strip__item" href={getRubricHref(rubric.slug)}>
 								<span>{String(index + 1).padStart(2, '0')}</span>
 								<strong><RubricLabel name={rubric.name} /></strong>
 								<em>{rubric.count} публикаций</em>
