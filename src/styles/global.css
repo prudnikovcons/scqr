@@ -1968,25 +1968,63 @@ blockquote {
 	}
 }
 
-.article-head {
-	grid-template-columns: 1fr;
-	gap: 18px;
+.article-hero {
+	margin-top: 18px;
 }
 
-.article-head__main {
-	padding: 36px 40px;
+.article-hero__frame {
+	display: grid;
+	grid-template-columns: minmax(0, 1.06fr) minmax(320px, 0.94fr);
+	align-items: stretch;
+	border: 1px solid var(--line);
+	border-radius: calc(var(--radius-lg) + 4px);
+	overflow: hidden;
+	background:
+		linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(246, 245, 241, 0.94)),
+		var(--surface);
+	box-shadow: var(--shadow-lg);
+}
+
+.article-hero__frame--text-only {
+	grid-template-columns: 1fr;
+}
+
+.article-hero__content {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	gap: 16px;
+	padding: 34px 36px 32px;
+	min-width: 0;
+}
+
+.article-hero__media {
+	position: relative;
+	min-height: 420px;
+	border-left: 1px solid rgba(20, 21, 16, 0.08);
+	background:
+		linear-gradient(180deg, rgba(20, 21, 16, 0.02), rgba(20, 21, 16, 0.08)),
+		var(--surface-soft);
+}
+
+.article-hero__media img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }
 
 .article-title {
-	max-width: 12ch;
-	font-size: clamp(3.2rem, 7vw, 5.6rem);
-	line-height: 0.92;
+	max-width: 14ch;
+	font-size: clamp(2.3rem, 4.5vw, 4.2rem);
+	line-height: 0.97;
+	letter-spacing: -0.035em;
 }
 
 .article-dek {
-	max-width: 58ch;
-	font-size: 19px;
-	line-height: 1.58;
+	max-width: 48ch;
+	font-size: 17px;
+	line-height: 1.62;
 }
 
 .article-verdict {
@@ -2108,6 +2146,16 @@ blockquote {
 }
 
 @media (max-width: 1200px) {
+	.article-hero__frame {
+		grid-template-columns: 1fr;
+	}
+
+	.article-hero__media {
+		min-height: 340px;
+		border-left: 0;
+		border-top: 1px solid rgba(20, 21, 16, 0.08);
+	}
+
 	.article-reading-layout {
 		grid-template-columns: 1fr;
 	}
@@ -2118,7 +2166,7 @@ blockquote {
 }
 
 @media (max-width: 720px) {
-	.article-head__main,
+	.article-hero__content,
 	.article-verdict,
 	.article-frame.prose {
 		padding: 20px;
@@ -2126,12 +2174,17 @@ blockquote {
 
 	.article-title {
 		max-width: none;
-		font-size: clamp(2.5rem, 11vw, 4.2rem);
+		font-size: clamp(2rem, 9vw, 3rem);
+		line-height: 1;
 	}
 
 	.article-dek,
 	.article-verdict p {
-		font-size: 17px;
+		font-size: 16px;
+	}
+
+	.article-hero__media {
+		min-height: 240px;
 	}
 
 	.article-frame.prose figure.wide-figure,

@@ -83,39 +83,42 @@ const articleJsonLd = buildArticleJsonLd({
 		<TickerBar />
 		<main class="main-shell">
 			<article class="article-shell">
-				<section class="article-head">
-					<div class="article-head__main">
-						<div class="article-meta-row">
-							<div class="article-chip-row">
-								{
-									displayRubrics.map((rubric) => (
-										<span class="article-chip"><RubricLabel name={rubric} /></span>
-									))
-								}
-								<span class="article-chip article-chip-muted">{getArticleTypeLabelFromValue(articleType)}</span>
-								<span class="article-chip article-chip-muted">{readingTime} мин</span>
+				<section class="article-hero">
+					<div class:list={['article-hero__frame', !heroImage && 'article-hero__frame--text-only']}>
+						<div class="article-hero__content">
+							<div class="article-meta-row">
+								<div class="article-chip-row">
+									{
+										displayRubrics.map((rubric) => (
+											<span class="article-chip"><RubricLabel name={rubric} /></span>
+										))
+									}
+									<span class="article-chip article-chip-muted">{getArticleTypeLabelFromValue(articleType)}</span>
+									<span class="article-chip article-chip-muted">{readingTime} мин</span>
+								</div>
+								<div class="article-date-row">
+									<FormattedDate date={pubDate} />
+									{
+										updatedDate && (
+											<span class="article-updated">
+												Обновлено <FormattedDate date={updatedDate} />
+											</span>
+										)
+									}
+								</div>
 							</div>
-							<div class="article-date-row">
-								<FormattedDate date={pubDate} />
-								{
-									updatedDate && (
-										<span class="article-updated">
-											Обновлено <FormattedDate date={updatedDate} />
-										</span>
-									)
-								}
-							</div>
+							<h1 class="article-title">{title}</h1>
+							<p class="article-dek">{articleDeck}</p>
 						</div>
-						<h1 class="article-title">{title}</h1>
-						<p class="article-dek">{articleDeck}</p>
+						{
+							heroImage && (
+								<div class="article-hero__media">
+									<Image width={1440} height={960} src={heroImage} alt={heroAlt} />
+								</div>
+							)
+						}
 					</div>
 				</section>
-
-				{heroImage && (
-					<div class="hero-image">
-						<Image width={1440} height={810} src={heroImage} alt={heroAlt} />
-					</div>
-				)}
 
 				<section class="article-verdict">
 					<span class="article-verdict__kicker">SCQR вывод</span>
