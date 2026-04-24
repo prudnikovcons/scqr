@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import PostThumbnail from '../components/PostThumbnail.astro';
 import RubricLabel from '../components/RubricLabel.astro';
 import TickerBar from '../components/TickerBar.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
@@ -38,10 +39,7 @@ const rubricSummary = buildRubricSummary(posts).filter((r) => r.slug);
 
 			{leadPost && (
 				<article class="lead-story">
-					<a
-						href={getPostHref(leadPost)}
-						class:list={['lead-story__media', `media-surface--${getToneClass(0)}`]}
-					></a>
+					<PostThumbnail post={leadPost} className="lead-story__media" toneClass={getToneClass(0)} />
 					<div class="lead-story__body">
 						<div class="lead-story__meta">
 							<span class="content-tag"><RubricLabel name={getPrimaryRubric(leadPost)} /></span>

@@ -3,8 +3,8 @@ interface Props {
 	name: string;
 }
 const { name } = Astro.props;
-const hasII = name.endsWith('ии');
-const base = hasII ? name.slice(0, -2) : name;
+const hasAIWord = /\sИИ$/u.test(name);
+const base = hasAIWord ? name.slice(0, -3) : name;
 ---
 
-<span class="rubric-label"><span class="rubric-label__base">{base}</span>{hasII && <span class="rubric-label__ai">ии</span>}</span>
+<span class="rubric-label"><span class="rubric-label__base">{base}</span>{hasAIWord && <span class="rubric-label__ai"> ИИ</span>}</span>

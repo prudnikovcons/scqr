@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="860" viewBox="0 0 1400 860" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1400" height="860" rx="28" fill="#FBFAF6"/>
+  <rect x="36" y="36" width="1328" height="788" rx="24" stroke="#D9DBD1" stroke-width="2"/>
+  <text x="82" y="120" fill="#141510" font-size="44" font-family="Georgia, 'Times New Roman', serif" font-weight="700">Уровни зрелости агентной системы</text>
+  <text x="82" y="160" fill="#6E7268" font-size="22" font-family="Arial, sans-serif">Способности без контроля не равны готовности к рабочему контуру</text>
+  
+  <rect x="160" y="560" width="1080" height="88" rx="18" fill="#141510"/>
+  <text x="202" y="614" fill="#F6F5F1" font-size="28" font-family="Arial, sans-serif" font-weight="700">Уровень 1 · Демонстрация</text>
+  <rect x="220" y="448" width="960" height="88" rx="18" fill="#35392F"/>
+  <text x="262" y="502" fill="#F6F5F1" font-size="28" font-family="Arial, sans-serif" font-weight="700">Уровень 2 · Маршрутизация инструментов</text>
+  <rect x="280" y="336" width="840" height="88" rx="18" fill="#7EA41B"/>
+  <text x="322" y="390" fill="#141510" font-size="28" font-family="Arial, sans-serif" font-weight="700">Уровень 3 · Наблюдаемость и права</text>
+  <rect x="340" y="224" width="720" height="88" rx="18" fill="#C6F24B"/>
+  <text x="382" y="278" fill="#141510" font-size="28" font-family="Arial, sans-serif" font-weight="700">Уровень 4 · Надёжный рабочий контур</text>
+  <text x="162" y="716" fill="#555A50" font-size="22" font-family="Arial, sans-serif">Чем выше автономность, тем дороже ошибки и тем толще должен быть защитный слой.</text>
+
+</svg>

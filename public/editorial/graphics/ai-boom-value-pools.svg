@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="860" viewBox="0 0 1400 860" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1400" height="860" rx="28" fill="#FBFAF6"/>
+  <rect x="36" y="36" width="1328" height="788" rx="24" stroke="#D9DBD1" stroke-width="2"/>
+  <text x="82" y="120" fill="#141510" font-size="44" font-family="Georgia, 'Times New Roman', serif" font-weight="700">Кто берёт деньги на буме ИИ</text>
+  <text x="82" y="160" fill="#6E7268" font-size="22" font-family="Arial, sans-serif">Не только лаборатории: стоимость распределена по нескольким этажам рынка</text>
+  
+  <line x1="120" y1="650" x2="1270" y2="650" stroke="#D9DBD1" stroke-width="2"/>
+  <line x1="120" y1="230" x2="120" y2="650" stroke="#D9DBD1" stroke-width="2"/>
+  <rect x="200" y="360" width="120" height="290" rx="14" fill="#2A2D25"/>
+  <rect x="390" y="280" width="120" height="370" rx="14" fill="#C6F24B"/>
+  <rect x="580" y="240" width="120" height="410" rx="14" fill="#A9D632"/>
+  <rect x="770" y="320" width="120" height="330" rx="14" fill="#E8E5D8"/>
+  <rect x="960" y="430" width="120" height="220" rx="14" fill="#D9DBD1"/>
+  <rect x="1150" y="470" width="120" height="180" rx="14" fill="#F4F0E6" stroke="#D9DBD1"/>
+  <text x="194" y="700" fill="#141510" font-size="20" font-family="Arial, sans-serif">Лаборатории</text>
+  <text x="394" y="700" fill="#141510" font-size="20" font-family="Arial, sans-serif">Чипы</text>
+  <text x="574" y="700" fill="#141510" font-size="20" font-family="Arial, sans-serif">Облака</text>
+  <text x="768" y="700" fill="#141510" font-size="20" font-family="Arial, sans-serif">Сети и ЦОД</text>
+  <text x="952" y="700" fill="#141510" font-size="20" font-family="Arial, sans-serif">Энергия</text>
+  <text x="1140" y="700" fill="#141510" font-size="20" font-family="Arial, sans-serif">Интеграторы</text>
+  <text x="210" y="340" fill="#141510" font-size="18" font-family="Arial, sans-serif">внимание</text>
+  <text x="404" y="260" fill="#141510" font-size="18" font-family="Arial, sans-serif">дефицит</text>
+  <text x="592" y="220" fill="#141510" font-size="18" font-family="Arial, sans-serif">регулярная доля</text>
+  <text x="786" y="300" fill="#141510" font-size="18" font-family="Arial, sans-serif">обязательная стройка</text>
+  <text x="966" y="410" fill="#141510" font-size="18" font-family="Arial, sans-serif">налог на масштаб</text>
+  <text x="1148" y="450" fill="#141510" font-size="18" font-family="Arial, sans-serif">последняя миля</text>
+
+</svg>

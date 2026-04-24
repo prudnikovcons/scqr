@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="860" viewBox="0 0 1400 860" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1400" height="860" rx="28" fill="#FBFAF6"/>
+  <rect x="36" y="36" width="1328" height="788" rx="24" stroke="#D9DBD1" stroke-width="2"/>
+  <text x="82" y="120" fill="#141510" font-size="44" font-family="Georgia, 'Times New Roman', serif" font-weight="700">Российский рынок ИИ: витрина, спрос, внедрение</text>
+  <text x="82" y="160" fill="#6E7268" font-size="22" font-family="Arial, sans-serif">Три слоя, которые часто смешивают в один</text>
+  
+  <rect x="110" y="250" width="320" height="360" rx="22" fill="#F4F0E6" stroke="#D9DBD1"/>
+  <rect x="540" y="250" width="320" height="360" rx="22" fill="#F7F8F3" stroke="#D9DBD1"/>
+  <rect x="970" y="250" width="320" height="360" rx="22" fill="#C6F24B" stroke="#A9D632"/>
+  <text x="156" y="320" fill="#141510" font-size="28" font-family="Arial, sans-serif" font-weight="700">Витрина</text>
+  <text x="156" y="366" fill="#555A50" font-size="22" font-family="Arial, sans-serif">Платформы, презентации,</text>
+  <text x="156" y="398" fill="#555A50" font-size="22" font-family="Arial, sans-serif">стратегии, отчёты о росте</text>
+  <text x="586" y="320" fill="#141510" font-size="28" font-family="Arial, sans-serif" font-weight="700">Пилоты</text>
+  <text x="586" y="366" fill="#555A50" font-size="22" font-family="Arial, sans-serif">Точечные внедрения,</text>
+  <text x="586" y="398" fill="#555A50" font-size="22" font-family="Arial, sans-serif">ручная поддержка, эксперименты</text>
+  <text x="1016" y="320" fill="#141510" font-size="28" font-family="Arial, sans-serif" font-weight="700">Повторяемый спрос</text>
+  <text x="1016" y="366" fill="#141510" font-size="22" font-family="Arial, sans-serif">Платящий заказчик,</text>
+  <text x="1016" y="398" fill="#141510" font-size="22" font-family="Arial, sans-serif">экономика внедрения, масштаб</text>
+  <path d="M430 430H540" stroke="#A9D632" stroke-width="8" stroke-linecap="round"/>
+  <path d="M860 430H970" stroke="#A9D632" stroke-width="8" stroke-linecap="round"/>
+  <text x="188" y="520" fill="#141510" font-size="20" font-family="Arial, sans-serif">Самый громкий слой</text>
+  <text x="620" y="520" fill="#141510" font-size="20" font-family="Arial, sans-serif">Самый неудобный этап</text>
+  <text x="1050" y="520" fill="#141510" font-size="20" font-family="Arial, sans-serif">Самая редкая ценность</text>
+
+</svg>

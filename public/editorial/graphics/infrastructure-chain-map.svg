@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="860" viewBox="0 0 1400 860" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1400" height="860" rx="28" fill="#FBFAF6"/>
+  <rect x="36" y="36" width="1328" height="788" rx="24" stroke="#D9DBD1" stroke-width="2"/>
+  <text x="82" y="120" fill="#141510" font-size="44" font-family="Georgia, 'Times New Roman', serif" font-weight="700">Цепочка ИИ-инфраструктуры</text>
+  <text x="82" y="160" fill="#6E7268" font-size="22" font-family="Arial, sans-serif">От энергии и сетей до приложений и конечной выручки</text>
+  
+  <rect x="84" y="250" width="170" height="96" rx="18" fill="#F4F0E6" stroke="#D9DBD1"/>
+  <text x="118" y="306" fill="#141510" font-size="28" font-family="Arial, sans-serif" font-weight="700">Энергия</text>
+  <rect x="304" y="250" width="170" height="96" rx="18" fill="#F4F0E6" stroke="#D9DBD1"/>
+  <text x="350" y="306" fill="#141510" font-size="28" font-family="Arial, sans-serif" font-weight="700">Чипы</text>
+  <rect x="524" y="250" width="210" height="96" rx="18" fill="#F4F0E6" stroke="#D9DBD1"/>
+  <text x="562" y="306" fill="#141510" font-size="28" font-family="Arial, sans-serif" font-weight="700">Облака и ЦОД</text>
+  <rect x="784" y="250" width="190" height="96" rx="18" fill="#F4F0E6" stroke="#D9DBD1"/>
+  <text x="830" y="306" fill="#141510" font-size="28" font-family="Arial, sans-serif" font-weight="700">Модели</text>
+  <rect x="1024" y="250" width="240" height="96" rx="18" fill="#C6F24B" stroke="#A9D632"/>
+  <text x="1068" y="306" fill="#141510" font-size="28" font-family="Arial, sans-serif" font-weight="700">Приложения</text>
+  <path d="M254 298H304" stroke="#A9D632" stroke-width="8" stroke-linecap="round"/>
+  <path d="M474 298H524" stroke="#A9D632" stroke-width="8" stroke-linecap="round"/>
+  <path d="M734 298H784" stroke="#A9D632" stroke-width="8" stroke-linecap="round"/>
+  <path d="M974 298H1024" stroke="#A9D632" stroke-width="8" stroke-linecap="round"/>
+  <text x="88" y="442" fill="#141510" font-size="24" font-family="Arial, sans-serif" font-weight="700">Где образуется дефицит</text>
+  <rect x="84" y="478" width="382" height="188" rx="20" fill="#141510"/>
+  <text x="118" y="548" fill="#F6F5F1" font-size="26" font-family="Arial, sans-serif" font-weight="700">Нижние этажи дают власть</text>
+  <text x="118" y="592" fill="#C8C9C1" font-size="22" font-family="Arial, sans-serif">Энергия, оборудование и облачная</text>
+  <text x="118" y="624" fill="#C8C9C1" font-size="22" font-family="Arial, sans-serif">логистика решают, кто сможет расти.</text>
+  <rect x="506" y="478" width="382" height="188" rx="20" fill="#F4F0E6" stroke="#D9DBD1"/>
+  <text x="540" y="548" fill="#141510" font-size="26" font-family="Arial, sans-serif" font-weight="700">Средние этажи берут координацию</text>
+  <text x="540" y="592" fill="#555A50" font-size="22" font-family="Arial, sans-serif">Модели и оркестрация превращают</text>
+  <text x="540" y="624" fill="#555A50" font-size="22" font-family="Arial, sans-serif">ресурс в управляемый продукт.</text>
+  <rect x="928" y="478" width="336" height="188" rx="20" fill="#F7F8F3" stroke="#D9DBD1"/>
+  <text x="962" y="548" fill="#141510" font-size="26" font-family="Arial, sans-serif" font-weight="700">Верхние этажи берут внимание</text>
+  <text x="962" y="592" fill="#555A50" font-size="22" font-family="Arial, sans-serif">Именно здесь виден бренд,</text>
+  <text x="962" y="624" fill="#555A50" font-size="22" font-family="Arial, sans-serif">но не вся экономическая рента.</text>
+
+</svg>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="860" viewBox="0 0 1400 860" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1400" height="860" rx="28" fill="#FBFAF6"/>
+  <rect x="36" y="36" width="1328" height="788" rx="24" stroke="#D9DBD1" stroke-width="2"/>
+  <text x="82" y="120" fill="#141510" font-size="44" font-family="Georgia, 'Times New Roman', serif" font-weight="700">Как рос риск вокруг агентных протоколов</text>
+  <text x="82" y="160" fill="#6E7268" font-size="22" font-family="Arial, sans-serif">Стандартизация пошла раньше, чем зрелая защита</text>
+  
+  <line x1="140" y1="430" x2="1260" y2="430" stroke="#D9DBD1" stroke-width="4"/>
+  <circle cx="220" cy="430" r="18" fill="#C6F24B"/>
+  <circle cx="520" cy="430" r="18" fill="#C6F24B"/>
+  <circle cx="840" cy="430" r="18" fill="#C6F24B"/>
+  <circle cx="1140" cy="430" r="18" fill="#141510"/>
+  <text x="164" y="358" fill="#141510" font-size="22" font-family="Arial, sans-serif" font-weight="700">Ноябрь 2024</text>
+  <text x="164" y="392" fill="#555A50" font-size="20" font-family="Arial, sans-serif">Запуск MCP как</text>
+  <text x="164" y="420" fill="#555A50" font-size="20" font-family="Arial, sans-serif">универсального протокола</text>
+  <text x="452" y="358" fill="#141510" font-size="22" font-family="Arial, sans-serif" font-weight="700">Декабрь 2025</text>
+  <text x="452" y="392" fill="#555A50" font-size="20" font-family="Arial, sans-serif">Передача в фонд</text>
+  <text x="452" y="420" fill="#555A50" font-size="20" font-family="Arial, sans-serif">и массовое внедрение</text>
+  <text x="782" y="358" fill="#141510" font-size="22" font-family="Arial, sans-serif" font-weight="700">Февраль–апрель 2026</text>
+  <text x="782" y="392" fill="#555A50" font-size="20" font-family="Arial, sans-serif">Работы по угрозам,</text>
+  <text x="782" y="420" fill="#555A50" font-size="20" font-family="Arial, sans-serif">новые защитные модели</text>
+  <text x="1084" y="358" fill="#141510" font-size="22" font-family="Arial, sans-serif" font-weight="700">Апрель 2026</text>
+  <text x="1084" y="392" fill="#555A50" font-size="20" font-family="Arial, sans-serif">Громкие сообщения</text>
+  <text x="1084" y="420" fill="#555A50" font-size="20" font-family="Arial, sans-serif">об уязвимостях</text>
+  <rect x="150" y="520" width="1110" height="150" rx="20" fill="#F4F0E6" stroke="#D9DBD1"/>
+  <text x="192" y="580" fill="#141510" font-size="26" font-family="Arial, sans-serif" font-weight="700">Итог</text>
+  <text x="192" y="620" fill="#555A50" font-size="22" font-family="Arial, sans-serif">Рынок быстро договорился о подключении инструментов, но слишком медленно выстраивает</text>
+  <text x="192" y="652" fill="#555A50" font-size="22" font-family="Arial, sans-serif">идентификацию, контроль прав и доверенный контур исполнения.</text>
+
+</svg>

@@ -1,0 +1,24 @@
+---
+import type { PostEntry } from '../lib/site';
+import { getPostHref } from '../lib/site';
+
+interface Props {
+	post: PostEntry;
+	className?: string;
+	toneClass?: string;
+}
+
+const { post, className = '', toneClass = 'paper' } = Astro.props;
+const href = getPostHref(post);
+const heroImage = post.data.heroImage;
+---
+
+{
+	heroImage ? (
+		<a href={href} class:list={['post-thumbnail', className]}>
+			<img src={heroImage.src} alt="" loading="lazy" />
+		</a>
+	) : (
+		<a href={href} class:list={['post-thumbnail', className, `media-surface--${toneClass}`]}></a>
+	)
+}

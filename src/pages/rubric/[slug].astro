@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
+import PostThumbnail from '../../components/PostThumbnail.astro';
 import RubricLabel from '../../components/RubricLabel.astro';
 import TickerBar from '../../components/TickerBar.astro';
 import { SITE_TITLE } from '../../consts';
@@ -65,10 +66,7 @@ const { tone } = rubric;
 				<section class="archive-feed">
 					{posts.map((post, index) => (
 						<article class="archive-feed__item">
-							<a
-								href={getPostHref(post)}
-								class:list={['archive-feed__thumb', `media-surface--${getToneClass(index)}`]}
-							></a>
+							<PostThumbnail post={post} className="archive-feed__thumb" toneClass={getToneClass(index)} />
 							<div>
 								<div class="archive-feed__meta">
 									<span class="content-tag">

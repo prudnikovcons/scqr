@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg-10" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10120e"/>
+      <stop offset="1" stop-color="#1a1d16"/>
+    </linearGradient>
+    <radialGradient id="glow-10" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1180 200) rotate(90) scale(260 340)">
+      <stop stop-color="#c6f24b" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#c6f24b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg-10)"/>
+  <rect x="72" y="72" width="1456" height="756" rx="28" stroke="#2d3128" stroke-width="2"/>
+  <rect x="104" y="104" width="640" height="690" rx="24" stroke="#2d3128" stroke-width="1.5"/>
+  <path d="M910 206C1020 112 1184 110 1290 172C1392 232 1452 350 1434 462C1414 590 1314 666 1184 700C1040 736 888 714 792 620" stroke="#7ca517" stroke-width="2.5"/>
+  <path d="M860 326C940 254 1066 230 1170 258C1290 292 1382 388 1392 510C1404 640 1320 746 1198 790" stroke="#2d3128" stroke-width="1.5" stroke-dasharray="8 10"/>
+  <circle cx="1180" cy="200" r="250" fill="url(#glow-10)"/>
+  <circle cx="1160" cy="240" r="12" fill="#c6f24b"/>
+  <circle cx="1012" cy="412" r="10" fill="#c6f24b"/>
+  <circle cx="1270" cy="592" r="10" fill="#c6f24b"/>
+  <text x="118" y="154" fill="#c6f24b" font-size="24" font-family="Arial, sans-serif" letter-spacing="7" font-weight="700">ТЕОРИИ</text>
+  <text x="118" y="256" fill="#f6f5f1" font-size="124" font-family="Georgia, 'Times New Roman', serif" font-weight="700">СКУЧНЫЕ</text>
+  <text x="118" y="376" fill="#f6f5f1" font-size="124" font-family="Georgia, 'Times New Roman', serif" font-weight="700">КОМПАНИИ</text>
+  <text x="120" y="716" fill="#f6f5f1" font-size="26" font-family="Arial, sans-serif">SCQR / первая волна редакционного наполнения</text>
+  <text x="120" y="760" fill="#f6f5f1" font-size="22" font-family="Arial, sans-serif" opacity="0.72">Эпоха ИИ делает скучные компании самыми важными</text>
+</svg>
