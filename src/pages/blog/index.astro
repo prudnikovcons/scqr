@@ -20,18 +20,21 @@ import {
 
 const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
 const rubricSummary = buildRubricSummary(posts).slice(0, 6);
+const newsPosts = posts.filter((post) => post.data.articleType === 'news');
+const analysisPosts = posts.filter((post) => post.data.articleType === 'analysis');
+const columnPosts = posts.filter((post) => post.data.articleType === 'column');
 ---
 
 <!doctype html>
 <html lang="ru">
 	<head>
-		<BaseHead title={`${SITE_TITLE} — Архив`} description={SITE_DESCRIPTION} />
+		<BaseHead title={`${SITE_TITLE} — Архив`} description={SITE_DESCRIPTION} image={posts[0]?.data.heroImage} />
 	</head>
 	<body>
 		<Header />
 		<TickerBar />
 		<main class="main-shell">
-			<section class="archive-hero">
+			<section class="archive-hero" id="top">
 				<div>
 					<p class="section-kicker">Архив</p>
 					<h1>Все публикации SCQR</h1>
@@ -56,9 +59,19 @@ const rubricSummary = buildRubricSummary(posts).slice(0, 6);
 				}
 			</section>
 
-			<section class="archive-feed">
-				{
-					posts.map((post, index) => (
+			<nav class="archive-section-nav" aria-label="Разделы архива">
+				<a href="#news">Новости</a>
+				<a href="#analysis">Аналитика</a>
+				<a href="#columns">Колонки</a>
+			</nav>
+
+			<section class="archive-section" id="news">
+				<div class="section-head">
+					<h2>Новости</h2>
+					<a href="#top">Наверх · {newsPosts.length}</a>
+				</div>
+				<div class="archive-feed">
+					{newsPosts.map((post, index) => (
 						<article class="archive-feed__item">
 							<PostThumbnail post={post} className="archive-feed__thumb" toneClass={getToneClass(index)} />
 							<div>
@@ -71,8 +84,54 @@ const rubricSummary = buildRubricSummary(posts).slice(0, 6);
 								<p>{post.data.description}</p>
 							</div>
 						</article>
-					))
-				}
+					))}
+				</div>
+			</section>
+
+			<section class="archive-section" id="analysis">
+				<div class="section-head">
+					<h2>Аналитика</h2>
+					<a href="#top">Наверх · {analysisPosts.length}</a>
+				</div>
+				<div class="archive-feed">
+					{analysisPosts.map((post, index) => (
+						<article class="archive-feed__item">
+							<PostThumbnail post={post} className="archive-feed__thumb" toneClass={getToneClass(index + 1)} />
+							<div>
+								<div class="archive-feed__meta">
+									<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
+									<span>{getArticleTypeLabel(post)}</span>
+									<span>{getReadingTimeLabel(post)}</span>
+								</div>
+								<h2><a href={getPostHref(post)}>{post.data.title}</a></h2>
+								<p>{post.data.description}</p>
+							</div>
+						</article>
+					))}
+				</div>
+			</section>
+
+			<section class="archive-section" id="columns">
+				<div class="section-head">
+					<h2>Колонки</h2>
+					<a href="#top">Наверх · {columnPosts.length}</a>
+				</div>
+				<div class="archive-feed">
+					{columnPosts.map((post, index) => (
+						<article class="archive-feed__item">
+							<PostThumbnail post={post} className="archive-feed__thumb" toneClass={getToneClass(index + 2)} />
+							<div>
+								<div class="archive-feed__meta">
+									<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
+									<span>{getArticleTypeLabel(post)}</span>
+									<span>{getReadingTimeLabel(post)}</span>
+								</div>
+								<h2><a href={getPostHref(post)}>{post.data.title}</a></h2>
+								<p>{post.data.description}</p>
+							</div>
+						</article>
+					))}
+				</div>
 			</section>
 		</main>
 		<Footer />

@@ -8,8 +8,10 @@ import RubricLabel from '../components/RubricLabel.astro';
 import TickerBar from '../components/TickerBar.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import {
+	buildClusterSummary,
 	buildRubricSummary,
 	getArticleTypeLabel,
+	getClusterHref,
 	getPostHref,
 	getPrimaryRubric,
 	getReadingTimeLabel,
@@ -21,15 +23,18 @@ import {
 
 const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
 const leadPost = posts[0];
+const visualFrontPosts = posts.slice(1, 5);
 const newsPosts = posts.filter((p) => p.data.articleType === 'news').slice(0, 7);
-const analysisPosts = posts.filter((p) => p.data.articleType !== 'news').slice(0, 5);
+const analysisPosts = posts.filter((p) => p.data.articleType === 'analysis').slice(0, 5);
+const columnPosts = posts.filter((p) => p.data.articleType === 'column').slice(0, 3);
+const clusterPosts = buildClusterSummary(posts).slice(0, 3);
 const rubricSummary = buildRubricSummary(posts).filter((r) => r.slug);
 ---
 
 <!doctype html>
 <html lang="ru">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} image={leadPost?.data.heroImage} />
 	</head>
 	<body>
 		<Header />
@@ -55,6 +60,48 @@ const rubricSummary = buildRubricSummary(posts).filter((r) => r.slug);
 						</time>
 					</div>
 				</article>
+			)}
+
+			{visualFrontPosts.length > 0 && (
+				<section class="frontline-grid" aria-label="Свежие материалы">
+					{visualFrontPosts.map((post, index) => (
+						<article class="frontline-card">
+							<PostThumbnail post={post} className="frontline-card__media" toneClass={getToneClass(index + 1)} />
+							<div class="frontline-card__body">
+								<div class="frontline-card__meta">
+									<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
+									<span>{getArticleTypeLabel(post)}</span>
+								</div>
+								<h2 class="frontline-card__title">
+									<a href={getPostHref(post)}>{post.data.title}</a>
+								</h2>
+								{post.data.description && <p class="frontline-card__desc">{post.data.description}</p>}
+								<time class="frontline-card__date">
+									{post.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}
+								</time>
+							</div>
+						</article>
+					))}
+				</section>
+			)}
+
+			{clusterPosts.length > 0 && (
+				<section class="signal-board" aria-label="Редакционные сюжеты">
+					<div class="section-head">
+						<h2>Сюжеты</h2>
+						<a href="/blog">Архив всех материалов</a>
+					</div>
+					<div class="signal-board__grid">
+						{clusterPosts.map((cluster) => (
+							<a class="signal-board__item" href={getClusterHref(cluster.slug)}>
+								<span class="signal-board__kicker">Сюжет</span>
+								<strong>{cluster.title}</strong>
+								<p>{cluster.latest.data.description}</p>
+								<span class="signal-board__meta">{cluster.count} материалов</span>
+							</a>
+						))}
+					</div>
+				</section>
 			)}
 
 			<div class="dual-stream">
@@ -91,6 +138,24 @@ const rubricSummary = buildRubricSummary(posts).filter((r) => r.slug);
 					<a class="post-stream__more" href="/blog">Вся аналитика →</a>
 				</section>
 			</div>
+
+			{columnPosts.length > 0 && (
+				<section class="essay-strip" aria-label="Колонки">
+					<div class="section-head">
+						<h2>Колонки</h2>
+						<a href="/blog#columns">Все колонки</a>
+					</div>
+					<div class="essay-strip__grid">
+						{columnPosts.map((post) => (
+							<a class="essay-strip__item" href={getPostHref(post)}>
+								<span class="essay-strip__meta"><RubricLabel name={getPrimaryRubric(post)} /></span>
+								<strong>{post.data.title}</strong>
+								<p>{post.data.description}</p>
+							</a>
+						))}
+					</div>
+				</section>
+			)}
 
 			{rubricSummary.length > 0 && (
 				<nav class="rubric-nav-strip" aria-label="Рубрики">

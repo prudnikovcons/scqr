@@ -53,11 +53,22 @@ const {
 
 const displayRubrics = rubricLabels.length > 0 ? rubricLabels : rubrics;
 const scopeLabel = adjacentScope === 'cluster' ? 'В сюжете' : 'В рубрике';
+const leadRubric = displayRubrics[0] ?? 'SCQR';
+const readingTimeLabel = `${Astro.props.readingTime ?? 1} мин`;
+const topicPreview = topics.slice(0, 8);
 ---
 
 <html lang="ru">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead
+			title={title}
+			description={description}
+			image={heroImage}
+			type="article"
+			publishedTime={pubDate}
+			updatedTime={updatedDate}
+			section={leadRubric}
+		/>
 	</head>
 
 	<body>
@@ -65,67 +76,107 @@ const scopeLabel = adjacentScope === 'cluster' ? 'В сюжете' : 'В руб�
 		<TickerBar />
 		<main class="main-shell">
 			<article class="article-shell">
-				<div class="article-frame">
-					<div class="article-meta-row">
-						<div class="article-chip-row">
-							{
-								displayRubrics.map((rubric) => (
-									<span class="article-chip"><RubricLabel name={rubric} /></span>
-								))
-							}
-							<span class="article-chip article-chip-muted">{getArticleTypeLabelFromValue(articleType)}</span>
-						</div>
-						<div class="article-date-row">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<span class="article-updated">
-										Обновлено <FormattedDate date={updatedDate} />
-									</span>
-								)
-							}
-						</div>
-					</div>
-					{clusterSlug && clusterTitle && clusterSize > 1 && (
-						<a class="article-cluster-chip" href={getClusterHref(clusterSlug)}>
-							<span class="article-cluster-chip__kicker">Часть сюжета</span>
-							<span class="article-cluster-chip__title">{clusterTitle}</span>
-							<span class="article-cluster-chip__count">{clusterSize} материалов →</span>
-						</a>
-					)}
-					<h1 class="article-title">{title}</h1>
-					<p class="article-dek">{description}</p>
-				</div>
-
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-
-				<div class="article-frame prose">
-					<slot />
-
-					{
-						(topics.length > 0 || sourceNote) && (
-							<div class="article-support">
-								{topics.length > 0 && (
-									<div class="article-support-block">
-										<h2>Темы</h2>
-										<div class="article-chip-row">
-											{topics.map((topic) => (
-												<a href={getTopicHref(topic)} class="article-chip article-chip-muted article-chip-link">{topic}</a>
-											))}
-										</div>
-									</div>
-								)}
-								{sourceNote && (
-									<div class="article-support-block">
-										<h2>Основание публикации</h2>
-										<p>{sourceNote}</p>
-									</div>
-								)}
+				<section class="article-head">
+					<div class="article-head__main">
+						<div class="article-meta-row">
+							<div class="article-chip-row">
+								{
+									displayRubrics.map((rubric) => (
+										<span class="article-chip"><RubricLabel name={rubric} /></span>
+									))
+								}
+								<span class="article-chip article-chip-muted">{getArticleTypeLabelFromValue(articleType)}</span>
 							</div>
-						)
-					}
+							<div class="article-date-row">
+								<FormattedDate date={pubDate} />
+								<span>{readingTimeLabel}</span>
+								{
+									updatedDate && (
+										<span class="article-updated">
+											Обновлено <FormattedDate date={updatedDate} />
+										</span>
+									)
+								}
+							</div>
+						</div>
+						{clusterSlug && clusterTitle && clusterSize > 1 && (
+							<a class="article-cluster-chip" href={getClusterHref(clusterSlug)}>
+								<span class="article-cluster-chip__kicker">Часть сюжета</span>
+								<span class="article-cluster-chip__title">{clusterTitle}</span>
+								<span class="article-cluster-chip__count">{clusterSize} материалов →</span>
+							</a>
+						)}
+						<h1 class="article-title">{title}</h1>
+						<p class="article-dek">{description}</p>
+					</div>
+
+					<aside class="article-head__rail" aria-label="Контекст материала">
+						<div class="article-rail-block article-rail-block--accent">
+							<span class="article-rail__kicker">SCQR вывод</span>
+							<p>{description}</p>
+						</div>
+
+						<div class="article-rail-block">
+							<span class="article-rail__kicker">Формат</span>
+							<ul class="article-rail__list">
+								<li>{getArticleTypeLabelFromValue(articleType)}</li>
+								<li>{readingTimeLabel}</li>
+								<li><FormattedDate date={pubDate} /></li>
+							</ul>
+						</div>
+
+						{sourceNote && (
+							<div class="article-rail-block">
+								<span class="article-rail__kicker">Основание публикации</span>
+								<p>{sourceNote}</p>
+							</div>
+						)}
+
+						{topicPreview.length > 0 && (
+							<div class="article-rail-block">
+								<span class="article-rail__kicker">Темы</span>
+								<div class="article-chip-row article-chip-row--tight">
+									{topicPreview.map((topic) => (
+										<a href={getTopicHref(topic)} class="article-chip article-chip-muted article-chip-link">{topic}</a>
+									))}
+								</div>
+							</div>
+						)}
+					</aside>
+				</section>
+
+				{heroImage && (
+					<div class="hero-image">
+						<Image width={1020} height={510} src={heroImage} alt="" />
+					</div>
+				)}
+
+				<div class="article-reading-layout">
+					<div class="article-frame prose">
+						<slot />
+					</div>
+
+					<aside class="article-reading-rail" aria-label="Навигация по статье">
+						{clusterSlug && clusterTitle && clusterSize > 1 && (
+							<div class="article-rail-block">
+								<span class="article-rail__kicker">Сюжет</span>
+								<a class="article-reading-rail__story" href={getClusterHref(clusterSlug)}>
+									<strong>{clusterTitle}</strong>
+									<span>{clusterSize} материалов в одной линии</span>
+								</a>
+							</div>
+						)}
+
+						{prev && (
+							<div class="article-rail-block">
+								<span class="article-rail__kicker">{scopeLabel}</span>
+								<a class="article-reading-rail__story" href={getPostHref(prev)}>
+									<strong>{prev.data.title}</strong>
+									<span>Предыдущий материал</span>
+								</a>
+							</div>
+						)}
+					</aside>
 				</div>
 
 				{(prev || next) && (
