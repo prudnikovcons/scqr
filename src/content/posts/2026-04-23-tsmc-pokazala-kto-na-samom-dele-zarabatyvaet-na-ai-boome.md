@@ -15,6 +15,7 @@ sourceNote: "Основано на сообщении AP о квартально
 readingTime: 1
 publicUrl: "/2026-04-23-tsmc-pokazala-kto-na-samom-dele-zarabatyvaet-na-ai-boome/"
 heroAlt: "Редакционная обложка SCQR к материалу «TSMC показала, кто на самом деле зарабатывает на AI-буме»."
+heroStyle: "industrial_plate"
 heroImage: ../../assets/editorial/secondary-tendencies-hero.svg
 ---
 

@@ -15,6 +15,7 @@ sourceNote: "Основано на сообщении AP и официально
 readingTime: 1
 publicUrl: "/2026-04-21-anthropic-prishila-sebya-k-aws-na-100-mlrd-dollarov/"
 heroAlt: "Редакционная обложка SCQR к материалу «Anthropic пришила себя к AWS на 100 млрд долларов»."
+heroStyle: "threshold_space"
 heroImage: ../../assets/editorial/secondary-generations-hero.svg
 ---
 

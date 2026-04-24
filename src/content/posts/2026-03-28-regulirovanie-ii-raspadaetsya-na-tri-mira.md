@@ -15,6 +15,7 @@ sourceNote: "Основано на мартовских материалах о 
 readingTime: 2
 publicUrl: "/2026-03-28-regulirovanie-ii-raspadaetsya-na-tri-mira/"
 heroAlt: "Редакционная обложка SCQR к материалу «Регулирование ИИ распадается на три мира»."
+heroStyle: "threshold_space"
 heroImage: ../../assets/editorial/secondary-regulations-hero.svg
 ---
 

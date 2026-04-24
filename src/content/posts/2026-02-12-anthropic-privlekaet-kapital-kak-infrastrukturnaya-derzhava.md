@@ -15,6 +15,7 @@ sourceNote: "Подготовлено на основе сообщения Anthr
 readingTime: 1
 publicUrl: "/2026-02-12-anthropic-privlekaet-kapital-kak-infrastrukturnaya-derzhava/"
 heroAlt: "Редакционная обложка SCQR к материалу «Anthropic привлекает капитал уже как инфраструктурная держава»."
+heroStyle: "threshold_space"
 heroImage: ../../assets/editorial/2026-02-12-anthropic-privlekaet-kapital-kak-infrastrukturnaya-derzhava-hero.svg
 ---
 

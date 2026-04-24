@@ -15,6 +15,7 @@ sourceNote: "Подготовлено на основе заявления OpenA
 readingTime: 1
 publicUrl: "/2026-01-09-energetika-vhodit-v-bazovyy-kontrakt-ii/"
 heroAlt: "Редакционная обложка SCQR к материалу «Энергетика входит в базовый контракт ИИ»."
+heroStyle: "industrial_plate"
 heroImage: ../../assets/editorial/2026-01-09-energetika-vhodit-v-bazovyy-kontrakt-ii-hero.svg
 ---
 

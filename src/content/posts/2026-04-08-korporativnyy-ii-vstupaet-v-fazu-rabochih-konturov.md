@@ -15,6 +15,7 @@ sourceNote: "Подготовлено на основе публикации Ope
 readingTime: 1
 publicUrl: "/2026-04-08-korporativnyy-ii-vstupaet-v-fazu-rabochih-konturov/"
 heroAlt: "Редакционная обложка SCQR к материалу «Корпоративный ИИ вступает в фазу рабочих контуров»."
+heroStyle: "signal_network"
 heroImage: ../../assets/editorial/2026-04-08-korporativnyy-ii-vstupaet-v-fazu-rabochih-konturov-hero.svg
 ---
 

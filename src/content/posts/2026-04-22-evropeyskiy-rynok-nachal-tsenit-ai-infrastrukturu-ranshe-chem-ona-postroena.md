@@ -15,6 +15,7 @@ sourceNote: "Основано на рыночном обзоре Reuters и кв
 readingTime: 1
 publicUrl: "/2026-04-22-evropeyskiy-rynok-nachal-tsenit-ai-infrastrukturu-ranshe-chem-ona-postroena/"
 heroAlt: "Редакционная обложка SCQR к материалу «Европейский рынок начал ценить AI-инфраструктуру раньше, чем она построена»."
+heroStyle: "industrial_plate"
 heroImage: ../../assets/editorial/secondary-tendencies-hero.svg
 ---
 

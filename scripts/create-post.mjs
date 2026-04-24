@@ -25,6 +25,18 @@ const RUBRIC_LABELS = {
   tendencies:   'Тенденции',
 };
 
+const DEFAULT_STYLE_BY_RUBRIC = {
+  trajectories: 'industrial_plate',
+  generations: 'threshold_space',
+  automations: 'signal_network',
+  innovations: 'signal_network',
+  illusions: 'editorial_collage',
+  russia: 'quiet_monument',
+  regulations: 'threshold_space',
+  theories: 'editorial_collage',
+  tendencies: 'industrial_plate',
+};
+
 function slugify(str) {
   return str
     .toLowerCase()
@@ -66,6 +78,7 @@ const slug = slugify(rawTitle);
 const filename = `${today}-${slug}.md`;
 const filepath = join(postsDir, filename);
 const label = RUBRIC_LABELS[rubricSlug];
+const heroStyle = DEFAULT_STYLE_BY_RUBRIC[rubricSlug] ?? 'quiet_monument';
 
 const pubDate = new Date().toISOString().replace(/\.\d+Z$/, '');
 const publicUrl = `/${today}-${slug}/`;
@@ -87,6 +100,7 @@ sourceNote: ""
 readingTime: 3
 publicUrl: "${publicUrl}"
 heroAlt: "Редакционная обложка SCQR к материалу «${rawTitle}»."
+heroStyle: "${heroStyle}"
 heroImage: ../../assets/blog-placeholder-1.jpg
 ---
 

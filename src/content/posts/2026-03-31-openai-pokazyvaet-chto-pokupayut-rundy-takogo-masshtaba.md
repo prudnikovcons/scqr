@@ -15,6 +15,7 @@ sourceNote: "Подготовлено на основе сообщения OpenA
 readingTime: 1
 publicUrl: "/2026-03-31-openai-pokazyvaet-chto-pokupayut-rundy-takogo-masshtaba/"
 heroAlt: "Редакционная обложка SCQR к материалу «Раунд OpenAI показывает, что на самом деле покупают деньги такого масштаба»."
+heroStyle: "industrial_plate"
 heroImage: ../../assets/editorial/2026-03-31-openai-pokazyvaet-chto-pokupayut-rundy-takogo-masshtaba-hero.svg
 ---
 

@@ -15,6 +15,7 @@ sourceNote: "Подготовлено на основе декабрьского
 readingTime: 1
 publicUrl: "/2026-04-24-protokoly-dlya-agentov-stanovyatsya-zonoy-riska/"
 heroAlt: "Редакционная обложка SCQR к материалу «Протоколы для агентов становятся новой зоной риска»."
+heroStyle: "signal_network"
 heroImage: ../../assets/editorial/2026-04-24-protokoly-dlya-agentov-stanovyatsya-zonoy-riska-hero-v2.png
 ---
 

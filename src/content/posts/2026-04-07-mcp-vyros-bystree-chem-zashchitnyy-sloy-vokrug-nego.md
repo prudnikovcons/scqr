@@ -15,6 +15,7 @@ sourceNote: "Подготовлено на основе Project Glasswing от A
 readingTime: 1
 publicUrl: "/2026-04-07-mcp-vyros-bystree-chem-zashchitnyy-sloy-vokrug-nego/"
 heroAlt: "Редакционная обложка SCQR к материалу «MCP вырос быстрее, чем защитный слой вокруг него»."
+heroStyle: "editorial_collage"
 heroImage: ../../assets/editorial/2026-04-07-mcp-vyros-bystree-chem-zashchitnyy-sloy-vokrug-nego-hero.svg
 ---
 

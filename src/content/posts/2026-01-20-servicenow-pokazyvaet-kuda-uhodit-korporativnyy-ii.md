@@ -15,6 +15,7 @@ sourceNote: "Подготовлено на основе сообщения OpenA
 readingTime: 1
 publicUrl: "/2026-01-20-servicenow-pokazyvaet-kuda-uhodit-korporativnyy-ii/"
 heroAlt: "Редакционная обложка SCQR к материалу «ServiceNow показывает, куда уходит корпоративный ИИ»."
+heroStyle: "signal_network"
 heroImage: ../../assets/editorial/2026-01-20-servicenow-pokazyvaet-kuda-uhodit-korporativnyy-ii-hero.svg
 ---
 

@@ -15,6 +15,7 @@ sourceNote: "Подготовлено на основе заявления NVIDI
 readingTime: 1
 publicUrl: "/2026-03-03-gtc-zakreplyaet-formulu-chto-ii-eto-infrastruktura/"
 heroAlt: "Редакционная обложка SCQR к материалу «GTC закрепляет главную формулу года: ИИ — это инфраструктура»."
+heroStyle: "industrial_plate"
 heroImage: ../../assets/editorial/2026-03-03-gtc-zakreplyaet-formulu-chto-ii-eto-infrastruktura-hero.svg
 ---
 

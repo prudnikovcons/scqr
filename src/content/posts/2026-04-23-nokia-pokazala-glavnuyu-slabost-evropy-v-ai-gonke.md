@@ -15,6 +15,7 @@ sourceNote: "Основано на сообщении Reuters о позиции 
 readingTime: 2
 publicUrl: "/2026-04-23-nokia-pokazala-glavnuyu-slabost-evropy-v-ai-gonke/"
 heroAlt: "Редакционная обложка SCQR к материалу «Nokia показала главную слабость Европы в AI-гонке»."
+heroStyle: "industrial_plate"
 heroImage: ../../assets/editorial/secondary-tendencies-hero.svg
 ---
 

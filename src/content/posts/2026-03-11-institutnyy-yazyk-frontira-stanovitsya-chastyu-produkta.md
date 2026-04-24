@@ -15,6 +15,7 @@ sourceNote: "Подготовлено на основе объявления Ant
 readingTime: 1
 publicUrl: "/2026-03-11-institutnyy-yazyk-frontira-stanovitsya-chastyu-produkta/"
 heroAlt: "Редакционная обложка SCQR к материалу «Институтный язык фронтира становится частью самого продукта»."
+heroStyle: "editorial_collage"
 heroImage: ../../assets/editorial/2026-03-11-institutnyy-yazyk-frontira-stanovitsya-chastyu-produkta-hero.svg
 ---
 

@@ -15,6 +15,7 @@ import {
 	premiumTrackPostIds,
 	rubricLeadBySlug,
 } from '../src/data/curation.shared.js';
+import { EDITORIAL_IMAGE_STYLE_ORDER } from '../src/data/editorial-image-styles.js';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const postsDir = join(__dir, '../src/content/posts');
@@ -25,6 +26,7 @@ const VALID_RUBRIC_SLUGS = [
 ];
 
 const VALID_ARTICLE_TYPES = ['news', 'analysis', 'column', 'illustration'];
+const VALID_HERO_STYLES = new Set(EDITORIAL_IMAGE_STYLE_ORDER);
 const RUBRIC_LABELS = {
 	trajectories: 'Траектории',
 	generations: 'Генерации',
@@ -169,6 +171,10 @@ for (const file of files) {
 		errors.push(`${ctx}: deck duplicates title`);
 	}
 
+	if (!fm.heroStyle || !VALID_HERO_STYLES.has(String(fm.heroStyle))) {
+		errors.push(`${ctx}: heroStyle "${fm.heroStyle}" is not valid`);
+	}
+
 	if (!fm.pubDate) {
 		errors.push(`${ctx}: pubDate is missing`);
 	}
@@ -217,6 +223,9 @@ for (const file of files) {
 		}
 		if (!fm.heroAlt || !String(fm.heroAlt).trim()) {
 			errors.push(`${ctx}: published material requires heroAlt`);
+		}
+		if (!fm.heroStyle || !VALID_HERO_STYLES.has(String(fm.heroStyle))) {
+			errors.push(`${ctx}: published material requires valid heroStyle`);
 		}
 		if (!fm.deck || !String(fm.deck).trim()) {
 			errors.push(`${ctx}: published material requires deck`);

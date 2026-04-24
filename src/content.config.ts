@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { EDITORIAL_IMAGE_STYLE_ORDER } from './data/editorial-image-styles.js';
 
 const posts = defineCollection({
 	loader: glob({ base: './src/content/posts', pattern: '**/*.md' }),
@@ -24,6 +25,7 @@ const posts = defineCollection({
 			readingTime: z.number().optional(),
 			publicUrl: z.string().optional(),
 			heroAlt: z.string(),
+			heroStyle: z.enum(EDITORIAL_IMAGE_STYLE_ORDER as [string, ...string[]]),
 			heroImage: z.optional(image()),
 		}),
 });

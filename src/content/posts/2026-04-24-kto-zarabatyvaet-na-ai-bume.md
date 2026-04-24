@@ -15,6 +15,7 @@ sourceNote: "Подготовлено на основе материалов Ope
 readingTime: 2
 publicUrl: "/2026-04-24-kto-zarabatyvaet-na-ai-bume/"
 heroAlt: "Редакционная обложка SCQR к материалу «Кто реально зарабатывает на буме ИИ: лаборатории, облака, чипы или энергосистема»."
+heroStyle: "industrial_plate"
 heroImage: ../../assets/editorial/2026-04-24-kto-zarabatyvaet-na-ai-bume-hero.svg
 ---
 

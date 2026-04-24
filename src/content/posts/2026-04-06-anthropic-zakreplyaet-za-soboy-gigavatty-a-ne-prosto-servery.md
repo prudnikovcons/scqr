@@ -15,6 +15,7 @@ sourceNote: "Подготовлено на основе сообщения Anthr
 readingTime: 1
 publicUrl: "/2026-04-06-anthropic-zakreplyaet-za-soboy-gigavatty-a-ne-prosto-servery/"
 heroAlt: "Редакционная обложка SCQR к материалу «Anthropic закрепляет за собой гигаватты, а не просто серверы»."
+heroStyle: "industrial_plate"
 heroImage: ../../assets/editorial/2026-04-06-anthropic-zakreplyaet-za-soboy-gigavatty-a-ne-prosto-servery-hero.svg
 ---
 
