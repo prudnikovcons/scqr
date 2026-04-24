@@ -12,6 +12,7 @@
     "astro": "astro",
     "import:scqr": "node scripts/import-scqr-content.mjs",
     "wave1:generate": "node scripts/generate-editorial-wave-1.mjs",
+    "wave2:generate": "node scripts/generate-editorial-wave-2.mjs",
     "check": "astro check",
     "vercel:pull": "npx vercel pull",
     "vercel:preview": "npx vercel",

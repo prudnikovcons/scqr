@@ -1,0 +1,94 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import RubricLabel from '../../components/RubricLabel.astro';
+import TickerBar from '../../components/TickerBar.astro';
+import { SITE_TITLE } from '../../consts';
+import {
+	getArticleTypeLabel,
+	getClusterConfig,
+	getClusterPosts,
+	getPostHref,
+	getPrimaryRubric,
+	getReadingTimeLabel,
+	getVisiblePosts,
+	sortPosts,
+} from '../../lib/site';
+
+export async function getStaticPaths() {
+	const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
+	const clusters = new Map<string, typeof posts>();
+	for (const post of posts) {
+		const slug = post.data.storyCluster;
+		if (!slug) continue;
+		if (!clusters.has(slug)) clusters.set(slug, []);
+		clusters.get(slug)!.push(post);
+	}
+	return [...clusters.entries()]
+		.filter(([, list]) => list.length >= 2)
+		.map(([slug]) => ({
+			params: { slug },
+			props: { slug, posts: getClusterPosts(posts, slug) },
+		}));
+}
+
+const { slug, posts } = Astro.props;
+const config = getClusterConfig(slug);
+const title = config?.title ?? slug;
+const description = config?.description ?? 'Материалы, развивающие одну историю.';
+
+const roleLabel = (index: number, total: number) => {
+	if (index === 0) return 'Первая публикация';
+	if (index === total - 1) return 'Последнее обновление';
+	return 'Развитие';
+};
+---
+
+<!doctype html>
+<html lang="ru">
+	<head>
+		<BaseHead title={`${title} — ${SITE_TITLE}`} description={description} />
+	</head>
+	<body>
+		<Header />
+		<TickerBar />
+		<main class="main-shell">
+			<section class="cluster-hero">
+				<p class="section-kicker">Сюжет</p>
+				<h1 class="cluster-hero__title">{title}</h1>
+				{description && <p class="cluster-hero__desc">{description}</p>}
+				<div class="cluster-hero__meta">
+					<span>{posts.length} материалов</span>
+					<a href="/blog" class="cluster-hero__back">← Архив</a>
+				</div>
+			</section>
+
+			<section class="cluster-timeline">
+				{posts.map((post, index) => (
+					<article class="cluster-timeline__item">
+						<div class="cluster-timeline__marker">
+							<time>
+								{post.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}
+							</time>
+							<span class="cluster-timeline__role">{roleLabel(index, posts.length)}</span>
+						</div>
+						<div class="cluster-timeline__body">
+							<div class="archive-feed__meta">
+								<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
+								<span>{getArticleTypeLabel(post)}</span>
+								<span>{getReadingTimeLabel(post)}</span>
+							</div>
+							<h2 class="cluster-timeline__title">
+								<a href={getPostHref(post)}>{post.data.title}</a>
+							</h2>
+							<p>{post.data.description}</p>
+						</div>
+					</article>
+				))}
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

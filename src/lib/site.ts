@@ -118,6 +118,113 @@ export const getRubricConfig = (slug: string) => RUBRIC_CONFIG.find((r) => r.slu
 
 export const getRubricHref = (slug: string) => `/rubric/${slug}/`;
 
+export interface ClusterConfig {
+	slug: string;
+	title: string;
+	description?: string;
+}
+
+export const CLUSTER_CONFIG: ClusterConfig[] = [
+	{ slug: 'frontier-compute-lock-in', title: 'Фронтирные вычисления и lock-in', description: 'Как крупнейшие лаборатории привязываются к конкретным облакам и какие следствия это несёт для рынка.' },
+	{ slug: 'anthropic-gosudarstvo-mythos', title: 'Anthropic, государство и Mythos', description: 'Путь Anthropic к статусу системного поставщика для правительства США.' },
+	{ slug: 'anthropic-control-boundaries', title: 'Anthropic: границы контроля', description: 'Где проходит черта между обязательствами лаборатории и требованиями заказчика.' },
+	{ slug: 'evropa-ai-capex-rally', title: 'Европа и AI-capex ралли', description: 'Почему европейский рынок начал закладывать инфраструктуру ИИ в цену раньше, чем она построена.' },
+	{ slug: 'evropa-ai-infra-gap', title: 'Европа: инфраструктурный разрыв', description: 'Инфраструктурная слабость Европы в AI-гонке на примере ключевых игроков.' },
+	{ slug: 'ormuz-makroshok', title: 'Ормузский макрошок', description: 'Как Ормузский пролив снова стал осью мировой экономики.' },
+	{ slug: 'poluprovodniki-ai-bottleneck', title: 'Полупроводники как узкое место AI', description: 'Кто реально зарабатывает на AI-буме в цепочке поставок.' },
+	{ slug: 'tesla-ai-capex', title: 'Tesla: ставка на AI', description: 'Как рынок оценивает AI-стратегию Tesla — не как машины, а как риск.' },
+	{ slug: 'protokoly-agentnoy-infrastruktury', title: 'Протоколы агентной инфраструктуры', description: 'Стандартизация взаимодействия агентов и её риски.' },
+	{ slug: 'globalnaya-fragmentatsiya-regulation', title: 'Фрагментация регулирования ИИ', description: 'Три мира регулирования ИИ и что это означает для компаний.' },
+	{ slug: 'backfill-energy-basement', title: 'Нижние этажи ИИ', description: 'Энергия, стройка, облака и вычисления как новый базовый слой рынка.' },
+	{ slug: 'backfill-corporate-agents', title: 'Корпоративные агенты', description: 'Как агенты переходят из пилота в рабочий контур компаний.' },
+	{ slug: 'backfill-frontier-access', title: 'Фронтир и режим доступа', description: 'Капитал, облака и договоры как новая цена доступа к сильнейшим моделям.' },
+	{ slug: 'backfill-governance-layers', title: 'Слои управления фронтиром', description: 'Как рынок строит вокруг сильных моделей язык институтов, комплаенса и допуска.' },
+	{ slug: 'backfill-protocol-security', title: 'Безопасность агентного протокола', description: 'Где стандарт связи агентов сталкивается с реальностью доверия и защиты.' },
+];
+
+export const getClusterConfig = (slug: string) => CLUSTER_CONFIG.find((c) => c.slug === slug);
+
+export const getClusterTitle = (slug: string) => getClusterConfig(slug)?.title ?? slug;
+
+export const getClusterHref = (slug: string) => `/cluster/${slug}/`;
+
+export const getClusterPosts = (posts: PostEntry[], slug: string) =>
+	sortPosts(posts.filter((p) => p.data.storyCluster === slug)).reverse();
+
+export const buildClusterSummary = (posts: PostEntry[]) => {
+	const map = new Map<string, PostEntry[]>();
+	for (const post of posts) {
+		const slug = post.data.storyCluster;
+		if (!slug) continue;
+		if (!map.has(slug)) map.set(slug, []);
+		map.get(slug)!.push(post);
+	}
+	return [...map.entries()]
+		.filter(([, list]) => list.length >= 2)
+		.map(([slug, list]) => ({
+			slug,
+			title: getClusterTitle(slug),
+			count: list.length,
+			latest: sortPosts(list)[0],
+		}))
+		.sort((a, b) => b.latest.data.pubDate.valueOf() - a.latest.data.pubDate.valueOf());
+};
+
+export const slugifyTopic = (topic: string) =>
+	topic
+		.toLowerCase()
+		.trim()
+		.replace(/[^a-z0-9а-яё\s-]/gi, '')
+		.replace(/\s+/g, '-')
+		.replace(/-+/g, '-');
+
+export const getTopicHref = (topic: string) => `/topic/${slugifyTopic(topic)}/`;
+
+export const getTopicPosts = (posts: PostEntry[], slug: string) =>
+	posts.filter((p) => p.data.topics.some((t) => slugifyTopic(t) === slug));
+
+export const buildTopicIndex = (posts: PostEntry[]) => {
+	const map = new Map<string, { label: string; posts: PostEntry[] }>();
+	for (const post of posts) {
+		for (const topic of post.data.topics) {
+			const slug = slugifyTopic(topic);
+			if (!slug) continue;
+			if (!map.has(slug)) map.set(slug, { label: topic, posts: [] });
+			map.get(slug)!.posts.push(post);
+		}
+	}
+	return map;
+};
+
+export const getRelatedPosts = (posts: PostEntry[], post: PostEntry, limit = 4) => {
+	const others = posts.filter((p) => p.id !== post.id);
+	const sameCluster = post.data.storyCluster
+		? others.filter((p) => p.data.storyCluster === post.data.storyCluster)
+		: [];
+	const sameRubric = others.filter(
+		(p) =>
+			!sameCluster.includes(p) &&
+			p.data.rubrics.some((r) => post.data.rubrics.includes(r)),
+	);
+	return sortPosts([...sameCluster, ...sameRubric]).slice(0, limit);
+};
+
+export const getAdjacentPosts = (posts: PostEntry[], post: PostEntry) => {
+	const cluster = post.data.storyCluster;
+	const pool = sortPosts(
+		cluster && posts.some((p) => p.id !== post.id && p.data.storyCluster === cluster)
+			? posts.filter((p) => p.data.storyCluster === cluster)
+			: posts.filter((p) => p.data.rubrics.some((r) => post.data.rubrics.includes(r))),
+	);
+	const idx = pool.findIndex((p) => p.id === post.id);
+	if (idx === -1) return { prev: null, next: null, scope: null };
+	return {
+		prev: idx < pool.length - 1 ? pool[idx + 1] : null,
+		next: idx > 0 ? pool[idx - 1] : null,
+		scope: cluster && pool.length > 1 && pool[0].data.storyCluster === cluster ? 'cluster' : 'rubric',
+	} as { prev: PostEntry | null; next: PostEntry | null; scope: 'cluster' | 'rubric' | null };
+};
+
 export const buildTimeline = (posts: PostEntry[], maxDays = 7) => {
 	const grouped = new Map<string, PostEntry[]>();
 

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1440" height="900" rx="28" fill="#FBFAF6"/>
+  <rect x="40" y="40" width="1360" height="820" rx="26" fill="#FBFAF6" stroke="#D7D2C4" stroke-width="2"/>
+  <rect x="72" y="72" width="1296" height="176" rx="22" fill="#141510"/>
+  <text x="110" y="144" fill="#F6F5F1" font-size="46" font-family="Arial, sans-serif" font-weight="700">Как устроен режим доступа к фронтиру</text>
+  <text x="110" y="194" fill="#C8C9C1" font-size="24" font-family="Arial, sans-serif">Модель стала только первым слоем коммерческого предложения</text>
+  <path d="M1120 110C1198 72 1292 82 1342 144C1384 198 1376 282 1324 330" stroke="#C6F24B" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="1298" cy="154" r="18" fill="#C6F24B"/>
+
+  <rect x="140" y="600" width="1160" height="82" rx="18" fill="#141510"/>
+  <rect x="190" y="494" width="1060" height="82" rx="18" fill="#35392F"/>
+  <rect x="240" y="388" width="960" height="82" rx="18" fill="#7EA41B"/>
+  <rect x="290" y="282" width="860" height="82" rx="18" fill="#C6F24B" stroke="#A9D632" stroke-width="2"/>
+  <text x="184" y="650" fill="#F6F5F1" font-size="28" font-family="Arial, sans-serif" font-weight="700">Слой 1 · Базовая модель и бенчмарки</text>
+  <text x="234" y="544" fill="#F6F5F1" font-size="28" font-family="Arial, sans-serif" font-weight="700">Слой 2 · Облака, квоты и устойчивость поставки</text>
+  <text x="284" y="438" fill="#141510" font-size="28" font-family="Arial, sans-serif" font-weight="700">Слой 3 · Аудит, журналы, корпоративный контур</text>
+  <text x="334" y="332" fill="#141510" font-size="28" font-family="Arial, sans-serif" font-weight="700">Слой 4 · Длинный договор и право приоритета</text>
+  <text x="166" y="742" fill="#555A50" font-size="22" font-family="Arial, sans-serif">Фронтир всё чаще продаётся как организованный сервис исключения, а не просто как умный ответ.</text>
+
+</svg>

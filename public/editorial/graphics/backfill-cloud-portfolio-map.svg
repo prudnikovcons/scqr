@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1440" height="900" rx="28" fill="#FBFAF6"/>
+  <rect x="40" y="40" width="1360" height="820" rx="26" fill="#FBFAF6" stroke="#D7D2C4" stroke-width="2"/>
+  <rect x="72" y="72" width="1296" height="176" rx="22" fill="#141510"/>
+  <text x="110" y="144" fill="#F6F5F1" font-size="46" font-family="Arial, sans-serif" font-weight="700">Портфель мощностей вместо одной ставки</text>
+  <text x="110" y="194" fill="#C8C9C1" font-size="24" font-family="Arial, sans-serif">Крупные лаборатории переходят к многоплатформенной инфраструктуре</text>
+  <path d="M1120 110C1198 72 1292 82 1342 144C1384 198 1376 282 1324 330" stroke="#C6F24B" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="1298" cy="154" r="18" fill="#C6F24B"/>
+
+  <rect x="136" y="272" width="1168" height="404" rx="26" fill="#F7F8F3" stroke="#D9DBD1"/>
+  <rect x="194" y="340" width="186" height="112" rx="18" fill="#141510"/>
+  <rect x="420" y="340" width="186" height="112" rx="18" fill="#F4F0E6" stroke="#D9DBD1"/>
+  <rect x="646" y="340" width="186" height="112" rx="18" fill="#F4F0E6" stroke="#D9DBD1"/>
+  <rect x="872" y="340" width="186" height="112" rx="18" fill="#F4F0E6" stroke="#D9DBD1"/>
+  <rect x="1098" y="340" width="148" height="112" rx="18" fill="#F4F0E6" stroke="#D9DBD1"/>
+  <text x="232" y="406" fill="#F6F5F1" font-size="24" font-family="Arial, sans-serif" font-weight="700">Облака</text>
+  <text x="462" y="406" fill="#141510" font-size="24" font-family="Arial, sans-serif" font-weight="700">Чипы</text>
+  <text x="682" y="406" fill="#141510" font-size="24" font-family="Arial, sans-serif" font-weight="700">Собственный</text>
+  <text x="684" y="436" fill="#141510" font-size="24" font-family="Arial, sans-serif" font-weight="700">дизайн</text>
+  <text x="914" y="406" fill="#141510" font-size="24" font-family="Arial, sans-serif" font-weight="700">ЦОД</text>
+  <text x="1124" y="406" fill="#141510" font-size="24" font-family="Arial, sans-serif" font-weight="700">Сбыт</text>
+  <path d="M286 484V566" stroke="#A9D632" stroke-width="8" stroke-linecap="round"/>
+  <path d="M512 484V566" stroke="#A9D632" stroke-width="8" stroke-linecap="round"/>
+  <path d="M738 484V566" stroke="#A9D632" stroke-width="8" stroke-linecap="round"/>
+  <path d="M964 484V566" stroke="#A9D632" stroke-width="8" stroke-linecap="round"/>
+  <path d="M1172 484V566" stroke="#A9D632" stroke-width="8" stroke-linecap="round"/>
+  <rect x="226" y="566" width="980" height="72" rx="18" fill="#C6F24B" stroke="#A9D632"/>
+  <text x="288" y="610" fill="#141510" font-size="28" font-family="Arial, sans-serif" font-weight="700">Портфель мощности = гибкость, цена переговоров и устойчивость к дефициту</text>
+
+</svg>

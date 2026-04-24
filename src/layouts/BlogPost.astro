@@ -5,11 +5,31 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import PostThumbnail from '../components/PostThumbnail.astro';
 import RubricLabel from '../components/RubricLabel.astro';
 import TickerBar from '../components/TickerBar.astro';
-import { getArticleTypeLabelFromValue } from '../lib/site';
+import {
+	getArticleTypeLabel,
+	getArticleTypeLabelFromValue,
+	getClusterHref,
+	getPostHref,
+	getPrimaryRubric,
+	getReadingTimeLabel,
+	getToneClass,
+	getTopicHref,
+} from '../lib/site';
 
-type Props = CollectionEntry<'posts'>['data'];
+type PostEntry = CollectionEntry<'posts'>;
+
+type Props = PostEntry['data'] & {
+	related?: PostEntry[];
+	prev?: PostEntry | null;
+	next?: PostEntry | null;
+	adjacentScope?: 'cluster' | 'rubric' | null;
+	clusterSlug?: string | null;
+	clusterTitle?: string | null;
+	clusterSize?: number;
+};
 
 const {
 	title,
@@ -22,9 +42,17 @@ const {
 	rubricLabels = [],
 	topics = [],
 	sourceNote,
+	related = [],
+	prev = null,
+	next = null,
+	adjacentScope = null,
+	clusterSlug = null,
+	clusterTitle = null,
+	clusterSize = 0,
 } = Astro.props;
 
 const displayRubrics = rubricLabels.length > 0 ? rubricLabels : rubrics;
+const scopeLabel = adjacentScope === 'cluster' ? 'В сюжете' : 'В рубрике';
 ---
 
 <html lang="ru">
@@ -58,6 +86,13 @@ const displayRubrics = rubricLabels.length > 0 ? rubricLabels : rubrics;
 							}
 						</div>
 					</div>
+					{clusterSlug && clusterTitle && clusterSize > 1 && (
+						<a class="article-cluster-chip" href={getClusterHref(clusterSlug)}>
+							<span class="article-cluster-chip__kicker">Часть сюжета</span>
+							<span class="article-cluster-chip__title">{clusterTitle}</span>
+							<span class="article-cluster-chip__count">{clusterSize} материалов →</span>
+						</a>
+					)}
 					<h1 class="article-title">{title}</h1>
 					<p class="article-dek">{description}</p>
 				</div>
@@ -76,7 +111,9 @@ const displayRubrics = rubricLabels.length > 0 ? rubricLabels : rubrics;
 									<div class="article-support-block">
 										<h2>Темы</h2>
 										<div class="article-chip-row">
-											{topics.map((topic) => <span class="article-chip article-chip-muted">{topic}</span>)}
+											{topics.map((topic) => (
+												<a href={getTopicHref(topic)} class="article-chip article-chip-muted article-chip-link">{topic}</a>
+											))}
 										</div>
 									</div>
 								)}
@@ -90,6 +127,50 @@ const displayRubrics = rubricLabels.length > 0 ? rubricLabels : rubrics;
 						)
 					}
 				</div>
+
+				{(prev || next) && (
+					<nav class="article-adjacent" aria-label="Навигация по материалам">
+						<span class="article-adjacent__scope">{scopeLabel}</span>
+						<div class="article-adjacent__row">
+							{prev ? (
+								<a class="article-adjacent__link article-adjacent__link--prev" href={getPostHref(prev)}>
+									<span class="article-adjacent__dir">← Предыдущий</span>
+									<strong>{prev.data.title}</strong>
+								</a>
+							) : <span />}
+							{next ? (
+								<a class="article-adjacent__link article-adjacent__link--next" href={getPostHref(next)}>
+									<span class="article-adjacent__dir">Следующий →</span>
+									<strong>{next.data.title}</strong>
+								</a>
+							) : <span />}
+						</div>
+					</nav>
+				)}
+
+				{related.length > 0 && (
+					<section class="article-related">
+						<h2 class="article-related__head">Продолжение темы</h2>
+						<div class="article-related__grid">
+							{related.map((item, index) => (
+								<article class="article-related__item">
+									<PostThumbnail post={item} className="article-related__thumb" toneClass={getToneClass(index)} />
+									<div class="article-related__body">
+										<div class="archive-feed__meta">
+											<span class="content-tag"><RubricLabel name={getPrimaryRubric(item)} /></span>
+											<span>{getArticleTypeLabel(item)}</span>
+											<span>{getReadingTimeLabel(item)}</span>
+										</div>
+										<h3 class="article-related__title">
+											<a href={getPostHref(item)}>{item.data.title}</a>
+										</h3>
+										<p>{item.data.description}</p>
+									</div>
+								</article>
+							))}
+						</div>
+					</section>
+				)}
 			</article>
 		</main>
 		<Footer />

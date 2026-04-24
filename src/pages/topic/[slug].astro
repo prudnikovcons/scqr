@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import PostThumbnail from '../../components/PostThumbnail.astro';
+import RubricLabel from '../../components/RubricLabel.astro';
+import TickerBar from '../../components/TickerBar.astro';
+import { SITE_TITLE } from '../../consts';
+import {
+	buildTopicIndex,
+	getArticleTypeLabel,
+	getPostHref,
+	getPrimaryRubric,
+	getReadingTimeLabel,
+	getToneClass,
+	getVisiblePosts,
+	sortPosts,
+} from '../../lib/site';
+
+export async function getStaticPaths() {
+	const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
+	const index = buildTopicIndex(posts);
+	return [...index.entries()].map(([slug, { label, posts: topicPosts }]) => ({
+		params: { slug },
+		props: { slug, label, posts: sortPosts(topicPosts) },
+	}));
+}
+
+const { label, posts } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ru">
+	<head>
+		<BaseHead title={`${label} — ${SITE_TITLE}`} description={`Материалы SCQR по теме «${label}».`} />
+	</head>
+	<body>
+		<Header />
+		<TickerBar />
+		<main class="main-shell">
+			<section class="topic-hero">
+				<p class="section-kicker">Тема</p>
+				<h1 class="topic-hero__title">{label}</h1>
+				<div class="topic-hero__meta">
+					<span>{posts.length} материалов</span>
+					<a href="/blog" class="topic-hero__back">← Архив</a>
+				</div>
+			</section>
+
+			<section class="archive-feed">
+				{posts.map((post, index) => (
+					<article class="archive-feed__item">
+						<PostThumbnail post={post} className="archive-feed__thumb" toneClass={getToneClass(index)} />
+						<div>
+							<div class="archive-feed__meta">
+								<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
+								<span>{getArticleTypeLabel(post)}</span>
+								<span>{getReadingTimeLabel(post)}</span>
+							</div>
+							<h2 class="archive-feed__item-title">
+								<a href={getPostHref(post)}>{post.data.title}</a>
+							</h2>
+							<p>{post.data.description}</p>
+						</div>
+					</article>
+				))}
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1440" height="900" rx="28" fill="#FBFAF6"/>
+  <rect x="40" y="40" width="1360" height="820" rx="26" fill="#FBFAF6" stroke="#D7D2C4" stroke-width="2"/>
+  <rect x="72" y="72" width="1296" height="176" rx="22" fill="#141510"/>
+  <text x="110" y="144" fill="#F6F5F1" font-size="46" font-family="Arial, sans-serif" font-weight="700">Энергия, вычисления и выручка</text>
+  <text x="110" y="194" fill="#C8C9C1" font-size="24" font-family="Arial, sans-serif">Почему рынок ИИ всё чаще считает не токены, а мегаватты</text>
+  <path d="M1120 110C1198 72 1292 82 1342 144C1384 198 1376 282 1324 330" stroke="#C6F24B" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="1298" cy="154" r="18" fill="#C6F24B"/>
+
+  <circle cx="286" cy="452" r="134" fill="#141510"/>
+  <circle cx="720" cy="452" r="134" fill="#F4F0E6" stroke="#D9DBD1" stroke-width="2"/>
+  <circle cx="1154" cy="452" r="134" fill="#C6F24B" stroke="#A9D632" stroke-width="2"/>
+  <text x="216" y="438" fill="#F6F5F1" font-size="30" font-family="Arial, sans-serif" font-weight="700">Энергия</text>
+  <text x="194" y="478" fill="#C8C9C1" font-size="22" font-family="Arial, sans-serif">земля, сеть,</text>
+  <text x="208" y="508" fill="#C8C9C1" font-size="22" font-family="Arial, sans-serif">охлаждение</text>
+  <text x="632" y="438" fill="#141510" font-size="30" font-family="Arial, sans-serif" font-weight="700">Вычисления</text>
+  <text x="620" y="478" fill="#555A50" font-size="22" font-family="Arial, sans-serif">чипы, стойки,</text>
+  <text x="628" y="508" fill="#555A50" font-size="22" font-family="Arial, sans-serif">облака и ЦОД</text>
+  <text x="1082" y="438" fill="#141510" font-size="30" font-family="Arial, sans-serif" font-weight="700">Выручка</text>
+  <text x="1058" y="478" fill="#141510" font-size="22" font-family="Arial, sans-serif">контракты,</text>
+  <text x="1046" y="508" fill="#141510" font-size="22" font-family="Arial, sans-serif">агенты, внедрение</text>
+  <path d="M420 452H580" stroke="#A9D632" stroke-width="10" stroke-linecap="round"/>
+  <path d="M854 452H1014" stroke="#A9D632" stroke-width="10" stroke-linecap="round"/>
+  <path d="M1062 596C950 694 792 742 628 720C442 694 288 600 218 466" stroke="#141510" stroke-width="3" stroke-dasharray="10 10"/>
+  <text x="500" y="760" fill="#141510" font-size="22" font-family="Arial, sans-serif">Чем плотнее связка между этими тремя узлами, тем устойчивее рынок.</text>
+
+</svg>

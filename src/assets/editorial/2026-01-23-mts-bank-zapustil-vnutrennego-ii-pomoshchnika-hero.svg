@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg-3" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f6f1e3"/>
+      <stop offset="1" stop-color="#e3dcc7"/>
+    </linearGradient>
+    <radialGradient id="glow-3" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1220 180) rotate(90) scale(280 360)">
+      <stop stop-color="#c6f24b" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#c6f24b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg-3)"/>
+  <rect x="72" y="72" width="1456" height="756" rx="28" stroke="#d8d2bf" stroke-width="2"/>
+  <rect x="106" y="106" width="672" height="688" rx="28" fill="#f6f1e3" stroke="#d8d2bf" stroke-width="1.5"/>
+  <path d="M876 214C976 122 1132 108 1248 162C1358 214 1432 324 1432 446C1432 614 1298 742 1116 742C980 742 852 674 780 572" stroke="#dff699" stroke-width="3"/>
+  <path d="M904 310C990 250 1096 230 1194 250C1328 280 1416 394 1400 542C1388 642 1330 728 1248 784" stroke="#d8d2bf" stroke-width="1.5" stroke-dasharray="8 10"/>
+  <circle cx="1220" cy="180" r="260" fill="url(#glow-3)"/>
+  <text x="154" y="178" fill="#141510" font-size="26" font-family="Arial, sans-serif" letter-spacing="0.14em">23 ЯНВАРЯ 2026 Г.</text>
+  <text x="154" y="220" fill="#141510" fill-opacity="0.72" font-size="22" font-family="Arial, sans-serif" letter-spacing="0.18em">НОВОСТЬ</text>
+  <text x="154" y="442" fill="#141510" font-size="118" font-family="Arial, sans-serif" font-weight="800" letter-spacing="-0.04em">ВНУТРИ</text>
+  <text x="154" y="564" fill="#141510" font-size="118" font-family="Arial, sans-serif" font-weight="800" letter-spacing="-0.04em">КОНТУРА</text>
+  <rect x="154" y="628" width="138" height="10" rx="5" fill="#c6f24b"/>
+  <text x="154" y="706" fill="#141510" fill-opacity="0.72" font-size="30" font-family="Arial, sans-serif">В России</text>
+  <text x="154" y="754" fill="#141510" fill-opacity="0.56" font-size="24" font-family="Arial, sans-serif">SCQR backfill wave</text>
+</svg>
