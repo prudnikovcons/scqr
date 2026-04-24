@@ -2,44 +2,34 @@
 import { SITE_TITLE } from '../consts';
 import { RUBRIC_CONFIG } from '../lib/site';
 import RubricLabel from './RubricLabel.astro';
-
-const primaryLinks = [
-	{ href: '/blog', label: 'Новости' },
-	{ href: '/#analysis', label: 'Аналитика' },
-	{ href: '/#columns', label: 'Колонки' },
-	{ href: '/#weekly-digest', label: 'Дайджест' },
-	{ href: '/#registry', label: 'Реестр' },
-	{ href: '/about', label: 'О проекте' },
-];
-
 ---
 
 <header class="site-header">
-	<div class="site-header__main">
+	<div class="site-header__inner">
 		<a class="site-brand" href="/">
 			<span class="site-brand__mark">{SITE_TITLE}<i>.</i></span>
-			<span class="site-brand__descriptor">Новости и аналитика<br />о рынке ИИ</span>
 		</a>
 
-		<nav class="site-nav" aria-label="Primary navigation">
+		<nav class="site-rubric-nav" aria-label="Рубрики">
 			{
-				primaryLinks.map((link) => (
-					<a href={link.href}>{link.label}</a>
+				RUBRIC_CONFIG.map((rubric) => (
+					<a href={`/rubric/${rubric.slug}/`} class={`site-rubric-nav__item tone--${rubric.tone}`}>
+						<RubricLabel name={rubric.label} />
+					</a>
 				))
 			}
 		</nav>
 
-		<div class="site-tools">
-			<a class="site-tool" href="/rss.xml" aria-label="RSS">RSS</a>
-			<a class="site-tool" href="/about" aria-label="О проекте">О проекте</a>
+		<div class="site-header__aside">
+			<a href="/blog" class="site-header__link">Архив</a>
+			<a href="/rss.xml" class="site-header__link site-header__rss" aria-label="RSS">
+				<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<circle cx="2.5" cy="11.5" r="1.5" fill="currentColor"/>
+					<path d="M1 6.5C4.03757 6.5 6.5 8.96243 6.5 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+					<path d="M1 2C6.52285 2 11 6.47715 11 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+				</svg>
+				RSS
+			</a>
 		</div>
-	</div>
-
-	<div class="site-header__rubrics">
-		{
-			RUBRIC_CONFIG.map((rubric) => (
-				<a href={`/rubric/${rubric.slug}/`}><RubricLabel name={rubric.label} /></a>
-			))
-		}
 	</div>
 </header>
