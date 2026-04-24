@@ -16,6 +16,7 @@ readingTime: 2
 publicUrl: "/2026-03-23-meta-hyperagents/"
 heroAlt: "Редакционная обложка SCQR к материалу «HyperAgents: еще один путь к ИИ, который труднее удержать»."
 heroStyle: "signal_network"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-innovations-hero.svg
 ---
 

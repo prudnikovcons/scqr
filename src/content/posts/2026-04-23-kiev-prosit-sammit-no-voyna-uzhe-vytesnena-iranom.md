@@ -17,6 +17,7 @@ readingTime: 1
 publicUrl: "/2026-04-23-kiev-prosit-sammit-no-voyna-uzhe-vytesnena-iranom/"
 heroAlt: "Редакционная обложка SCQR к материалу «Киев просит саммит, но война уже вытеснена Ираном»."
 heroStyle: "quiet_monument"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-russia-hero.svg
 ---
 

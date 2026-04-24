@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-04-14-openai-zapustila-gpt-5-4-cyber-kak-model-doverennogo-dostupa/"
 heroAlt: "Редакционная обложка SCQR к материалу «OpenAI запустила GPT-5.4-Cyber как модель доверенного доступа»."
 heroStyle: "threshold_space"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-automations-hero.svg
 ---
 

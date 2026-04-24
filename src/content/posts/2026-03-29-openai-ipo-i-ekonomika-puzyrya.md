@@ -16,6 +16,7 @@ readingTime: 2
 publicUrl: "/2026-03-29-openai-ipo-i-ekonomika-puzyrya/"
 heroAlt: "Редакционная обложка SCQR к материалу «IPO на фоне убытков: как рынок ИИ раскалывается на две экономики»."
 heroStyle: "quiet_monument"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-tendencies-hero.svg
 ---
 

@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-02-20-rossiyskie-regiony-vyvodyat-ii-iz-federalnoy-vitriny/"
 heroAlt: "Редакционная обложка SCQR к материалу «Российские регионы выводят ИИ из федеральной витрины в прикладной слой»."
 heroStyle: "quiet_monument"
+heroSource: "generated"
 heroImage: ../../assets/editorial/2026-02-20-rossiyskie-regiony-vyvodyat-ii-iz-federalnoy-vitriny-hero.svg
 ---
 

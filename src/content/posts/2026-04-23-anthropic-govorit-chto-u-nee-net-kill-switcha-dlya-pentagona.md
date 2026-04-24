@@ -17,6 +17,7 @@ readingTime: 1
 publicUrl: "/2026-04-23-anthropic-govorit-chto-u-nee-net-kill-switcha-dlya-pentagona/"
 heroAlt: "Редакционная обложка SCQR к материалу «Anthropic говорит, что у нее нет kill switch для Пентагона»."
 heroStyle: "threshold_space"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-regulations-hero.svg
 ---
 

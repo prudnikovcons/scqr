@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-03-23-evropa-perevodit-gpai-v-rezhim-prakticheskogo-sootvetstviya/"
 heroAlt: "Редакционная обложка SCQR к материалу «Европа переводит GPAI в режим практического соответствия»."
 heroStyle: "threshold_space"
+heroSource: "generated"
 heroImage: ../../assets/editorial/2026-03-23-evropa-perevodit-gpai-v-rezhim-prakticheskogo-sootvetstviya-hero.svg
 ---
 

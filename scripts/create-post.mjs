@@ -9,6 +9,7 @@
 import { writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { recommendHeroStrategy } from '../src/data/editorial-designer.js';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const postsDir = join(__dir, '../src/content/posts');
@@ -23,18 +24,6 @@ const RUBRIC_LABELS = {
   regulations:  'Регуляции',
   theories:     'Теории',
   tendencies:   'Тенденции',
-};
-
-const DEFAULT_STYLE_BY_RUBRIC = {
-  trajectories: 'industrial_plate',
-  generations: 'threshold_space',
-  automations: 'signal_network',
-  innovations: 'signal_network',
-  illusions: 'editorial_collage',
-  russia: 'quiet_monument',
-  regulations: 'threshold_space',
-  theories: 'editorial_collage',
-  tendencies: 'industrial_plate',
 };
 
 function slugify(str) {
@@ -78,7 +67,13 @@ const slug = slugify(rawTitle);
 const filename = `${today}-${slug}.md`;
 const filepath = join(postsDir, filename);
 const label = RUBRIC_LABELS[rubricSlug];
-const heroStyle = DEFAULT_STYLE_BY_RUBRIC[rubricSlug] ?? 'quiet_monument';
+const heroStrategy = recommendHeroStrategy({
+  rubricSlug,
+  articleType,
+  title: rawTitle,
+  topics: [label],
+});
+const heroStyle = heroStrategy.styleId;
 
 const pubDate = new Date().toISOString().replace(/\.\d+Z$/, '');
 const publicUrl = `/${today}-${slug}/`;
@@ -101,6 +96,7 @@ readingTime: 3
 publicUrl: "${publicUrl}"
 heroAlt: "Редакционная обложка SCQR к материалу «${rawTitle}»."
 heroStyle: "${heroStyle}"
+heroSource: "${heroStrategy.heroSource}"
 heroImage: ../../assets/blog-placeholder-1.jpg
 ---
 

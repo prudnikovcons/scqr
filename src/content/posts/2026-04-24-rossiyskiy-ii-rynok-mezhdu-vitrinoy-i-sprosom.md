@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-04-24-rossiyskiy-ii-rynok-mezhdu-vitrinoy-i-sprosom/"
 heroAlt: "Редакционная обложка SCQR к материалу «Отечественный ИИ-рынок между витриной и реальным спросом»."
 heroStyle: "signal_network"
+heroSource: "generated"
 heroImage: ../../assets/editorial/2026-04-24-rossiyskiy-ii-rynok-mezhdu-vitrinoy-i-sprosom-hero.svg
 ---
 

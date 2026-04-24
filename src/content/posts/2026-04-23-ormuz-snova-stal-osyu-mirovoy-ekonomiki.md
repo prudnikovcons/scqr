@@ -16,6 +16,7 @@ readingTime: 2
 publicUrl: "/2026-04-23-ormuz-snova-stal-osyu-mirovoy-ekonomiki/"
 heroAlt: "Редакционная обложка SCQR к материалу «Ормуз снова стал осью мировой экономики»."
 heroStyle: "quiet_monument"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-tendencies-hero.svg
 ---
 

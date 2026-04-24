@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-03-25-openai-spud/"
 heroAlt: "Редакционная обложка SCQR к материалу «Spud: зачем OpenAI снова складывает компанию в одну модель»."
 heroStyle: "threshold_space"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-innovations-hero.svg
 ---
 

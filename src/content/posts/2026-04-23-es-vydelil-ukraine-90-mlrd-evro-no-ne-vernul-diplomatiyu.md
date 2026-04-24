@@ -17,6 +17,7 @@ readingTime: 1
 publicUrl: "/2026-04-23-es-vydelil-ukraine-90-mlrd-evro-no-ne-vernul-diplomatiyu/"
 heroAlt: "Редакционная обложка SCQR к материалу «ЕС выделил Украине 90 млрд евро, но не вернул дипломатию»."
 heroStyle: "quiet_monument"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-russia-hero.svg
 ---
 

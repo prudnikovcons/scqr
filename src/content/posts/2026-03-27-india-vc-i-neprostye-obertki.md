@@ -16,6 +16,7 @@ readingTime: 2
 publicUrl: "/2026-03-27-india-vc-i-neprostye-obertki/"
 heroAlt: "Редакционная обложка SCQR к материалу «Недооцененный слой: почему \\\"обертки над моделями\\\" тоже строят рынок ИИ»."
 heroStyle: "quiet_monument"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-tendencies-hero.svg
 ---
 

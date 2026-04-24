@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-03-30-mcp-stanovitsya-standartom-agentov/"
 heroAlt: "Редакционная обложка SCQR к материалу «MCP выходит из стадии моды и становится стандартом»."
 heroStyle: "signal_network"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-automations-hero.svg
 ---
 

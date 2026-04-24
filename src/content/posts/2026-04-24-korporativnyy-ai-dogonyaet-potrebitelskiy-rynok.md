@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-04-24-korporativnyy-ai-dogonyaet-potrebitelskiy-rynok/"
 heroAlt: "Редакционная обложка SCQR к материалу «Корпоративный ИИ догоняет потребительский рынок по деньгам и влиянию»."
 heroStyle: "quiet_monument"
+heroSource: "generated"
 heroImage: ../../assets/editorial/2026-04-24-korporativnyy-ai-dogonyaet-potrebitelskiy-rynok-hero-v2.png
 ---
 

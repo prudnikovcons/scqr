@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-02-27-partnerstvo-microsoft-i-openai-pokazyvaet-cenu-gibkosti/"
 heroAlt: "Редакционная обложка SCQR к материалу «Партнёрство Microsoft и OpenAI показывает цену гибкости в эпоху дефицита»."
 heroStyle: "quiet_monument"
+heroSource: "generated"
 heroImage: ../../assets/editorial/2026-02-27-partnerstvo-microsoft-i-openai-pokazyvaet-cenu-gibkosti-hero.svg
 ---
 

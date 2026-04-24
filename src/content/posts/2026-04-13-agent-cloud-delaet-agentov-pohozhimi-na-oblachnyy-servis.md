@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-04-13-agent-cloud-delaet-agentov-pohozhimi-na-oblachnyy-servis/"
 heroAlt: "Редакционная обложка SCQR к материалу «Agent Cloud делает агентов больше похожими на облачный сервис, чем на лабораторный трюк»."
 heroStyle: "signal_network"
+heroSource: "generated"
 heroImage: ../../assets/editorial/2026-04-13-agent-cloud-delaet-agentov-pohozhimi-na-oblachnyy-servis-hero.svg
 ---
 

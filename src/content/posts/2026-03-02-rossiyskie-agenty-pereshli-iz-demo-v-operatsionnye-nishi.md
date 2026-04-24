@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-03-02-rossiyskie-agenty-pereshli-iz-demo-v-operatsionnye-nishi/"
 heroAlt: "Редакционная обложка SCQR к материалу «Российские агенты переходят из демо в операционные ниши»."
 heroStyle: "signal_network"
+heroSource: "generated"
 heroImage: ../../assets/editorial/2026-03-02-rossiyskie-agenty-pereshli-iz-demo-v-operatsionnye-nishi-hero.svg
 ---
 

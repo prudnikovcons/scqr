@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-03-23-ai-fabriki-vhodyat-v-energosistemu-kak-novyy-tip-nagruzki/"
 heroAlt: "Редакционная обложка SCQR к материалу «AI-фабрики входят в энергосистему как новый тип промышленной нагрузки»."
 heroStyle: "industrial_plate"
+heroSource: "generated"
 heroImage: ../../assets/editorial/2026-03-23-ai-fabriki-vhodyat-v-energosistemu-kak-novyy-tip-nagruzki-hero.svg
 ---
 

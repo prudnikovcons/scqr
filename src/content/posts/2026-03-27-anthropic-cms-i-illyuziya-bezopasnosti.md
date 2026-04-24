@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-03-27-anthropic-cms-i-illyuziya-bezopasnosti/"
 heroAlt: "Редакционная обложка SCQR к материалу «Anthropic показала старую истину: безопасность рушится на банальной CMS»."
 heroStyle: "signal_network"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-illusions-hero.svg
 ---
 

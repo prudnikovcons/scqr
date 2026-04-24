@@ -17,6 +17,7 @@ readingTime: 1
 publicUrl: "/2026-04-23-poslablenie-po-rossiyskoy-nefti-pokazalo-predel-sanktsionnoy-logiki/"
 heroAlt: "Редакционная обложка SCQR к материалу «Послабление по российской нефти показало предел санкционной логики»."
 heroStyle: "threshold_space"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-regulations-hero.svg
 ---
 

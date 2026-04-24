@@ -15,7 +15,19 @@ import {
 	premiumTrackPostIds,
 	rubricLeadBySlug,
 } from '../src/data/curation.shared.js';
-import { EDITORIAL_IMAGE_STYLE_ORDER } from '../src/data/editorial-image-styles.js';
+import {
+	countDistinctVisualModes,
+	getVisualMode,
+	hasRepeatingVisualRun,
+	inferHeroSource,
+	isMeaningfulHeroAlt,
+} from '../src/data/editorial-designer.js';
+import {
+	EDITORIAL_IMAGE_STYLE_ORDER,
+	HERO_SOURCE_OPTIONS,
+	isLegacyEditorialImageStyle,
+	isPrimaryEditorialImageStyle,
+} from '../src/data/editorial-image-styles.js';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const postsDir = join(__dir, '../src/content/posts');
@@ -27,6 +39,7 @@ const VALID_RUBRIC_SLUGS = [
 
 const VALID_ARTICLE_TYPES = ['news', 'analysis', 'column', 'illustration'];
 const VALID_HERO_STYLES = new Set(EDITORIAL_IMAGE_STYLE_ORDER);
+const VALID_HERO_SOURCES = new Set(HERO_SOURCE_OPTIONS);
 const RUBRIC_LABELS = {
 	trajectories: 'Траектории',
 	generations: 'Генерации',
@@ -87,9 +100,15 @@ const PREMIUM_SLOT_IDS = new Set([
 	...Object.values(clusterSpotlightBySlug),
 	...premiumTrackPostIds,
 ].filter(Boolean));
+const HIGH_VISIBILITY_SLOT_IDS = new Set([
+	homepageLead,
+	...homepageVisualGrid,
+	...Object.values(rubricLeadBySlug),
+	...Object.values(clusterSpotlightBySlug),
+].filter(Boolean));
 
 function parseFrontmatter(content) {
-	const match = content.match(/^---\n([\s\S]*?)\n---/);
+	const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
 	if (!match) return null;
 	const raw = match[1];
 	const obj = {};
@@ -118,12 +137,12 @@ function parseFrontmatter(content) {
 }
 
 function countWords(content) {
-	const body = content.replace(/^---[\s\S]*?---\n/, '');
+	const body = content.replace(/^---[\s\S]*?---\r?\n/, '');
 	return body.trim().split(/\s+/).filter(Boolean).length;
 }
 
 function getBody(content) {
-	return content.replace(/^---[\s\S]*?---\n/, '').trim();
+	return content.replace(/^---[\s\S]*?---\r?\n/, '').trim();
 }
 
 function resolveHeroPath(file, heroImage) {
@@ -139,6 +158,7 @@ function isPremiumHero(heroImage) {
 const files = readdirSync(postsDir).filter((f) => f.endsWith('.md'));
 const errors = [];
 const warnings = [];
+const postMeta = new Map();
 
 for (const file of files) {
 	const content = readFileSync(join(postsDir, file), 'utf8');
@@ -154,6 +174,14 @@ for (const file of files) {
 	const publishReady = fm.status === 'ready';
 	const legacyPublished = fm.status === 'approved';
 	const premiumSlotCandidate = PREMIUM_SLOT_IDS.has(postId);
+	const heroSource = fm.heroSource ?? inferHeroSource(fm.heroImage);
+
+	postMeta.set(postId, {
+		file,
+		heroStyle: fm.heroStyle,
+		heroSource,
+		articleType: fm.articleType,
+	});
 
 	if (!fm.title || !fm.title.trim()) {
 		errors.push(`${ctx}: title is empty`);
@@ -173,6 +201,10 @@ for (const file of files) {
 
 	if (!fm.heroStyle || !VALID_HERO_STYLES.has(String(fm.heroStyle))) {
 		errors.push(`${ctx}: heroStyle "${fm.heroStyle}" is not valid`);
+	}
+
+	if (fm.heroSource && !VALID_HERO_SOURCES.has(String(fm.heroSource))) {
+		errors.push(`${ctx}: heroSource "${fm.heroSource}" is not valid`);
 	}
 
 	if (!fm.pubDate) {
@@ -224,6 +256,9 @@ for (const file of files) {
 		if (!fm.heroAlt || !String(fm.heroAlt).trim()) {
 			errors.push(`${ctx}: published material requires heroAlt`);
 		}
+		if (!heroSource || !VALID_HERO_SOURCES.has(String(heroSource))) {
+			errors.push(`${ctx}: published material requires valid heroSource`);
+		}
 		if (!fm.heroStyle || !VALID_HERO_STYLES.has(String(fm.heroStyle))) {
 			errors.push(`${ctx}: published material requires valid heroStyle`);
 		}
@@ -239,6 +274,10 @@ for (const file of files) {
 		}
 	}
 
+	if (heroSource === 'user-supplied' && !isMeaningfulHeroAlt(fm.heroAlt, fm.title)) {
+		warnings.push(`${ctx}: user-supplied image should have a more specific heroAlt`);
+	}
+
 	if (premiumSlotCandidate) {
 		if (!publishReady) {
 			errors.push(`${ctx}: premium-slot candidate must have status "ready"`);
@@ -248,6 +287,18 @@ for (const file of files) {
 		}
 		if (!isPremiumHero(String(fm.heroImage ?? ''))) {
 			errors.push(`${ctx}: premium-slot candidate must use a premium heroImage, not a secondary or placeholder cover`);
+		}
+		if (!heroSource || !VALID_HERO_SOURCES.has(String(heroSource))) {
+			errors.push(`${ctx}: premium-slot candidate requires valid heroSource`);
+		}
+		if (heroSource === 'user-supplied' && !isMeaningfulHeroAlt(fm.heroAlt, fm.title)) {
+			errors.push(`${ctx}: user-supplied premium visual requires a specific, non-generic heroAlt`);
+		}
+		if (HIGH_VISIBILITY_SLOT_IDS.has(postId) && isLegacyEditorialImageStyle(String(fm.heroStyle)) && !editorialFlags.includes('legacy-premium-ok')) {
+			warnings.push(`${ctx}: premium-slot candidate still uses a legacy heroStyle`);
+		}
+		if (isPrimaryEditorialImageStyle(String(fm.heroStyle)) && heroSource === 'generated' && String(fm.heroImage ?? '').includes('secondary-')) {
+			warnings.push(`${ctx}: primary-style premium candidate is paired with a secondary cover`);
 		}
 	}
 
@@ -309,6 +360,39 @@ for (const file of files) {
 	const body = getBody(content);
 	if (!body) {
 		warnings.push(`${ctx}: body is empty`);
+	}
+}
+
+const homepageFrontIds = [homepageLead, ...homepageVisualGrid].filter(Boolean);
+const homepageFrontStyles = homepageFrontIds
+	.map((id) => postMeta.get(id)?.heroStyle)
+	.filter(Boolean);
+const homepageFrontSources = homepageFrontIds
+	.map((id) => postMeta.get(id)?.heroSource)
+	.filter(Boolean);
+
+if (homepageFrontStyles.length > 0) {
+	if (countDistinctVisualModes(homepageFrontStyles) < 3) {
+		errors.push(
+			`homepage frontline uses only ${countDistinctVisualModes(homepageFrontStyles)} visual modes (expected at least 3 across lead + visual grid)`,
+		);
+	}
+
+	if (hasRepeatingVisualRun(homepageFrontStyles, 3)) {
+		errors.push('homepage frontline contains a run of 3 similar visual modes in a row');
+	}
+}
+
+const userSuppliedFrontCount = homepageFrontSources.filter((source) => source === 'user-supplied').length;
+if (homepageFrontStyles.length > 0 && userSuppliedFrontCount === 0) {
+	warnings.push('homepage frontline does not use any user-supplied imagery');
+}
+
+for (const [slug, postId] of Object.entries(rubricLeadBySlug)) {
+	const meta = postMeta.get(postId);
+	if (!meta) continue;
+	if (isLegacyEditorialImageStyle(String(meta.heroStyle)) && !['illusions', 'theories'].includes(slug)) {
+		warnings.push(`${postId}: rubric lead "${slug}" still relies on a legacy visual style`);
 	}
 }
 

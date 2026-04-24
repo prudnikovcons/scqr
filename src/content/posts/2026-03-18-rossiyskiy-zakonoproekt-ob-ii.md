@@ -16,6 +16,7 @@ readingTime: 3
 publicUrl: "/2026-03-18-rossiyskiy-zakonoproekt-ob-ii/"
 heroAlt: "Редакционная обложка SCQR к материалу «Законопроект Минцифры об ИИ: государство строит не рынок, а контур допуска»."
 heroStyle: "threshold_space"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-regulations-hero.svg
 ---
 

@@ -16,6 +16,7 @@ readingTime: 2
 publicUrl: "/2026-04-24-kitay-reguliruet-ne-model-a-privyazannost-k-ney/"
 heroAlt: "Редакционная иллюстрация о регуляторных границах и контроле эмоционального взаимодействия с ИИ."
 heroStyle: "threshold_space"
+heroSource: "user-supplied"
 heroImage: ../../assets/editorial/contributed/2026-04-24/sig-20260424-eu-ai-omnibus.png
 ---
 

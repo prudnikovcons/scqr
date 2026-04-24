@@ -16,6 +16,7 @@ readingTime: 3
 publicUrl: "/2026-03-28-tsentr-ii-smeshchaetsya-v-aziyu/"
 heroAlt: "Редакционная обложка SCQR к материалу «Центр ИИ смещается в Азию»."
 heroStyle: "quiet_monument"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-trajectories-hero.svg
 ---
 

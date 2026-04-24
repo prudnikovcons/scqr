@@ -16,6 +16,7 @@ readingTime: 2
 publicUrl: "/2026-04-24-rynok-ii-stanovitsya-infrastrukturnoy-gonkoy/"
 heroAlt: "Редакционная обложка SCQR к материалу «Почему рынок ИИ всё больше похож на инфраструктурную гонку, а не на гонку приложений»."
 heroStyle: "industrial_plate"
+heroSource: "generated"
 heroImage: ../../assets/editorial/2026-04-24-rynok-ii-stanovitsya-infrastrukturnoy-gonkoy-hero.svg
 ---
 

@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-04-23-microsoft-stroit-avstraliyskiy-uzel-ai-infrastruktury/"
 heroAlt: "Редакционная обложка SCQR к материалу «Microsoft строит австралийский узел AI-инфраструктуры»."
 heroStyle: "quiet_monument"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-trajectories-hero.svg
 ---
 

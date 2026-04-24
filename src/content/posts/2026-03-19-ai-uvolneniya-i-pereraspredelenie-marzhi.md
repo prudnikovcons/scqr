@@ -16,6 +16,7 @@ readingTime: 2
 publicUrl: "/2026-03-19-ai-uvolneniya-i-pereraspredelenie-marzhi/"
 heroAlt: "Редакционная обложка SCQR к материалу «ИИ уже перераспределяет маржу, а не только задачи»."
 heroStyle: "quiet_monument"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-tendencies-hero.svg
 ---
 

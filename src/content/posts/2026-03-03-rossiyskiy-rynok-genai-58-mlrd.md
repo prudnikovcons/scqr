@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-03-03-rossiyskiy-rynok-genai-58-mlrd/"
 heroAlt: "Редакционная обложка SCQR к материалу «Российский рынок genAI вырос в 4,5 раза. Это еще не зрелость»."
 heroStyle: "quiet_monument"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-russia-hero.svg
 ---
 

@@ -16,6 +16,7 @@ readingTime: 2
 publicUrl: "/2026-03-07-ii-kotoryi-hochet-byt-vyklyuchennym/"
 heroAlt: "Редакционная обложка SCQR к материалу «ИИ, который хочет быть выключенным»."
 heroStyle: "editorial_collage"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-theories-hero.svg
 ---
 

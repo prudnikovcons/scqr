@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-04-24-bolshie-laboratorii-prodayut-ne-prosto-model/"
 heroAlt: "Редакционная обложка SCQR к материалу «Большие лаборатории продают уже не просто модель, а режим доступа к ней»."
 heroStyle: "threshold_space"
+heroSource: "generated"
 heroImage: ../../assets/editorial/2026-04-24-bolshie-laboratorii-prodayut-ne-prosto-model-hero-v2.png
 ---
 

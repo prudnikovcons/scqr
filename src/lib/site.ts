@@ -1,5 +1,11 @@
 import type { CollectionEntry } from 'astro:content';
 import { PREMIUM_SLOT_IDS } from '../data/curation';
+import {
+	getVisualMode,
+	inferHeroSource,
+	isMeaningfulHeroAlt,
+} from '../data/editorial-designer.js';
+import { isPrimaryEditorialImageStyle } from '../data/editorial-image-styles.js';
 
 export type PostEntry = CollectionEntry<'posts'>;
 
@@ -55,6 +61,8 @@ export const sortPosts = (posts: PostEntry[]) =>
 export const hasHeroImage = (post: PostEntry) => Boolean(post.data.heroImage?.src);
 
 export const getHeroSrc = (post: PostEntry) => post.data.heroImage?.src ?? '';
+export const getHeroSource = (post: PostEntry) =>
+	post.data.heroSource ?? inferHeroSource(getHeroSrc(post));
 
 export const hasSecondaryHero = (post: PostEntry) => getHeroSrc(post).includes('secondary-');
 
@@ -70,6 +78,12 @@ export const getScqrVerdict = (post: PostEntry) =>
 
 export const getHeroAlt = (post: PostEntry) =>
 	post.data.heroAlt?.trim() || `Редакционная обложка SCQR к материалу «${post.data.title}».`;
+export const hasHeroSource = (post: PostEntry) => Boolean(getHeroSource(post));
+export const hasMeaningfulHeroAlt = (post: PostEntry) =>
+	isMeaningfulHeroAlt(post.data.heroAlt, post.data.title);
+export const hasPrimaryHeroStyle = (post: PostEntry) =>
+	isPrimaryEditorialImageStyle(post.data.heroStyle);
+export const getHeroVisualMode = (post: PostEntry) => getVisualMode(post.data.heroStyle);
 
 export const hasCompleteDeck = (post: PostEntry) => Boolean(post.data.deck?.trim());
 
@@ -82,7 +96,7 @@ export const isReadyPost = (post: PostEntry) => post.data.status === 'ready';
 export const isPremiumSlotCandidate = (post: PostEntry) => PREMIUM_SLOT_IDS.has(post.id);
 
 export const hasPremiumMetadata = (post: PostEntry) =>
-	hasCompleteDeck(post) && hasScqrVerdict(post) && hasHeroAlt(post);
+	hasCompleteDeck(post) && hasScqrVerdict(post) && hasHeroAlt(post) && hasHeroSource(post);
 
 export const isPremiumReadyPost = (post: PostEntry) =>
 	isReadyPost(post) && hasPremiumHero(post) && hasPremiumMetadata(post);
@@ -94,8 +108,11 @@ export const getPresentationScore = (post: PostEntry) => {
 	const deckScore = hasCompleteDeck(post) ? 12 : 0;
 	const verdictScore = hasScqrVerdict(post) ? 12 : 0;
 	const altScore = hasHeroAlt(post) ? 6 : 0;
+	const heroSourceScore = hasHeroSource(post) ? 6 : 0;
+	const primaryStyleScore = hasPrimaryHeroStyle(post) ? 10 : 0;
+	const userImageScore = getHeroSource(post) === 'user-supplied' ? 10 : 0;
 	const premiumSlotScore = isPremiumSlotCandidate(post) ? 18 : 0;
-	return readyScore + premiumHeroScore + secondaryHeroScore + deckScore + verdictScore + altScore + premiumSlotScore;
+	return readyScore + premiumHeroScore + secondaryHeroScore + deckScore + verdictScore + altScore + heroSourceScore + primaryStyleScore + userImageScore + premiumSlotScore;
 };
 
 export const sortPostsForPresentation = (posts: PostEntry[]) =>

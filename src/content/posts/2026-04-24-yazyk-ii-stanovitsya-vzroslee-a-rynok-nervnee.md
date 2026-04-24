@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-04-24-yazyk-ii-stanovitsya-vzroslee-a-rynok-nervnee/"
 heroAlt: "Редакционная обложка SCQR к материалу «Мы вошли в фазу, где язык ИИ становится взрослее, а рынок — нервнее»."
 heroStyle: "quiet_monument"
+heroSource: "generated"
 heroImage: ../../assets/editorial/2026-04-24-yazyk-ii-stanovitsya-vzroslee-a-rynok-nervnee-hero.svg
 ---
 

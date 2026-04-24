@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-04-24-epokha-ii-delaet-skuchnye-kompanii-vazhnymi/"
 heroAlt: "Редакционная обложка SCQR к материалу «Эпоха ИИ делает скучные компании самыми важными»."
 heroStyle: "quiet_monument"
+heroSource: "generated"
 heroImage: ../../assets/editorial/2026-04-24-epokha-ii-delaet-skuchnye-kompanii-vazhnymi-hero.svg
 ---
 

@@ -16,6 +16,7 @@ readingTime: 2
 publicUrl: "/2026-03-27-openclaw-stal-infrastrukturoy/"
 heroAlt: "Редакционная обложка SCQR к материалу «OpenClaw в Китае: как агентный фреймворк стал инфраструктурой»."
 heroStyle: "signal_network"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-automations-hero.svg
 ---
 

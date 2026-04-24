@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-04-14-rynok-ii-zagovoril-yazykom-energetikov-i-kaznacheev/"
 heroAlt: "Редакционная обложка SCQR к материалу «Рынок ИИ заговорил языком энергетиков и казначеев»."
 heroStyle: "quiet_monument"
+heroSource: "generated"
 heroImage: ../../assets/editorial/2026-04-14-rynok-ii-zagovoril-yazykom-energetikov-i-kaznacheev-hero.svg
 ---
 

@@ -16,6 +16,7 @@ readingTime: 4
 publicUrl: "/2026-03-27-bezopasnost-ne-skladyvaetsya/"
 heroAlt: "Редакционная обложка SCQR к материалу «Безопасность ИИ перестала складываться»."
 heroStyle: "signal_network"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-illusions-hero.svg
 ---
 

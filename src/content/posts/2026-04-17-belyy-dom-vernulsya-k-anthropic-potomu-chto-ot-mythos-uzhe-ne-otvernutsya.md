@@ -17,6 +17,7 @@ readingTime: 1
 publicUrl: "/2026-04-17-belyy-dom-vernulsya-k-anthropic-potomu-chto-ot-mythos-uzhe-ne-otvernutsya/"
 heroAlt: "Редакционная обложка SCQR к материалу «Белый дом вернулся к Anthropic, потому что от Mythos уже не отвернуться»."
 heroStyle: "threshold_space"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-regulations-hero.svg
 ---
 

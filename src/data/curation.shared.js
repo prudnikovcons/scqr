@@ -1,10 +1,10 @@
 export const homepageLead = '2026-04-24-gosudarstvennyy-ii-vyhodit-iz-pilotov-gennai';
 
 export const homepageVisualGrid = [
-	'2026-04-24-elektrichestvo-stalo-predelom-gonki-ii',
+	'2026-04-24-alphafold-4-ot-struktury-k-povedeniyu',
 	'2026-04-24-privacy-filter-zakryvaet-odnu-dyru-iz-pyati',
+	'2026-04-24-elektrichestvo-stalo-predelom-gonki-ii',
 	'2026-04-24-workspace-agents-pervyy-rabochiy-den',
-	'2026-04-24-kitay-reguliruet-ne-model-a-privyazannost-k-ney',
 ];
 
 export const homepageSignalClusters = [
@@ -19,10 +19,10 @@ export const homepageEssays = [
 ];
 
 export const rubricLeadBySlug = {
-	trajectories: '2026-04-24-elektrichestvo-stalo-predelom-gonki-ii',
-	generations: '2026-04-24-bolshie-laboratorii-prodayut-ne-prosto-model',
+	trajectories: '2026-04-24-gde-vstrechayutsya-pamyat-i-logika',
+	generations: '2026-04-24-criticgpt-kritik-dlya-modeley',
 	automations: '2026-04-24-gosudarstvennyy-ii-vyhodit-iz-pilotov-gennai',
-	innovations: '2026-04-24-privacy-filter-zakryvaet-odnu-dyru-iz-pyati',
+	innovations: '2026-04-24-alphafold-4-ot-struktury-k-povedeniyu',
 	illusions: '2026-04-24-mif-o-gotovom-agente',
 	russia: '2026-04-24-rossiyskiy-ii-rynok-mezhdu-vitrinoy-i-sprosom',
 	regulations: '2026-04-24-kitay-reguliruet-ne-model-a-privyazannost-k-ney',
@@ -50,6 +50,9 @@ export const premiumTrackPostIds = [
 	'2026-04-08-korporativnyy-ii-vstupaet-v-fazu-rabochih-konturov',
 	'2026-04-13-agent-cloud-delaet-agentov-pohozhimi-na-oblachnyy-servis',
 	'2026-04-24-bolshie-laboratorii-prodayut-ne-prosto-model',
+	'2026-04-24-criticgpt-kritik-dlya-modeley',
+	'2026-04-24-gde-vstrechayutsya-pamyat-i-logika',
+	'2026-04-24-alphafold-4-ot-struktury-k-povedeniyu',
 	'2026-04-24-elektrichestvo-stalo-predelom-gonki-ii',
 	'2026-04-24-epokha-ii-delaet-skuchnye-kompanii-vazhnymi',
 	'2026-04-24-gosudarstvennyy-ii-vyhodit-iz-pilotov-gennai',

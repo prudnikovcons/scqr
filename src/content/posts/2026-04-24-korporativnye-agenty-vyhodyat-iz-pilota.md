@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-04-24-korporativnye-agenty-vyhodyat-iz-pilota/"
 heroAlt: "Редакционная обложка SCQR к материалу «Корпоративные агенты выходят из пилота и становятся частью штатной работы»."
 heroStyle: "signal_network"
+heroSource: "generated"
 heroImage: ../../assets/editorial/2026-04-24-korporativnye-agenty-vyhodyat-iz-pilota-hero-v2.png
 ---
 

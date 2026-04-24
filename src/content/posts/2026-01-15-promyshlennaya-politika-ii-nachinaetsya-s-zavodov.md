@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-01-15-promyshlennaya-politika-ii-nachinaetsya-s-zavodov/"
 heroAlt: "Редакционная обложка SCQR к материалу «Промышленная политика ИИ начинается с заводов, а не с презентаций»."
 heroStyle: "threshold_space"
+heroSource: "generated"
 heroImage: ../../assets/editorial/2026-01-15-promyshlennaya-politika-ii-nachinaetsya-s-zavodov-hero.svg
 ---
 

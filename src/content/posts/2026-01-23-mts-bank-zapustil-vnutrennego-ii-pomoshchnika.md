@@ -16,6 +16,7 @@ readingTime: 1
 publicUrl: "/2026-01-23-mts-bank-zapustil-vnutrennego-ii-pomoshchnika/"
 heroAlt: "Редакционная обложка SCQR к материалу «МТС Банк запускает внутреннего ИИ-помощника как рабочий контур, а не как витрину»."
 heroStyle: "signal_network"
+heroSource: "generated"
 heroImage: ../../assets/editorial/2026-01-23-mts-bank-zapustil-vnutrennego-ii-pomoshchnika-hero.svg
 ---
 

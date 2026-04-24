@@ -16,6 +16,7 @@ readingTime: 2
 publicUrl: "/2026-04-23-tesla-podnyala-stavku-na-ai-no-rynok-vidit-ne-mashiny-a-risk/"
 heroAlt: "Редакционная обложка SCQR к материалу «Tesla подняла ставку на AI, но рынок видит не машины, а риск»."
 heroStyle: "industrial_plate"
+heroSource: "generated"
 heroImage: ../../assets/editorial/secondary-tendencies-hero.svg
 ---
 

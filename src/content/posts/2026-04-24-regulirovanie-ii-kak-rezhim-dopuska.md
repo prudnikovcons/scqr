@@ -16,6 +16,7 @@ readingTime: 2
 publicUrl: "/2026-04-24-regulirovanie-ii-kak-rezhim-dopuska/"
 heroAlt: "Редакционная обложка SCQR к материалу «Регулирование ИИ в 2026 году: уже не запрет, а режим допуска»."
 heroStyle: "threshold_space"
+heroSource: "generated"
 heroImage: ../../assets/editorial/2026-04-24-regulirovanie-ii-kak-rezhim-dopuska-hero.svg
 ---
 
