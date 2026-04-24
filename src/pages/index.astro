@@ -26,7 +26,6 @@ const latestPosts = posts.slice(1, 5);
 const digestPosts = posts.slice(0, 4);
 const opinionPosts = posts.filter((post) => post.data.articleType !== 'news').slice(0, 5);
 const illustrationPosts = posts.slice(5, 10);
-const registryPosts = posts.slice(0, 6);
 const notePosts = posts.slice(2, 5);
 const rubricSummary = buildRubricSummary(posts);
 const heroRubrics = rubricSummary.slice(0, 6);
@@ -348,62 +347,6 @@ const timeline = buildTimeline(posts);
 				</div>
 			</section>
 
-			<section class="registry-surface" id="registry">
-				<div class="registry-surface__intro">
-					<p class="section-kicker">Реестр публикаций</p>
-					<h2>Полный архив с фильтрами и контекстом</h2>
-					<p>
-						Каждый материал снабжён рубрикой, форматом и темами. Архив пополняется регулярно — здесь удобно находить нужный контекст по событиям рынка ИИ.
-					</p>
-					<div class="registry-surface__chips">
-						{
-							['новости', 'аналитика', 'колонки', 'реестр', 'дайджест'].map((chip) => (
-								<span class="content-tag">{chip}</span>
-							))
-						}
-					</div>
-					<a class="site-button" href="/blog">Перейти в архив</a>
-				</div>
-
-				<div class="registry-table">
-					<div class="registry-table__head">
-						<span>Дата</span>
-						<span>Рубрика</span>
-						<span>Заголовок</span>
-						<span>Тип</span>
-					</div>
-					{
-						registryPosts.map((post) => (
-							<a class="registry-table__row" href={getPostHref(post)}>
-								<span>{post.data.pubDate.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' })}</span>
-								<span><RubricLabel name={getPrimaryRubric(post)} /></span>
-								<strong>{post.data.title}</strong>
-								<em>{getArticleTypeLabel(post)}</em>
-							</a>
-						))
-					}
-				</div>
-			</section>
-
-			<section class="about-grid">
-				<div class="about-grid__block">
-					<p class="section-kicker">О проекте</p>
-					<h3>SCQR — независимое медиа о рынке искусственного интеллекта</h3>
-					<p>
-						Мы исследуем рынок ИИ как систему: от инфраструктуры и капитала до регулирования, корпоративных стратегий и локальных сдвигов в России.
-					</p>
-					<a href="/about">Подробнее о проекте</a>
-				</div>
-				<div class="about-grid__block about-grid__block--mark">
-					<div class="mark-grid">
-						{
-							Array.from({ length: 36 }).map((_, index) => (
-								<span class:list={['mark-grid__dot', index % 5 === 0 && 'is-accent']}></span>
-							))
-						}
-					</div>
-				</div>
-			</section>
 		</main>
 
 		<Footer />
