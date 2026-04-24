@@ -5,8 +5,8 @@ pubDate: "2026-04-06T15:20:00"
 articleType: "news"
 stage: "wave-2"
 status: "ready"
-rubrics: ["innovations"]
-rubricLabels: ["Новации"]
+rubrics: ["tendencies"]
+rubricLabels: ["Тенденции"]
 topics: ["Anthropic", "Google Cloud", "Broadcom", "вычисления", "гигаватты"]
 storyCluster: "backfill-energy-basement"
 sourceNote: "Подготовлено на основе сообщения Anthropic от 6 апреля 2026 года о многогига-ваттном соглашении с Google и Broadcom."

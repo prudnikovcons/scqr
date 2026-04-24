@@ -5,8 +5,8 @@ pubDate: "2026-01-09T10:20:00"
 articleType: "news"
 stage: "wave-2"
 status: "ready"
-rubrics: ["innovations"]
-rubricLabels: ["Новации"]
+rubrics: ["tendencies"]
+rubricLabels: ["Тенденции"]
 topics: ["Stargate", "SB Energy", "OpenAI", "энергетика", "центры обработки данных"]
 storyCluster: "backfill-energy-basement"
 sourceNote: "Подготовлено на основе заявления OpenAI от 9 января 2026 года о партнёрстве с SoftBank Group и SB Energy в рамках Stargate."

@@ -5,8 +5,8 @@ pubDate: "2026-04-24T17:25:00"
 articleType: "news"
 stage: "wave-1"
 status: "ready"
-rubrics: ["innovations"]
-rubricLabels: ["Новации"]
+rubrics: ["tendencies"]
+rubricLabels: ["Тенденции"]
 topics: ["вычисления", "Anthropic", "Google", "Broadcom", "Jensen Huang"]
 storyCluster: "wave-1-compute-shortage"
 sourceNote: "Подготовлено на основе апрельского сообщения Anthropic о многогига-ваттном соглашении с Google и Broadcom, материала OpenAI о связи вычислительных мощностей и выручки, а также мартовского текста Дженсена Хуанга о следующем этапе стройки ИИ-инфраструктуры."

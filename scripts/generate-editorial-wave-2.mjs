@@ -137,8 +137,8 @@ const posts = [
 			'Партнёрство OpenAI, SoftBank и SB Energy показывает, что рынок ИИ окончательно спускается на нижние этажи: теперь без энергии, земли и стройки не бывает ни модели, ни роста.',
 		pubDate: '2026-01-09T10:20:00',
 		articleType: 'news',
-		rubrics: ['innovations'],
-		rubricLabels: ['Новации'],
+		rubrics: ['tendencies'],
+		rubricLabels: ['Тенденции'],
 		topics: ['Stargate', 'SB Energy', 'OpenAI', 'энергетика', 'центры обработки данных'],
 		storyCluster: 'backfill-energy-basement',
 		sourceNote:
@@ -460,8 +460,8 @@ const posts = [
 			'Апрельская сделка с Google и Broadcom показывает новый масштаб мышления отрасли: сегодня лаборатории резервируют уже не парк ускорителей, а целые пласты будущей энергетической и облачной инфраструктуры.',
 		pubDate: '2026-04-06T15:20:00',
 		articleType: 'news',
-		rubrics: ['innovations'],
-		rubricLabels: ['Новации'],
+		rubrics: ['tendencies'],
+		rubricLabels: ['Тенденции'],
 		topics: ['Anthropic', 'Google Cloud', 'Broadcom', 'вычисления', 'гигаватты'],
 		storyCluster: 'backfill-energy-basement',
 		sourceNote:

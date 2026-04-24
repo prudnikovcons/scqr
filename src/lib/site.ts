@@ -106,7 +106,7 @@ export const RUBRIC_CONFIG: RubricConfig[] = [
 	{ slug: 'trajectories', label: 'Траектории', description: 'Долгосрочные тренды, стратегические сдвиги и сценарии развития рынка ИИ.', tone: 'dark' },
 	{ slug: 'generations', label: 'Генерации', description: 'Фронтирные модели, их возможности, ограничения и гонка лабораторий.', tone: 'graph' },
 	{ slug: 'automations', label: 'Автоматизации', description: 'Агенты, инструменты и последствия автоматизации для рынка труда.', tone: 'warm' },
-	{ slug: 'innovations', label: 'Новации', description: 'Технологические прорывы, инфраструктура и цепочки поставок вычислений.', tone: 'paper' },
+	{ slug: 'innovations', label: 'Новации', description: 'Новые компании, запуски, продуктовые анонсы, свежие модели и заметные технологические релизы.', tone: 'paper' },
 	{ slug: 'illusions', label: 'Иллюзии', description: 'Хайп, завышенные ожидания, риски и провалы в мире ИИ.', tone: 'dark' },
 	{ slug: 'russia', label: 'В России', description: 'Отечественный рынок ИИ, регулирование и корпоративные стратегии.', tone: 'warm' },
 	{ slug: 'regulations', label: 'Регуляции', description: 'Законодательство, политика и регуляторные инициативы в области ИИ.', tone: 'paper' },

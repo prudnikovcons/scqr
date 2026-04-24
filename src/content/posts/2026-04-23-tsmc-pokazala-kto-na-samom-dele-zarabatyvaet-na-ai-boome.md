@@ -5,8 +5,8 @@ pubDate: "2026-04-23T09:00:00"
 articleType: "news"
 stage: "drafted"
 status: "approved"
-rubrics: ["innovations"]
-rubricLabels: ["Новации"]
+rubrics: ["tendencies"]
+rubricLabels: ["Тенденции"]
 topics: ["TSMC", "semiconductors", "AI demand", "HPC", "Iran war"]
 storyCluster: "poluprovodniki-ai-bottleneck"
 sourceNote: "Основано на сообщении AP о квартальной отчетности TSMC и официальном отчете компании за первый квартал 2026 года."

@@ -5,8 +5,8 @@ pubDate: "2026-04-23T09:00:00"
 articleType: "news"
 stage: "drafted"
 status: "approved"
-rubrics: ["innovations"]
-rubricLabels: ["Новации"]
+rubrics: ["trajectories"]
+rubricLabels: ["Траектории"]
 topics: ["Microsoft", "Australia", "Azure", "data centers", "AI infrastructure"]
 storyCluster: "avstraliya-ai-infrastruktura"
 sourceNote: "Основано на сообщении Reuters об инвестиции Microsoft в Австралию и официальном анонсе Microsoft Australia."

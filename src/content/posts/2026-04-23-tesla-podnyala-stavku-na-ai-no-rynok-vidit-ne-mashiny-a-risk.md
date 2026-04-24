@@ -5,8 +5,8 @@ pubDate: "2026-04-23T09:00:00"
 articleType: "analysis"
 stage: "drafted"
 status: "approved"
-rubrics: ["innovations"]
-rubricLabels: ["Новации"]
+rubrics: ["tendencies"]
+rubricLabels: ["Тенденции"]
 topics: ["Tesla", "Elon Musk", "robotaxi", "Optimus", "capex"]
 storyCluster: "tesla-ai-capex"
 sourceNote: "Основано на квартальной отчетности Tesla по версии AP и сообщении Reuters о новом плане капитальных затрат компании на AI, robotaxi и робототехнику."

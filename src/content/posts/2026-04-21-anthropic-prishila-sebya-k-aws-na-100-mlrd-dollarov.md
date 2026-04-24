@@ -5,8 +5,8 @@ pubDate: "2026-04-21T09:00:00"
 articleType: "news"
 stage: "drafted"
 status: "approved"
-rubrics: ["innovations"]
-rubricLabels: ["Новации"]
+rubrics: ["generations"]
+rubricLabels: ["Генерации"]
 topics: ["Anthropic", "AWS", "Trainium", "compute", "cloud"]
 storyCluster: "frontier-compute-lock-in"
 sourceNote: "Основано на сообщении AP и официальном анонсе Anthropic о расширении партнерства с AWS и закреплении новой вычислительной мощности под Claude."

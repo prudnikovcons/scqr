@@ -92,8 +92,8 @@ const posts = [
 			'Рынок всё чаще упирается не в идеи и не в сценарии применения, а в линии электропитания, центры обработки данных, чипы и облачную логистику. И это уже не образ, а новая хозяйственная правда отрасли.',
 		pubDate: '2026-04-24T17:25:00',
 		articleType: 'news',
-		rubrics: ['innovations'],
-		rubricLabels: ['Новации'],
+		rubrics: ['tendencies'],
+		rubricLabels: ['Тенденции'],
 		topics: ['вычисления', 'Anthropic', 'Google', 'Broadcom', 'Jensen Huang'],
 		storyCluster: 'wave-1-compute-shortage',
 		sourceNote:
