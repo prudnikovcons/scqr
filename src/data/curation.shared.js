@@ -1,10 +1,10 @@
-export const homepageLead = '2026-04-24-korporativnye-agenty-vyhodyat-iz-pilota';
+export const homepageLead = '2026-04-24-gosudarstvennyy-ii-vyhodit-iz-pilotov-gennai';
 
 export const homepageVisualGrid = [
-	'2026-04-24-vychisleniya-stanovyatsya-glavnym-deficitom-ai-rynka',
-	'2026-04-24-korporativnyy-ai-dogonyaet-potrebitelskiy-rynok',
-	'2026-04-24-protokoly-dlya-agentov-stanovyatsya-zonoy-riska',
-	'2026-04-24-bolshie-laboratorii-prodayut-ne-prosto-model',
+	'2026-04-24-elektrichestvo-stalo-predelom-gonki-ii',
+	'2026-04-24-privacy-filter-zakryvaet-odnu-dyru-iz-pyati',
+	'2026-04-24-workspace-agents-pervyy-rabochiy-den',
+	'2026-04-24-kitay-reguliruet-ne-model-a-privyazannost-k-ney',
 ];
 
 export const homepageSignalClusters = [
@@ -19,12 +19,13 @@ export const homepageEssays = [
 ];
 
 export const rubricLeadBySlug = {
-	trajectories: '2026-04-24-rynok-ii-stanovitsya-infrastrukturnoy-gonkoy',
+	trajectories: '2026-04-24-elektrichestvo-stalo-predelom-gonki-ii',
 	generations: '2026-04-24-bolshie-laboratorii-prodayut-ne-prosto-model',
-	automations: '2026-04-24-korporativnye-agenty-vyhodyat-iz-pilota',
+	automations: '2026-04-24-gosudarstvennyy-ii-vyhodit-iz-pilotov-gennai',
+	innovations: '2026-04-24-privacy-filter-zakryvaet-odnu-dyru-iz-pyati',
 	illusions: '2026-04-24-mif-o-gotovom-agente',
 	russia: '2026-04-24-rossiyskiy-ii-rynok-mezhdu-vitrinoy-i-sprosom',
-	regulations: '2026-04-24-regulirovanie-ii-kak-rezhim-dopuska',
+	regulations: '2026-04-24-kitay-reguliruet-ne-model-a-privyazannost-k-ney',
 	theories: '2026-04-24-epokha-ii-delaet-skuchnye-kompanii-vazhnymi',
 	tendencies: '2026-04-24-kto-zarabatyvaet-na-ai-bume',
 };
@@ -49,15 +50,20 @@ export const premiumTrackPostIds = [
 	'2026-04-08-korporativnyy-ii-vstupaet-v-fazu-rabochih-konturov',
 	'2026-04-13-agent-cloud-delaet-agentov-pohozhimi-na-oblachnyy-servis',
 	'2026-04-24-bolshie-laboratorii-prodayut-ne-prosto-model',
+	'2026-04-24-elektrichestvo-stalo-predelom-gonki-ii',
 	'2026-04-24-epokha-ii-delaet-skuchnye-kompanii-vazhnymi',
+	'2026-04-24-gosudarstvennyy-ii-vyhodit-iz-pilotov-gennai',
+	'2026-04-24-kitay-reguliruet-ne-model-a-privyazannost-k-ney',
 	'2026-04-24-korporativnye-agenty-vyhodyat-iz-pilota',
 	'2026-04-24-korporativnyy-ai-dogonyaet-potrebitelskiy-rynok',
 	'2026-04-24-kto-zarabatyvaet-na-ai-bume',
 	'2026-04-24-mif-o-gotovom-agente',
+	'2026-04-24-privacy-filter-zakryvaet-odnu-dyru-iz-pyati',
 	'2026-04-24-protokoly-dlya-agentov-stanovyatsya-zonoy-riska',
 	'2026-04-24-regulirovanie-ii-kak-rezhim-dopuska',
 	'2026-04-24-rossiyskiy-ii-rynok-mezhdu-vitrinoy-i-sprosom',
 	'2026-04-24-rynok-ii-stanovitsya-infrastrukturnoy-gonkoy',
 	'2026-04-24-vychisleniya-stanovyatsya-glavnym-deficitom-ai-rynka',
+	'2026-04-24-workspace-agents-pervyy-rabochiy-den',
 	'2026-04-24-yazyk-ii-stanovitsya-vzroslee-a-rynok-nervnee',
 ];
