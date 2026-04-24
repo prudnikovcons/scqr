@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import { getPostHref, getPrimaryRubric, getVisiblePosts, sortPosts } from '../lib/site';
+
+const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
+const tickerPosts = posts.slice(0, 6);
+const tickerLoop = [...tickerPosts, ...tickerPosts];
+---
+
+<div class="ticker-bar">
+	<div class="ticker-bar__inner">
+		<span class="ticker-bar__label">LIVE · СИГНАЛЫ</span>
+		<div class="ticker-bar__track">
+			<div class="ticker-bar__marquee">
+				{
+					tickerLoop.map((post) => (
+						<a href={getPostHref(post)}>
+							<span>{getPrimaryRubric(post)}</span>
+							<strong>{post.data.title}</strong>
+						</a>
+					))
+				}
+			</div>
+		</div>
+	</div>
+</div>

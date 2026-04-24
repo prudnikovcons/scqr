@@ -4,6 +4,7 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import RubricLabel from '../../components/RubricLabel.astro';
+import TickerBar from '../../components/TickerBar.astro';
 import { SITE_TITLE } from '../../consts';
 import {
 	RUBRIC_CONFIG,
@@ -46,17 +47,18 @@ const { tone } = rubric;
 	</head>
 	<body>
 		<Header />
+		<TickerBar />
 		<main class="main-shell">
 
 			<section class:list={['rubric-hero', `rubric-hero--${tone}`]}>
-				<div class="rubric-hero__top">
-					<a href="/blog" class="rubric-hero__back">← Все публикации</a>
-					<span class="rubric-hero__count">{posts.length} материалов</span>
-				</div>
 				<h1 class="rubric-hero__title">
 					<RubricLabel name={rubric.label} />
 				</h1>
 				<p class="rubric-hero__desc">{rubric.description}</p>
+				<div class="rubric-hero__meta">
+					<span class="rubric-hero__count">{posts.length} материалов</span>
+					<a href="/blog" class="rubric-hero__back">← Архив</a>
+				</div>
 			</section>
 
 			{posts.length > 0 ? (

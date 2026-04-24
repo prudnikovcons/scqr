@@ -1115,12 +1115,14 @@ blockquote {
 
 
 .rubric-hero {
-	margin-top: 18px;
-	padding: 40px 36px 36px;
+	display: flex;
+	align-items: center;
+	gap: 24px;
+	margin-top: 14px;
+	padding: 18px 24px;
 	border: 1px solid var(--line);
 	border-radius: var(--radius-lg);
 	background: rgba(255, 255, 255, 0.82);
-	box-shadow: var(--shadow-sm);
 }
 
 .rubric-hero--dark {
@@ -1129,9 +1131,7 @@ blockquote {
 }
 
 .rubric-hero--graph {
-	background:
-		radial-gradient(circle at 80% 20%, rgba(198, 242, 75, 0.18), transparent 30%),
-		linear-gradient(135deg, #11130f, #1e2019);
+	background: linear-gradient(135deg, #11130f, #1e2019);
 	border-color: var(--dark-line);
 }
 
@@ -1143,21 +1143,40 @@ blockquote {
 	background: linear-gradient(135deg, #fcfbf7, #eae6d8);
 }
 
-.rubric-hero__top {
+.rubric-hero__title {
+	font-size: clamp(1.6rem, 3vw, 2.4rem);
+	line-height: 1;
+	letter-spacing: -0.03em;
+	color: var(--ink);
+	flex-shrink: 0;
+}
+
+.rubric-hero--dark .rubric-hero__title,
+.rubric-hero--graph .rubric-hero__title {
+	color: #f6f5f1;
+}
+
+.rubric-hero__desc {
+	font-size: 13px;
+	line-height: 1.5;
+	color: var(--ink-2);
+	flex: 1;
+	border-left: 1px solid var(--line);
+	padding-left: 24px;
+}
+
+.rubric-hero--dark .rubric-hero__desc,
+.rubric-hero--graph .rubric-hero__desc {
+	color: #c8c9c1;
+	border-color: var(--dark-line);
+}
+
+.rubric-hero__meta {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
-	margin-bottom: 28px;
-}
-
-.rubric-hero__back {
-	font-size: 13px;
-	color: var(--muted);
-}
-
-.rubric-hero--dark .rubric-hero__back,
-.rubric-hero--graph .rubric-hero__back {
-	color: var(--dark-muted);
+	gap: 14px;
+	flex-shrink: 0;
+	margin-left: auto;
 }
 
 .rubric-hero__count {
@@ -1173,29 +1192,14 @@ blockquote {
 	color: var(--dark-muted);
 }
 
-.rubric-hero__title {
-	font-size: clamp(3.6rem, 9vw, 7rem);
-	line-height: 0.95;
-	letter-spacing: -0.04em;
-	color: var(--ink);
+.rubric-hero__back {
+	font-size: 12px;
+	color: var(--muted);
 }
 
-.rubric-hero--dark .rubric-hero__title,
-.rubric-hero--graph .rubric-hero__title {
-	color: #f6f5f1;
-}
-
-.rubric-hero__desc {
-	max-width: 52ch;
-	margin-top: 20px;
-	font-size: 16px;
-	line-height: 1.6;
-	color: var(--ink-2);
-}
-
-.rubric-hero--dark .rubric-hero__desc,
-.rubric-hero--graph .rubric-hero__desc {
-	color: #c8c9c1;
+.rubric-hero--dark .rubric-hero__back,
+.rubric-hero--graph .rubric-hero__back {
+	color: var(--dark-muted);
 }
 
 .rubric-empty {
