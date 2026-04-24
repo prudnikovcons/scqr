@@ -7,10 +7,12 @@ import RubricLabel from '../components/RubricLabel.astro';
 import TickerBar from '../components/TickerBar.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import {
+	buildRubricSummary,
 	getArticleTypeLabel,
 	getPostHref,
 	getPrimaryRubric,
 	getReadingTimeLabel,
+	getRubricHref,
 	getToneClass,
 	getVisiblePosts,
 	sortPosts,
@@ -18,8 +20,9 @@ import {
 
 const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
 const leadPost = posts[0];
-const latestPosts = posts.slice(1, 10);
-const opinionPosts = posts.filter((p) => p.data.articleType !== 'news').slice(0, 3);
+const newsPosts = posts.filter((p) => p.data.articleType === 'news').slice(0, 7);
+const analysisPosts = posts.filter((p) => p.data.articleType !== 'news').slice(0, 5);
+const rubricSummary = buildRubricSummary(posts).filter((r) => r.slug);
 ---
 
 <!doctype html>
@@ -56,37 +59,50 @@ const opinionPosts = posts.filter((p) => p.data.articleType !== 'news').slice(0,
 				</article>
 			)}
 
-			<section class="post-stream">
-				{latestPosts.map((post) => (
-					<a class="post-row" href={getPostHref(post)}>
-						<time class="post-row__date">
-							{post.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
-						</time>
-						<span class="post-row__rubric"><RubricLabel name={getPrimaryRubric(post)} /></span>
-						<strong class="post-row__title">{post.data.title}</strong>
-						<em class="post-row__type">{getArticleTypeLabel(post)}</em>
-					</a>
-				))}
-				<a class="post-stream__more" href="/blog">Все публикации →</a>
-			</section>
-
-			{opinionPosts.length > 0 && (
-				<section class="opinion-grid">
-					{opinionPosts.map((post, index) => (
-						<article class="opinion-card">
-							<div class="feed-list__meta">
-								<RubricLabel name={getPrimaryRubric(post)} />
-								<span>{getArticleTypeLabel(post)}</span>
-							</div>
-							<a href={getPostHref(post)} class:list={['media-surface', `media-surface--${getToneClass(index + 1)}`]}></a>
-							<h3><a href={getPostHref(post)}>{post.data.title}</a></h3>
-							<div class="opinion-card__meta">
-								<span>{post.data.pubDate.toLocaleDateString('ru-RU')}</span>
-								<span>{getReadingTimeLabel(post)}</span>
-							</div>
-						</article>
+			<div class="dual-stream">
+				<section class="stream-col">
+					<h2 class="stream-col__head">Новости</h2>
+					{newsPosts.map((post) => (
+						<a class="post-row" href={getPostHref(post)}>
+							<time class="post-row__date">
+								{post.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
+							</time>
+							<span class="post-row__rubric"><RubricLabel name={getPrimaryRubric(post)} /></span>
+							<strong class="post-row__title">{post.data.title}</strong>
+						</a>
 					))}
+					<a class="post-stream__more" href="/blog">Все новости →</a>
 				</section>
+
+				<section class="stream-col">
+					<h2 class="stream-col__head">Аналитика</h2>
+					{analysisPosts.map((post) => (
+						<a class="analysis-row" href={getPostHref(post)}>
+							<div class="analysis-row__top">
+								<span class="post-row__rubric"><RubricLabel name={getPrimaryRubric(post)} /></span>
+								<time class="post-row__date">
+									{post.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
+								</time>
+							</div>
+							<strong class="post-row__title">{post.data.title}</strong>
+							{post.data.description && (
+								<p class="analysis-row__desc">{post.data.description}</p>
+							)}
+						</a>
+					))}
+					<a class="post-stream__more" href="/blog">Вся аналитика →</a>
+				</section>
+			</div>
+
+			{rubricSummary.length > 0 && (
+				<nav class="rubric-nav-strip" aria-label="Рубрики">
+					{rubricSummary.map((rubric) => (
+						<a class="rubric-nav-tile" href={getRubricHref(rubric.slug!)}>
+							<strong><RubricLabel name={rubric.name} /></strong>
+							<span>{rubric.count}</span>
+						</a>
+					))}
+				</nav>
 			)}
 
 		</main>
