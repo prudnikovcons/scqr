@@ -1,59 +1,81 @@
 # SCQR Vercel Runbook
 
-## Goal
+> Updated 2026-04-25 после workspace-реструктуризации. Корень репозитория — `D:\CODEX\gitscqr\scqr\`, Astro-сайт переехал в `site/` подпапку.
 
-Deploy the Astro-based SCQR frontend from GitHub to Vercel with a clean static build and a repeatable release flow.
+## Цель
 
-## Current deployment model
+Стабильный Git-connected деплой Astro-сайта на Vercel из подпапки `site/` нового pnpm-workspace.
 
-- framework: Astro static site
-- content source: Markdown collection in `src/content/posts`
-- expected hosting mode: Git-connected Vercel project
-- release path: local changes -> Git commit -> GitHub push -> Vercel build
+## Текущая модель деплоя
 
-## Local commands
+- Фреймворк: Astro static site
+- Источник контента: `site/src/content/posts/*.md`
+- Хостинг: Vercel project, привязанный к `https://github.com/prudnikovcons/scqr.git`
+- Релиз-цепочка: локальные изменения → коммит → push в `main` → Vercel автоматически собирает
+
+## Vercel project settings (после реструктуризации)
+
+| Поле | Значение |
+|---|---|
+| Framework Preset | Astro |
+| Root Directory | `site` |
+| Build Command | `pnpm --filter site build` (или `astro build` если root=site) |
+| Install Command | `pnpm install --frozen-lockfile` |
+| Output Directory | `dist` (внутри site/) |
+| Node Version | 22.x |
+| Package Manager | pnpm 10 |
+
+**Важно**: Root Directory нужно поменять с `/` (или `scqr`) на `site` — иначе Vercel не найдёт `package.json` и `astro.config.mjs`.
+
+## Локальные команды
 
 ```bash
-npm install
-npm run import:scqr
-npm run build
-npm run vercel:pull
-npx vercel
-npx vercel --prod
+cd D:\CODEX\gitscqr\scqr
+pnpm install                 # установка всех зависимостей workspace
+pnpm --filter site build     # production-сборка в site/dist
+pnpm --filter site preview   # локальный preview сборки
+pnpm --filter site dev       # dev-сервер (http://localhost:4321)
+pnpm check                   # astro check
 ```
 
-## First-time Vercel setup
+Скрипт импорта контента из WordPress (`D:\CODEX\SCQR`):
 
-1. Install or use `npx vercel`.
-2. Authenticate in the CLI if needed.
-3. Link the repo root `D:\CODEX\gitscqr\scqr` to the correct Vercel project.
-4. Pull remote settings and env values if the project uses them later.
-5. Confirm the production domain and DNS state in Vercel.
+```bash
+pnpm --filter site exec node scripts/import-scqr-content.mjs
+# или
+cd site && node scripts/import-scqr-content.mjs
+```
 
-## Expected project settings
+## Первая настройка Vercel после реструктуризации
 
-- root directory: repository root
-- build command: `npm run build`
-- output directory: `dist`
-- install command: `npm install`
+1. Войти в дашборд: `https://vercel.com/<team>/scqr`.
+2. Settings → General → Root Directory → изменить на `site` → Save.
+3. Settings → General → Build & Development Settings:
+   - Framework: Astro (уже)
+   - Build Command: оставить override `pnpm --filter site build` или просто `astro build`
+   - Install Command: `pnpm install --frozen-lockfile`
+   - Output Directory: `dist`
+4. Settings → General → Node.js Version → 22.x.
+5. Trigger preview deploy на текущей ветке `chore/workspace-restructure`. Проверить, что preview ссылка отрисовывает главную и одну статью.
+6. Только после успешного preview — мёрж ветки в `main`. Vercel автоматически перенесёт production-домен.
 
-## Release checklist
+## Чек-лист перед релизом
 
-1. `npm run import:scqr`
-2. `npm run build`
-3. inspect changed routes and homepage composition
-4. push to GitHub
-5. confirm Vercel build result
-6. verify homepage, archive, and at least one article page in production
+1. На локальной машине: `pnpm --filter site build` без ошибок.
+2. `pnpm scqr doctor` зелёный.
+3. Просмотр изменённых маршрутов в `site/dist/`.
+4. Push на feature-ветку → Vercel preview deploy.
+5. Проверить главную, одну рубрику, одну статью на preview-URL.
+6. Мёрж в `main` через PR (автоматический prod-деплой).
 
-## Known blockers for fully automated deploy from this environment
+## Известные ограничения
 
-- no Vercel CLI is currently installed in PATH
-- no `.vercel/` local project link exists yet
-- deployment may still require one-time authentication or dashboard confirmation
+- `gh` CLI не установлен в текущем окружении — PR открывается через GitHub UI вручную.
+- Vercel CLI (`npx vercel`) требует одноразовой авторизации владельцем (`vercel login`) перед первым `vercel pull`/`vercel deploy` локально.
+- Скрипты в `site/scripts/*.mjs` используют относительные пути (`./src/content/posts/...`) — запускать только из `site/` директории.
 
-## Practical division of labor
+## Разделение обязанностей
 
-- Codex prepares code, routes, scripts, and deployment-ready structure
-- user may need to complete one-time authentication if Vercel access is not already available to the session
-- once linked, Codex can continue operating the release loop with far less friction
+- **Codex/Claude Code** — готовит код, статьи, метаданные, ветки и коммиты.
+- **Владелец** — открывает PR, делает one-time `vercel login` при необходимости, управляет доменом и DNS.
+- После первичной привязки — релизы идут автоматически через push в `main`.
