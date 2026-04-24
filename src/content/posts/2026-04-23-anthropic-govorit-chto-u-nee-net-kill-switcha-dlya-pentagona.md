@@ -6,7 +6,7 @@ articleType: "news"
 stage: "drafted"
 status: "approved"
 rubrics: ["regulations"]
-rubricLabels: ["Регулирование"]
+rubricLabels: ["Регуляции"]
 topics: ["Anthropic", "Pentagon", "control", "AI governance", "classified networks"]
 storyCluster: "anthropic-control-boundaries"
 sourceNote: "Основано на сообщении AP о судебной позиции Anthropic и материалах Reuters о споре компании с американским правительством вокруг Mythos."

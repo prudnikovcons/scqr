@@ -6,7 +6,7 @@ articleType: "news"
 stage: "drafted"
 status: "approved"
 rubrics: ["regulations"]
-rubricLabels: ["Регулирование"]
+rubricLabels: ["Регуляции"]
 topics: ["Anthropic", "White House", "Mythos", "Pentagon", "AI safety"]
 storyCluster: "anthropic-gosudarstvo-mythos"
 sourceNote: "Основано на сообщениях AP и Reuters о переговорах Белого дома с Anthropic вокруг модели Mythos после конфликта компании с Пентагоном."

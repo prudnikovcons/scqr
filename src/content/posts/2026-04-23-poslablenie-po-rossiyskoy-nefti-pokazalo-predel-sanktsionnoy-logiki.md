@@ -6,7 +6,7 @@ articleType: "news"
 stage: "drafted"
 status: "approved"
 rubrics: ["regulations"]
-rubricLabels: ["Регулирование"]
+rubricLabels: ["Регуляции"]
 topics: ["sanctions", "Russian oil", "United States", "Strait of Hormuz", "energy"]
 storyCluster: "ormuz-sanktsionnyy-predel"
 sourceNote: "Основано на сообщении AP о продлении американского послабления по поставкам российской нефти и апрельском макропрогнозе IMF."

@@ -10,6 +10,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "new": "node scripts/create-post.mjs",
+    "validate": "node scripts/validate-content.mjs",
     "import:scqr": "node scripts/import-scqr-content.mjs",
     "wave1:generate": "node scripts/generate-editorial-wave-1.mjs",
     "wave2:generate": "node scripts/generate-editorial-wave-2.mjs",
