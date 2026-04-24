@@ -644,6 +644,122 @@ blockquote {
 	font-size: 13px;
 }
 
+/* ── Lead story ─────────────────────────────────────────── */
+
+.lead-story {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	margin-top: 20px;
+	border: 1px solid var(--line);
+	border-radius: var(--radius-lg);
+	overflow: hidden;
+}
+
+.lead-story__media {
+	min-height: 300px;
+	display: block;
+}
+
+.lead-story__body {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	padding: 32px 36px;
+}
+
+.lead-story__meta {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+	color: var(--muted);
+	font-size: 12px;
+}
+
+.lead-story__title {
+	font-size: clamp(1.5rem, 2.2vw, 2.1rem);
+	line-height: 1.18;
+	letter-spacing: -0.03em;
+}
+
+.lead-story__desc {
+	color: var(--ink-2);
+	font-size: 15px;
+	line-height: 1.6;
+	flex: 1;
+}
+
+.lead-story__date {
+	font-size: 12px;
+	color: var(--muted);
+	margin-top: auto;
+}
+
+/* ── Post stream ─────────────────────────────────────────── */
+
+.post-stream {
+	margin-top: 28px;
+	border-top: 2px solid var(--ink);
+}
+
+.post-row {
+	display: grid;
+	grid-template-columns: 72px 110px 1fr auto;
+	align-items: baseline;
+	gap: 16px;
+	padding: 13px 0;
+	border-bottom: 1px solid var(--line);
+	color: var(--ink);
+	transition: padding-left 0.1s;
+}
+
+.post-row:hover {
+	padding-left: 6px;
+}
+
+.post-row:hover .post-row__title {
+	color: var(--accent-deep);
+}
+
+.post-row__date {
+	font-size: 12px;
+	color: var(--muted);
+	white-space: nowrap;
+}
+
+.post-row__rubric {
+	font-size: 12px;
+	color: var(--muted);
+}
+
+.post-row__title {
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.4;
+	transition: color 0.1s;
+}
+
+.post-row__type {
+	font-size: 11px;
+	color: var(--muted);
+	font-style: normal;
+	letter-spacing: 0.03em;
+	white-space: nowrap;
+}
+
+.post-stream__more {
+	display: block;
+	padding: 14px 0;
+	font-size: 13px;
+	color: var(--muted);
+	text-align: center;
+	transition: color 0.15s;
+}
+
+.post-stream__more:hover {
+	color: var(--ink);
+}
+
 .latest-grid {
 	display: grid;
 	grid-template-columns: 1.1fr 0.9fr 0.9fr;
@@ -1617,6 +1733,26 @@ blockquote {
 }
 
 @media (max-width: 900px) {
+	.lead-story {
+		grid-template-columns: 1fr;
+	}
+
+	.lead-story__media {
+		min-height: 200px;
+	}
+
+	.lead-story__body {
+		padding: 22px 20px;
+	}
+
+	.post-row {
+		grid-template-columns: 60px 1fr auto;
+	}
+
+	.post-row__rubric {
+		display: none;
+	}
+
 	.hero-stage__stats,
 	.hero-stage__notes,
 	.opinion-grid,

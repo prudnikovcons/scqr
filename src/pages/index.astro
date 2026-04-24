@@ -7,37 +7,19 @@ import RubricLabel from '../components/RubricLabel.astro';
 import TickerBar from '../components/TickerBar.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import {
-	buildRubricSummary,
-	buildTimeline,
 	getArticleTypeLabel,
 	getPostHref,
 	getPrimaryRubric,
 	getReadingTimeLabel,
 	getToneClass,
-	getRubricHref,
 	getVisiblePosts,
 	sortPosts,
 } from '../lib/site';
 
 const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
 const leadPost = posts[0];
-const latestDateLabel = posts[0]?.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' }) ?? '';
-const tickerPosts = posts.slice(0, 6);
-const latestPosts = posts.slice(1, 5);
-const digestPosts = posts.slice(0, 4);
-const opinionPosts = posts.filter((post) => post.data.articleType !== 'news').slice(0, 5);
-const illustrationPosts = posts.slice(5, 10);
-const notePosts = posts.slice(2, 5);
-const rubricSummary = buildRubricSummary(posts);
-const heroRubrics = rubricSummary.slice(0, 6);
-const tickerLoop = [...tickerPosts, ...tickerPosts];
-const trendPoints = rubricSummary.slice(0, 6).map((rubric, index) => ({
-	...rubric,
-	x: [16, 34, 52, 68, 78, 42][index] ?? 20,
-	y: [28, 18, 38, 24, 56, 72][index] ?? 30,
-	size: [84, 62, 96, 54, 72, 58][index] ?? 60,
-}));
-const timeline = buildTimeline(posts);
+const latestPosts = posts.slice(1, 10);
+const opinionPosts = posts.filter((p) => p.data.articleType !== 'news').slice(0, 3);
 ---
 
 <!doctype html>
@@ -47,290 +29,65 @@ const timeline = buildTimeline(posts);
 	</head>
 	<body>
 		<Header />
-
 		<TickerBar />
 
 		<main class="main-shell">
-			<section class="hero-stage">
-				<div class="hero-stage__copy">
-					<p class="section-kicker">Главное</p>
-					<h1>
-						Понимаем, что меняет
-						<span>траекторию</span>
-						рынка ИИ
-					</h1>
-					<p class="hero-stage__summary">
-						{leadPost
-							? leadPost.data.description
-							: 'SCQR — это система сигналов и контекста. Мы соединяем события, решения и последствия, чтобы видеть картину рынка целиком.'}
-					</p>
 
-					<div class="hero-stage__actions">
-						{leadPost && <a class="site-button" href={getPostHref(leadPost)}>Читать главный материал</a>}
-						<a class="site-button site-button--ghost" href="/blog">Открыть архив</a>
-					</div>
-
-					<div class="hero-stage__editorial">
-						<p class="section-kicker">Фокус редакции</p>
-						{leadPost && (
-							<>
-								<a href={getPostHref(leadPost)} class="hero-stage__editorial-title">{leadPost.data.title}</a>
-								<p>{leadPost.data.description}</p>
-							</>
-						)}
-					</div>
-
-					<div class="hero-stage__stats">
-						<div>
-							<strong>{posts.length}</strong>
-							<span>материалов в архиве</span>
+			{leadPost && (
+				<article class="lead-story">
+					<a
+						href={getPostHref(leadPost)}
+						class:list={['lead-story__media', `media-surface--${getToneClass(0)}`]}
+					></a>
+					<div class="lead-story__body">
+						<div class="lead-story__meta">
+							<span class="content-tag"><RubricLabel name={getPrimaryRubric(leadPost)} /></span>
+							<span>{getArticleTypeLabel(leadPost)}</span>
+							<span>{getReadingTimeLabel(leadPost)}</span>
 						</div>
-						<div>
-							<strong>{rubricSummary.length}</strong>
-							<span>активных рубрик</span>
-						</div>
-						<div>
-							<strong>{posts.filter((post) => post.data.articleType === 'analysis').length}</strong>
-							<span>аналитических разборов</span>
-						</div>
-						<div>
-							<strong>{posts.filter((post) => post.data.articleType === 'column').length}</strong>
-							<span>колонок сейчас</span>
-						</div>
+						<h1 class="lead-story__title">
+							<a href={getPostHref(leadPost)}>{leadPost.data.title}</a>
+						</h1>
+						<p class="lead-story__desc">{leadPost.data.description}</p>
+						<time class="lead-story__date">
+							{leadPost.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}
+						</time>
 					</div>
+				</article>
+			)}
 
-					<div class="hero-stage__notes">
-						{
-							notePosts.map((post) => (
-								<a class="hero-note" href={getPostHref(post)}>
-									<span><RubricLabel name={getPrimaryRubric(post)} /></span>
-									<strong>{post.data.title}</strong>
-								</a>
-							))
-						}
-					</div>
-				</div>
-
-				<div class="hero-stage__visual">
-					<div class="hero-globe">
-						<div class="hero-globe__sphere"></div>
-						<div class="hero-globe__orbit hero-globe__orbit--one"></div>
-						<div class="hero-globe__orbit hero-globe__orbit--two"></div>
-						<div class="hero-globe__orbit hero-globe__orbit--three"></div>
-						<span class="hero-globe__node hero-globe__node--one"></span>
-						<span class="hero-globe__node hero-globe__node--two"></span>
-						<span class="hero-globe__node hero-globe__node--three"></span>
-					</div>
-
-					{tickerPosts[0] && (
-						<a href={getPostHref(tickerPosts[0])} class="signal-card signal-card--top">
-							<p><RubricLabel name={getPrimaryRubric(tickerPosts[0])} /></p>
-							<strong>{tickerPosts[0].data.title}</strong>
-						</a>
-					)}
-					{tickerPosts[1] && (
-						<a href={getPostHref(tickerPosts[1])} class="signal-card signal-card--left">
-							<p><RubricLabel name={getPrimaryRubric(tickerPosts[1])} /></p>
-							<strong>{tickerPosts[1].data.title}</strong>
-						</a>
-					)}
-					{tickerPosts[2] && (
-						<a href={getPostHref(tickerPosts[2])} class="signal-card signal-card--bottom">
-							<p><RubricLabel name={getPrimaryRubric(tickerPosts[2])} /></p>
-							<strong>{tickerPosts[2].data.title}</strong>
-						</a>
-					)}
-				</div>
-
-				<div class="rubric-strip" id="rubrics">
-					{
-						heroRubrics.map((rubric, index) => (
-							<a class="rubric-strip__item" href={getRubricHref(rubric.slug)}>
-								<span>{String(index + 1).padStart(2, '0')}</span>
-								<strong><RubricLabel name={rubric.name} /></strong>
-								<em>{rubric.count} публикаций</em>
-							</a>
-						))
-					}
-				</div>
-
-				<div class="signal-day">
-					<span>Сигнал дня</span>
-					{leadPost && <a href={getPostHref(leadPost)}>{leadPost.data.title}</a>}
-					<a href="/blog">Смотреть карту трендов</a>
-				</div>
+			<section class="post-stream">
+				{latestPosts.map((post) => (
+					<a class="post-row" href={getPostHref(post)}>
+						<time class="post-row__date">
+							{post.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
+						</time>
+						<span class="post-row__rubric"><RubricLabel name={getPrimaryRubric(post)} /></span>
+						<strong class="post-row__title">{post.data.title}</strong>
+						<em class="post-row__type">{getArticleTypeLabel(post)}</em>
+					</a>
+				))}
+				<a class="post-stream__more" href="/blog">Все публикации →</a>
 			</section>
 
-			<section class="surface-section">
-				<div class="section-head">
-					<div>
-						<p class="section-kicker">Обновлено {latestDateLabel}</p>
-						<h2>Последние публикации</h2>
-					</div>
-					<a href="/blog">Все новости</a>
-				</div>
-
-				<div class="latest-grid">
-					{leadPost && (
-						<article class="feature-story">
-							<a href={getPostHref(leadPost)} class:list={['media-surface', `media-surface--${getToneClass(0)}`]}>
-								<span><RubricLabel name={getPrimaryRubric(leadPost)} /></span>
-							</a>
-							<div class="feature-story__meta">
-								<span class="content-tag"><RubricLabel name={getPrimaryRubric(leadPost)} /></span>
-								<span>{getReadingTimeLabel(leadPost)}</span>
+			{opinionPosts.length > 0 && (
+				<section class="opinion-grid">
+					{opinionPosts.map((post, index) => (
+						<article class="opinion-card">
+							<div class="feed-list__meta">
+								<RubricLabel name={getPrimaryRubric(post)} />
+								<span>{getArticleTypeLabel(post)}</span>
 							</div>
-							<h3><a href={getPostHref(leadPost)}>{leadPost.data.title}</a></h3>
-							<p>{leadPost.data.description}</p>
-							<div class="feature-story__footer">
-								<span>{leadPost.data.pubDate.toLocaleDateString('ru-RU')}</span>
-								<span>{getArticleTypeLabel(leadPost)}</span>
-								<span>{getReadingTimeLabel(leadPost)}</span>
+							<a href={getPostHref(post)} class:list={['media-surface', `media-surface--${getToneClass(index + 1)}`]}></a>
+							<h3><a href={getPostHref(post)}>{post.data.title}</a></h3>
+							<div class="opinion-card__meta">
+								<span>{post.data.pubDate.toLocaleDateString('ru-RU')}</span>
+								<span>{getReadingTimeLabel(post)}</span>
 							</div>
 						</article>
-					)}
-
-					<div class="feed-list" id="analysis">
-						{
-							latestPosts.map((post, index) => (
-								<a class="feed-list__item" href={getPostHref(post)}>
-									<div class:list={['feed-list__thumb', `media-surface--${getToneClass(index + 1)}`]}></div>
-									<div>
-										<div class="feed-list__meta">
-											<span><RubricLabel name={getPrimaryRubric(post)} /></span>
-											<em>{getReadingTimeLabel(post)}</em>
-										</div>
-										<strong>{post.data.title}</strong>
-									</div>
-								</a>
-							))
-						}
-					</div>
-
-					<aside class="digest-card" id="weekly-digest">
-						<div class="digest-card__head">
-							<p class="section-kicker">Weekly Digest</p>
-							<a href="/blog">Все выпуски</a>
-						</div>
-						<p class="digest-card__issue">
-							{digestPosts[digestPosts.length - 1]?.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}
-							{' — '}
-							{digestPosts[0]?.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}
-						</p>
-						<h3>Главное за неделю в мире ИИ</h3>
-						<div class="digest-wave"></div>
-						<ul>
-							{digestPosts.map((post) => <li>{post.data.title}</li>)}
-						</ul>
-						<a class="site-button site-button--full" href="/blog">Открыть архив</a>
-					</aside>
-				</div>
-			</section>
-
-			<section class="trend-surface">
-				<div class="trend-surface__copy">
-					<p class="section-kicker">Карта трендов</p>
-					<h2>Не шум, а связанная картина</h2>
-					<p>
-						Размер узла показывает объём материалов в рубрике. Яркие кластеры помогают быстро увидеть, где SCQR уже накапливает сильнейший контекст.
-					</p>
-					<div class="trend-surface__legend">
-						<span>яркие узлы — активные рубрики</span>
-						<span>размер круга — плотность покрытия</span>
-					</div>
-				</div>
-				<div class="trend-surface__map">
-					{
-						trendPoints.map((point) => (
-							<div
-								class="trend-node"
-								style={`left:${point.x}%;top:${point.y}%;width:${point.size}px;height:${point.size}px;`}
-							>
-								<span>{point.name}</span>
-								<em>{point.count}</em>
-							</div>
-						))
-					}
-				</div>
-			</section>
-
-			<section class="surface-section" id="columns">
-				<div class="section-head">
-					<div>
-						<p class="section-kicker">Мнения и разборы</p>
-						<h2>Колонки и аналитические линии</h2>
-					</div>
-					<a href="/blog">Все материалы</a>
-				</div>
-
-				<div class="opinion-grid">
-					{
-						opinionPosts.map((post, index) => (
-							<article class="opinion-card">
-								<div class="feed-list__meta">
-									<RubricLabel name={getPrimaryRubric(post)} />
-									<span>{getArticleTypeLabel(post)}</span>
-								</div>
-								<a href={getPostHref(post)} class:list={['media-surface', `media-surface--${getToneClass(index)}`]}></a>
-								<h3><a href={getPostHref(post)}>{post.data.title}</a></h3>
-								<div class="opinion-card__meta">
-									<span>{post.data.pubDate.toLocaleDateString('ru-RU')}</span>
-									<span>{getReadingTimeLabel(post)}</span>
-								</div>
-							</article>
-						))
-					}
-				</div>
-			</section>
-
-			<section class="surface-section surface-section--soft">
-				<div class="section-head">
-					<div>
-						<p class="section-kicker">Визуальная аналитика</p>
-						<h2>Иллюстрации и схемы</h2>
-					</div>
-					<a href="/blog">Все поверхности</a>
-				</div>
-
-				<div class="illustration-grid">
-					{
-						illustrationPosts.map((post, index) => (
-							<a class="illustration-card" href={getPostHref(post)}>
-								<div class:list={['media-surface', `media-surface--${getToneClass(index + 2)}`]}></div>
-								<strong>{post.data.title}</strong>
-							</a>
-						))
-					}
-				</div>
-			</section>
-
-			<section class="surface-section">
-				<div class="section-head">
-					<div>
-						<p class="section-kicker">Хроника недели</p>
-						<h2>Последовательность сигналов</h2>
-					</div>
-					<a href="/blog">Весь архив</a>
-				</div>
-
-				<div class="timeline-grid">
-					{
-						timeline.map((day) => (
-							<div class="timeline-day">
-								<p>{day.date.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' })}</p>
-								<div class="timeline-day__dot"></div>
-								<div class="timeline-day__entries">
-									{
-										day.entries.map((entry) => (
-											<a href={getPostHref(entry)}>{entry.data.title}</a>
-										))
-									}
-								</div>
-							</div>
-						))
-					}
-				</div>
-			</section>
+					))}
+				</section>
+			)}
 
 		</main>
 
