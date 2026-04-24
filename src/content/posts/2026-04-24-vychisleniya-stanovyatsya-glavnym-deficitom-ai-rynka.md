@@ -12,7 +12,7 @@ storyCluster: "wave-1-compute-shortage"
 sourceNote: "Подготовлено на основе апрельского сообщения Anthropic о многогига-ваттном соглашении с Google и Broadcom, материала OpenAI о связи вычислительных мощностей и выручки, а также мартовского текста Дженсена Хуанга о следующем этапе стройки ИИ-инфраструктуры."
 readingTime: 3
 publicUrl: "/2026-04-24-vychisleniya-stanovyatsya-glavnym-deficitom-ai-rynka/"
-heroImage: ../../assets/editorial/2026-04-24-vychisleniya-stanovyatsya-glavnym-deficitom-ai-rynka-hero.svg
+heroImage: ../../assets/editorial/2026-04-24-vychisleniya-stanovyatsya-glavnym-deficitom-ai-rynka-hero-v2.png
 ---
 
 Ещё недавно казалось, что главный дефицит рынка ИИ — это редкая идея, талантливая команда или удачная модель. Весной 2026 года картина уже другая. Главным узким местом становятся вычисления: электричество, чипы, линии связи, центры обработки данных и право занять место в этой очереди.

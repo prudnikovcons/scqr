@@ -12,7 +12,7 @@ storyCluster: "wave-1-enterprise-revenue"
 sourceNote: "Подготовлено на основе апрельского текста OpenAI о следующей фазе корпоративного ИИ и декабрьского отчёта компании о состоянии корпоративного внедрения."
 readingTime: 3
 publicUrl: "/2026-04-24-korporativnyy-ai-dogonyaet-potrebitelskiy-rynok/"
-heroImage: ../../assets/editorial/2026-04-24-korporativnyy-ai-dogonyaet-potrebitelskiy-rynok-hero.svg
+heroImage: ../../assets/editorial/2026-04-24-korporativnyy-ai-dogonyaet-potrebitelskiy-rynok-hero-v2.png
 ---
 
 Потребительский ажиотаж вокруг ИИ никуда не делся, но центр тяжести уже смещается. Всё больше отраслевых сигналов указывает на то, что главным полем монетизации становится не массовый пользователь, а корпоративный заказчик.

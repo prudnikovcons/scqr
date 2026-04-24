@@ -12,7 +12,7 @@ storyCluster: "wave-1-corporate-agents"
 sourceNote: "Подготовлено на основе апрельской заметки OpenAI о следующей фазе корпоративного ИИ и сообщения Anthropic о резком росте числа крупных корпоративных клиентов."
 readingTime: 3
 publicUrl: "/2026-04-24-korporativnye-agenty-vyhodyat-iz-pilota/"
-heroImage: ../../assets/editorial/2026-04-24-korporativnye-agenty-vyhodyat-iz-pilota-hero.svg
+heroImage: ../../assets/editorial/2026-04-24-korporativnye-agenty-vyhodyat-iz-pilota-hero-v2.png
 ---
 
 Главный сдвиг весны не в том, что у искусственного интеллекта появились новые трюки. Главный сдвиг в том, что крупные компании перестали относиться к агентам как к лабораторной игрушке. Они начинают ставить их туда, где раньше держали только людей, регламенты и дорогое корпоративное программное обеспечение.

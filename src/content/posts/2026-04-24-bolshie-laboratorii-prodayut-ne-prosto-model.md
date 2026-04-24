@@ -12,7 +12,7 @@ storyCluster: "wave-1-access-regime"
 sourceNote: "Подготовлено на основе апрельских сообщений OpenAI о корпоративной фазе рынка, материалов компании о бизнес-модели интеллекта и заявления Anthropic о многоплатформенном размещении Claude."
 readingTime: 3
 publicUrl: "/2026-04-24-bolshie-laboratorii-prodayut-ne-prosto-model/"
-heroImage: ../../assets/editorial/2026-04-24-bolshie-laboratorii-prodayut-ne-prosto-model-hero.svg
+heroImage: ../../assets/editorial/2026-04-24-bolshie-laboratorii-prodayut-ne-prosto-model-hero-v2.png
 ---
 
 Ещё недавно лаборатории продавали рынку историю про саму модель: кто умнее, кто быстрее, кто лучше пишет код или отвечает на вопросы. Весной 2026 года продаётся уже не только это. Продаётся право войти в особый контур доступа — туда, где есть мощности, корпоративные гарантии, особая поддержка и предсказуемая доступность.

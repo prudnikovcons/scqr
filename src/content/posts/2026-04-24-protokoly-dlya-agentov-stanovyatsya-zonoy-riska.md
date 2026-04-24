@@ -12,7 +12,7 @@ storyCluster: "wave-1-agent-protocol-risk"
 sourceNote: "Подготовлено на основе декабрьского сообщения Anthropic о передаче MCP в Agentic AI Foundation, апрельского исследования MCPSHIELD и апрельских публикаций о критических уязвимостях в экосистеме MCP."
 readingTime: 3
 publicUrl: "/2026-04-24-protokoly-dlya-agentov-stanovyatsya-zonoy-riska/"
-heroImage: ../../assets/editorial/2026-04-24-protokoly-dlya-agentov-stanovyatsya-zonoy-riska-hero.svg
+heroImage: ../../assets/editorial/2026-04-24-protokoly-dlya-agentov-stanovyatsya-zonoy-riska-hero-v2.png
 ---
 
 Когда рынок начинает быстро стандартизироваться, это почти всегда выглядит как победа зрелости. Так было и с протоколами для агентных систем. За несколько месяцев Model Context Protocol стал почти обязательным языком для связки модели с внешними инструментами. Но именно здесь удобство внезапно обернулось новой площадью атаки.
