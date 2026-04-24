@@ -4,14 +4,16 @@ description: "Самая неприятная для Запада новость
 pubDate: "2026-04-23T09:00:00"
 articleType: "news"
 stage: "drafted"
-status: "approved"
+status: "ready"
 rubrics: ["regulations"]
 rubricLabels: ["Регуляции"]
 topics: ["sanctions", "Russian oil", "United States", "Strait of Hormuz", "energy"]
+editorialFlags: ["archive-noise"]
 storyCluster: "ormuz-sanktsionnyy-predel"
 sourceNote: "Основано на сообщении AP о продлении американского послабления по поставкам российской нефти и апрельском макропрогнозе IMF."
-readingTime: 2
+readingTime: 1
 publicUrl: "/2026-04-23-poslablenie-po-rossiyskoy-nefti-pokazalo-predel-sanktsionnoy-logiki/"
+heroImage: ../../assets/editorial/secondary-regulations-hero.svg
 ---
 
 # Послабление по российской нефти показало предел санкционной логики

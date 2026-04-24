@@ -4,14 +4,15 @@ description: "История с Ормузским проливом больше
 pubDate: "2026-04-23T09:00:00"
 articleType: "analysis"
 stage: "drafted"
-status: "approved"
+status: "ready"
 rubrics: ["tendencies"]
 rubricLabels: ["Тенденции"]
 topics: ["Strait of Hormuz", "oil", "inflation", "AI infrastructure", "macroeconomy"]
 storyCluster: "ormuz-makroshok"
 sourceNote: "Основано на сообщениях AP о новой эскалации в Ормузском проливе, апрельском прогнозе EIA по нефтяному рынку и апрельском обзоре мировой экономики IMF."
-readingTime: 3
+readingTime: 2
 publicUrl: "/2026-04-23-ormuz-snova-stal-osyu-mirovoy-ekonomiki/"
+heroImage: ../../assets/editorial/secondary-tendencies-hero.svg
 ---
 
 # Ормуз снова стал осью мировой экономики

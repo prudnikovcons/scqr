@@ -10,7 +10,7 @@ rubricLabels: ["Регуляции"]
 topics: ["OpenAI", "промышленная политика", "производство", "цепочки поставок", "инфраструктура"]
 storyCluster: "backfill-energy-basement"
 sourceNote: "Подготовлено на основе обращения OpenAI от 15 января 2026 года о расширении производственной базы для ИИ-инфраструктуры."
-readingTime: 6
+readingTime: 1
 publicUrl: "/2026-01-15-promyshlennaya-politika-ii-nachinaetsya-s-zavodov/"
 heroImage: ../../assets/editorial/2026-01-15-promyshlennaya-politika-ii-nachinaetsya-s-zavodov-hero.svg
 ---

@@ -10,8 +10,9 @@ rubricLabels: ["Теории"]
 topics: ["shutdown safety", "AI safety", "self-improvement", "agents", "control"]
 storyCluster: "vyklyuchenie-sverhsistem"
 sourceNote: "Текст опирается на мартовский paper о shutdown safety valves и развивает его в формате маркированной спекулятивной рубрики."
-readingTime: 3
+readingTime: 2
 publicUrl: "/2026-03-07-ii-kotoryi-hochet-byt-vyklyuchennym/"
+heroImage: ../../assets/editorial/secondary-theories-hero.svg
 ---
 
 # ИИ, который хочет быть выключенным

@@ -10,8 +10,9 @@ rubricLabels: ["Тенденции"]
 topics: ["layoffs", "labor market", "AI", "Challenger", "tech"]
 storyCluster: "rynok-truda-i-ii"
 sourceNote: "Основано на мартовских сообщениях о tech-сокращениях, публикации Reuters о переносе инвестиций в AI и статистике Challenger по причинам увольнений."
-readingTime: 4
+readingTime: 2
 publicUrl: "/2026-03-19-ai-uvolneniya-i-pereraspredelenie-marzhi/"
+heroImage: ../../assets/editorial/secondary-tendencies-hero.svg
 ---
 
 # ИИ уже перераспределяет маржу, а не только задачи

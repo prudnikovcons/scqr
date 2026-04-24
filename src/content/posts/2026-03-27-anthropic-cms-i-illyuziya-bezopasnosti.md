@@ -12,6 +12,7 @@ storyCluster: "operatsionnaya-bezopasnost-laboratoriy"
 sourceNote: "Основано на мартовских публикациях об утечке внутренних материалов Anthropic из-за ошибки конфигурации CMS."
 readingTime: 1
 publicUrl: "/2026-03-27-anthropic-cms-i-illyuziya-bezopasnosti/"
+heroImage: ../../assets/editorial/secondary-illusions-hero.svg
 ---
 
 # Anthropic показала старую истину: безопасность рушится на банальной CMS

@@ -10,7 +10,7 @@ rubricLabels: ["Автоматизации"]
 topics: ["Cloudflare", "OpenAI", "Agent Cloud", "облака", "корпоративные агенты"]
 storyCluster: "backfill-corporate-agents"
 sourceNote: "Подготовлено на основе сообщения OpenAI от 13 апреля 2026 года о работе корпоративных агентных сценариев в Cloudflare Agent Cloud."
-readingTime: 3
+readingTime: 1
 publicUrl: "/2026-04-13-agent-cloud-delaet-agentov-pohozhimi-na-oblachnyy-servis/"
 heroImage: ../../assets/editorial/2026-04-13-agent-cloud-delaet-agentov-pohozhimi-na-oblachnyy-servis-hero.svg
 ---

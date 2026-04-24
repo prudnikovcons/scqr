@@ -10,7 +10,7 @@ rubricLabels: ["Теории"]
 topics: ["энергетика", "капитал", "рынок ИИ", "инфраструктура", "язык отрасли"]
 storyCluster: "backfill-energy-basement"
 sourceNote: "Подготовлено на основе январско-апрельской серии инфраструктурных сообщений OpenAI, NVIDIA и Anthropic о мощности, строительстве и многоплатформенной поставке вычислений."
-readingTime: 5
+readingTime: 1
 publicUrl: "/2026-04-14-rynok-ii-zagovoril-yazykom-energetikov-i-kaznacheev/"
 heroImage: ../../assets/editorial/2026-04-14-rynok-ii-zagovoril-yazykom-energetikov-i-kaznacheev-hero.svg
 ---

@@ -4,14 +4,16 @@ description: "23 апреля 2026 Европейский союз наконе�
 pubDate: "2026-04-23T09:00:00"
 articleType: "news"
 stage: "drafted"
-status: "approved"
+status: "ready"
 rubrics: ["russia"]
 rubricLabels: ["В России"]
 topics: ["Ukraine", "European Union", "loan", "Viktor Orban", "Druzhba pipeline"]
+editorialFlags: ["archive-noise"]
 storyCluster: "finansirovanie-ukrainy-2026"
 sourceNote: "Основано на материалах AP об утверждении пакета помощи ЕС Украине и о значении этого пакета для украинского бюджета военного времени."
-readingTime: 2
+readingTime: 1
 publicUrl: "/2026-04-23-es-vydelil-ukraine-90-mlrd-evro-no-ne-vernul-diplomatiyu/"
+heroImage: ../../assets/editorial/secondary-russia-hero.svg
 ---
 
 # ЕС выделил Украине 90 млрд евро, но не вернул дипломатию

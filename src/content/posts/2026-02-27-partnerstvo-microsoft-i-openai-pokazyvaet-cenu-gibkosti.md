@@ -10,7 +10,7 @@ rubricLabels: ["Генерации"]
 topics: ["Microsoft", "OpenAI", "Azure", "вычисления", "партнёрства"]
 storyCluster: "backfill-frontier-access"
 sourceNote: "Подготовлено на основе совместного заявления Microsoft и OpenAI от 27 февраля 2026 года о продолжении партнёрства и сохранении права OpenAI привлекать дополнительные вычисления."
-readingTime: 5
+readingTime: 1
 publicUrl: "/2026-02-27-partnerstvo-microsoft-i-openai-pokazyvaet-cenu-gibkosti/"
 heroImage: ../../assets/editorial/2026-02-27-partnerstvo-microsoft-i-openai-pokazyvaet-cenu-gibkosti-hero.svg
 ---

@@ -80,6 +80,7 @@ status: "draft"
 rubrics: ["${rubricSlug}"]
 rubricLabels: ["${label}"]
 topics: []
+editorialFlags: []
 sourceNote: ""
 readingTime: 3
 publicUrl: "${publicUrl}"

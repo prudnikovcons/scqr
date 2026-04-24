@@ -10,7 +10,7 @@ rubricLabels: ["Тенденции"]
 topics: ["Anthropic", "Google Cloud", "Broadcom", "вычисления", "гигаватты"]
 storyCluster: "backfill-energy-basement"
 sourceNote: "Подготовлено на основе сообщения Anthropic от 6 апреля 2026 года о многогига-ваттном соглашении с Google и Broadcom."
-readingTime: 3
+readingTime: 1
 publicUrl: "/2026-04-06-anthropic-zakreplyaet-za-soboy-gigavatty-a-ne-prosto-servery/"
 heroImage: ../../assets/editorial/2026-04-06-anthropic-zakreplyaet-za-soboy-gigavatty-a-ne-prosto-servery-hero.svg
 ---

@@ -10,7 +10,7 @@ rubricLabels: ["Иллюзии"]
 topics: ["MCP", "Project Glasswing", "Anthropic", "безопасность агентов", "протоколы"]
 storyCluster: "backfill-protocol-security"
 sourceNote: "Подготовлено на основе Project Glasswing от Anthropic от 7 апреля 2026 года и весенних исследований по защите MCP, включая работы SMCP и MCPSHIELD."
-readingTime: 5
+readingTime: 1
 publicUrl: "/2026-04-07-mcp-vyros-bystree-chem-zashchitnyy-sloy-vokrug-nego/"
 heroImage: ../../assets/editorial/2026-04-07-mcp-vyros-bystree-chem-zashchitnyy-sloy-vokrug-nego-hero.svg
 ---

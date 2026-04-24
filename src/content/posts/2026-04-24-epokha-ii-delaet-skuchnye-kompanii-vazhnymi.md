@@ -10,7 +10,7 @@ rubricLabels: ["Теории"]
 topics: ["инфраструктура", "наблюдаемость", "энергия", "аудит", "корпоративные системы"]
 storyCluster: "wave-1-boring-companies"
 sourceNote: "Колонка опирается на текущую инфраструктурную повестку рынка ИИ, включая тексты Дженсена Хуанга, OpenAI и Anthropic о росте вычислительной базы и корпоративного внедрения."
-readingTime: 5
+readingTime: 1
 publicUrl: "/2026-04-24-epokha-ii-delaet-skuchnye-kompanii-vazhnymi/"
 heroImage: ../../assets/editorial/2026-04-24-epokha-ii-delaet-skuchnye-kompanii-vazhnymi-hero.svg
 ---

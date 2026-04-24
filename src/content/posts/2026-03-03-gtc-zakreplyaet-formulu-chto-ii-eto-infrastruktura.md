@@ -10,7 +10,7 @@ rubricLabels: ["Траектории"]
 topics: ["NVIDIA", "Jensen Huang", "GTC 2026", "инфраструктура", "AI factories"]
 storyCluster: "backfill-energy-basement"
 sourceNote: "Подготовлено на основе заявления NVIDIA от 3 марта 2026 года о GTC 2026 и тезиса Дженсена Хуанга о том, что ИИ становится essential infrastructure."
-readingTime: 5
+readingTime: 1
 publicUrl: "/2026-03-03-gtc-zakreplyaet-formulu-chto-ii-eto-infrastruktura/"
 heroImage: ../../assets/editorial/2026-03-03-gtc-zakreplyaet-formulu-chto-ii-eto-infrastruktura-hero.svg
 ---

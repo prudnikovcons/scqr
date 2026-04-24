@@ -4,14 +4,16 @@ description: "Anthropic в суде сформулировала вещь, ко�
 pubDate: "2026-04-23T09:00:00"
 articleType: "news"
 stage: "drafted"
-status: "approved"
+status: "ready"
 rubrics: ["regulations"]
 rubricLabels: ["Регуляции"]
 topics: ["Anthropic", "Pentagon", "control", "AI governance", "classified networks"]
+editorialFlags: ["archive-noise"]
 storyCluster: "anthropic-control-boundaries"
 sourceNote: "Основано на сообщении AP о судебной позиции Anthropic и материалах Reuters о споре компании с американским правительством вокруг Mythos."
-readingTime: 2
+readingTime: 1
 publicUrl: "/2026-04-23-anthropic-govorit-chto-u-nee-net-kill-switcha-dlya-pentagona/"
+heroImage: ../../assets/editorial/secondary-regulations-hero.svg
 ---
 
 # Anthropic говорит, что у нее нет kill switch для Пентагона

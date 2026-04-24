@@ -10,7 +10,7 @@ rubricLabels: ["Генерации"]
 topics: ["Anthropic", "Series G", "инвестиции", "корпоративный рынок", "frontier"]
 storyCluster: "backfill-frontier-access"
 sourceNote: "Подготовлено на основе сообщения Anthropic от 12 февраля 2026 года о раунде Series G объёмом 30 млрд долларов."
-readingTime: 3
+readingTime: 1
 publicUrl: "/2026-02-12-anthropic-privlekaet-kapital-kak-infrastrukturnaya-derzhava/"
 heroImage: ../../assets/editorial/2026-02-12-anthropic-privlekaet-kapital-kak-infrastrukturnaya-derzhava-hero.svg
 ---

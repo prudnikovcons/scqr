@@ -10,7 +10,7 @@ rubricLabels: ["В России"]
 topics: ["Россия", "корпоративное внедрение", "госзаказ", "генеративный ИИ", "спрос"]
 storyCluster: "wave-1-russia-market"
 sourceNote: "Подготовлено на основе внутреннего архива SCQR о росте российского рынка генеративного ИИ, мартовского текста о законопроекте Минцифры и публичных сигналов корпоративного внедрения."
-readingTime: 5
+readingTime: 1
 publicUrl: "/2026-04-24-rossiyskiy-ii-rynok-mezhdu-vitrinoy-i-sprosom/"
 heroImage: ../../assets/editorial/2026-04-24-rossiyskiy-ii-rynok-mezhdu-vitrinoy-i-sprosom-hero.svg
 ---

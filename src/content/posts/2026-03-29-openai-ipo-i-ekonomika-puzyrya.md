@@ -10,8 +10,9 @@ rubricLabels: ["Тенденции"]
 topics: ["OpenAI", "Anthropic", "IPO", "AI market", "monetization"]
 storyCluster: "ekonomika-frontier-laboratorii"
 sourceNote: "Текст опирается на мартовские публикации о прогнозных убытках OpenAI, подготовке к IPO и ожиданиях Anthropic выйти к положительному денежному потоку раньше конкурента."
-readingTime: 5
+readingTime: 2
 publicUrl: "/2026-03-29-openai-ipo-i-ekonomika-puzyrya/"
+heroImage: ../../assets/editorial/secondary-tendencies-hero.svg
 ---
 
 # IPO на фоне убытков: как рынок ИИ раскалывается на две экономики

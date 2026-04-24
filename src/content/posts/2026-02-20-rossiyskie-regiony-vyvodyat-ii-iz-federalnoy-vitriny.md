@@ -10,7 +10,7 @@ rubricLabels: ["В России"]
 topics: ["Цифровой регион", "правительство России", "региональные внедрения", "ИИ-практики", "российский рынок"]
 storyCluster: "backfill-corporate-agents"
 sourceNote: "Подготовлено на основе сообщения правительства России от 20 февраля 2026 года о публикации региональных ИИ-практик на портале «Цифровой регион»."
-readingTime: 3
+readingTime: 1
 publicUrl: "/2026-02-20-rossiyskie-regiony-vyvodyat-ii-iz-federalnoy-vitriny/"
 heroImage: ../../assets/editorial/2026-02-20-rossiyskie-regiony-vyvodyat-ii-iz-federalnoy-vitriny-hero.svg
 ---

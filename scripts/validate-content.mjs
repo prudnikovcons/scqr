@@ -172,6 +172,7 @@ for (const file of files) {
 
   const publishReady = fm.status === 'ready';
   const legacyPublished = fm.status === 'approved';
+  const editorialFlags = Array.isArray(fm.editorialFlags) ? fm.editorialFlags : [];
 
   if (publishReady) {
     if (!fm.sourceNote || !String(fm.sourceNote).trim()) {
@@ -210,10 +211,33 @@ for (const file of files) {
     const title = String(fm.title || '').toLowerCase();
     const topics = Array.isArray(fm.topics) ? fm.topics.map((topic) => String(topic).toLowerCase()) : [];
     if (
+      !editorialFlags.includes('archive-noise') &&
       POLITICAL_TITLE_KEYWORDS.some((keyword) => title.includes(keyword)) ||
-      topics.some((topic) => POLITICAL_TOPIC_KEYWORDS.some((keyword) => topic.includes(keyword)))
+      (!editorialFlags.includes('archive-noise') &&
+      topics.some((topic) => POLITICAL_TOPIC_KEYWORDS.some((keyword) => topic.includes(keyword))))
     ) {
       warnings.push(`${ctx}: looks like a political news item and may be filtered from the public site`);
+    }
+  }
+
+  if (Array.isArray(fm.topics)) {
+    const normalizedTopics = fm.topics.map((topic) => String(topic).trim()).filter(Boolean);
+    const uniqueTopics = new Set(normalizedTopics.map((topic) => topic.toLowerCase()));
+    if (uniqueTopics.size !== normalizedTopics.length) {
+      warnings.push(`${ctx}: topics contain duplicates`);
+    }
+    if ((publishReady || legacyPublished) && normalizedTopics.some((topic) => topic.length < 2)) {
+      warnings.push(`${ctx}: topics contain very short labels`);
+    }
+  }
+
+  if (fm.sourceNote) {
+    const sourceNote = String(fm.sourceNote).trim();
+    if ((publishReady || legacyPublished) && sourceNote.length < 20) {
+      warnings.push(`${ctx}: sourceNote is too short for a published material`);
+    }
+    if (sourceNote === String(fm.title).trim() || sourceNote === String(fm.description).trim()) {
+      warnings.push(`${ctx}: sourceNote duplicates headline or description`);
     }
   }
 

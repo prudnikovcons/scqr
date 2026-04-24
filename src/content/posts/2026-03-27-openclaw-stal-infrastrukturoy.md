@@ -10,8 +10,9 @@ rubricLabels: ["Автоматизации"]
 topics: ["OpenClaw", "China", "agents", "Tencent", "Alibaba Cloud"]
 storyCluster: "agentnye-platformy-kitaya"
 sourceNote: "Основано на мартовских публикациях о вирусном росте OpenClaw в Китае, интеграциях у крупных облачных провайдеров и включении агентной платформы в массовые сервисы."
-readingTime: 3
+readingTime: 2
 publicUrl: "/2026-03-27-openclaw-stal-infrastrukturoy/"
+heroImage: ../../assets/editorial/secondary-automations-hero.svg
 ---
 
 # OpenClaw в Китае: как агентный фреймворк стал инфраструктурой

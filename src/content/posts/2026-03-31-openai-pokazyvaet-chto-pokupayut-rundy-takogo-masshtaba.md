@@ -10,7 +10,7 @@ rubricLabels: ["Тенденции"]
 topics: ["OpenAI", "финансирование", "многоплатформенная инфраструктура", "облака", "чипы"]
 storyCluster: "backfill-frontier-access"
 sourceNote: "Подготовлено на основе сообщения OpenAI от 31 марта 2026 года о закрытии раунда на 122 млрд долларов и описании своей многоплатформенной инфраструктурной стратегии."
-readingTime: 6
+readingTime: 1
 publicUrl: "/2026-03-31-openai-pokazyvaet-chto-pokupayut-rundy-takogo-masshtaba/"
 heroImage: ../../assets/editorial/2026-03-31-openai-pokazyvaet-chto-pokupayut-rundy-takogo-masshtaba-hero.svg
 ---

@@ -42,10 +42,43 @@ export const isPoliticalNews = (post: PostEntry) => {
 	);
 };
 
-export const getVisiblePosts = (posts: PostEntry[]) => posts.filter((post) => !isPoliticalNews(post));
+export const isArchiveNoise = (post: PostEntry) =>
+	post.data.editorialFlags?.includes('archive-noise') ?? false;
+
+export const getVisiblePosts = (posts: PostEntry[]) =>
+	posts.filter((post) => !isPoliticalNews(post) && !isArchiveNoise(post));
 
 export const sortPosts = (posts: PostEntry[]) =>
 	[...posts].sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+export const hasHeroImage = (post: PostEntry) => Boolean(post.data.heroImage?.src);
+
+export const getHeroSrc = (post: PostEntry) => post.data.heroImage?.src ?? '';
+
+export const hasSecondaryHero = (post: PostEntry) => getHeroSrc(post).includes('secondary-');
+
+export const hasPremiumHero = (post: PostEntry) => {
+	const src = getHeroSrc(post);
+	return Boolean(src) && !src.includes('secondary-') && !src.includes('blog-placeholder');
+};
+
+export const getPresentationScore = (post: PostEntry) => {
+	const statusScore = post.data.status === 'ready' ? 100 : post.data.status === 'approved' ? 70 : 0;
+	const premiumScore = hasPremiumHero(post) ? 40 : 0;
+	const secondaryScore = hasSecondaryHero(post) ? 20 : 0;
+	const heroScore = hasHeroImage(post) ? 10 : 0;
+	return statusScore + premiumScore + secondaryScore + heroScore;
+};
+
+export const sortPostsForPresentation = (posts: PostEntry[]) =>
+	[...posts].sort((a, b) => {
+		const scoreDiff = getPresentationScore(b) - getPresentationScore(a);
+		if (scoreDiff !== 0) return scoreDiff;
+		return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+	});
+
+export const getFeaturePosts = (posts: PostEntry[], count: number) =>
+	sortPostsForPresentation(posts.filter((post) => !isArchiveNoise(post))).slice(0, count);
 
 export const getDisplayRubrics = (post: PostEntry) =>
 	post.data.rubricLabels.length > 0 ? post.data.rubricLabels : post.data.rubrics;
@@ -206,7 +239,7 @@ export const getRelatedPosts = (posts: PostEntry[], post: PostEntry, limit = 4) 
 			!sameCluster.includes(p) &&
 			p.data.rubrics.some((r) => post.data.rubrics.includes(r)),
 	);
-	return sortPosts([...sameCluster, ...sameRubric]).slice(0, limit);
+	return sortPostsForPresentation([...sameCluster, ...sameRubric]).slice(0, limit);
 };
 
 export const getAdjacentPosts = (posts: PostEntry[], post: PostEntry) => {

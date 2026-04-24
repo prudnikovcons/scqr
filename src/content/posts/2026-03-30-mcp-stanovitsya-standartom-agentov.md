@@ -10,8 +10,9 @@ rubricLabels: ["Автоматизации"]
 topics: ["MCP", "protocols", "agents", "Linux Foundation", "enterprise"]
 storyCluster: "protokoly-agentnoy-infrastruktury"
 sourceNote: "Основано на мартовских публикациях о росте MCP, его передаче в Linux Foundation и roadmap протокола на 2026 год."
-readingTime: 2
+readingTime: 1
 publicUrl: "/2026-03-30-mcp-stanovitsya-standartom-agentov/"
+heroImage: ../../assets/editorial/secondary-automations-hero.svg
 ---
 
 # MCP выходит из стадии моды и становится стандартом

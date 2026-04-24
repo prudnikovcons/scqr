@@ -10,7 +10,7 @@ rubricLabels: ["Иллюзии"]
 topics: ["агенты", "автономность", "MCP", "безопасность", "зрелость"]
 storyCluster: "wave-1-agent-myth"
 sourceNote: "Подготовлено на основе недавних материалов об уязвимостях в экосистеме MCP, научных работ по безопасности агентных протоколов и корпоративных заявлений о массовом внедрении агентных сценариев."
-readingTime: 6
+readingTime: 2
 publicUrl: "/2026-04-24-mif-o-gotovom-agente/"
 heroImage: ../../assets/editorial/2026-04-24-mif-o-gotovom-agente-hero.svg
 ---

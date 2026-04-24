@@ -10,7 +10,7 @@ rubricLabels: ["Иллюзии"]
 topics: ["MCP", "безопасность агентов", "Anthropic", "протоколы", "уязвимости"]
 storyCluster: "wave-1-agent-protocol-risk"
 sourceNote: "Подготовлено на основе декабрьского сообщения Anthropic о передаче MCP в Agentic AI Foundation, апрельского исследования MCPSHIELD и апрельских публикаций о критических уязвимостях в экосистеме MCP."
-readingTime: 3
+readingTime: 1
 publicUrl: "/2026-04-24-protokoly-dlya-agentov-stanovyatsya-zonoy-riska/"
 heroImage: ../../assets/editorial/2026-04-24-protokoly-dlya-agentov-stanovyatsya-zonoy-riska-hero-v2.png
 ---

@@ -10,7 +10,7 @@ rubricLabels: ["Автоматизации"]
 topics: ["OpenAI", "корпоративные агенты", "рабочие процессы", "enterprise AI", "внедрение"]
 storyCluster: "backfill-corporate-agents"
 sourceNote: "Подготовлено на основе публикации OpenAI от 8 апреля 2026 года The next phase of enterprise AI."
-readingTime: 6
+readingTime: 1
 publicUrl: "/2026-04-08-korporativnyy-ii-vstupaet-v-fazu-rabochih-konturov/"
 heroImage: ../../assets/editorial/2026-04-08-korporativnyy-ii-vstupaet-v-fazu-rabochih-konturov-hero.svg
 ---

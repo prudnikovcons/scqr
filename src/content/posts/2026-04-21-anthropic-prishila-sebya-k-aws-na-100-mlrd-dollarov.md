@@ -4,14 +4,15 @@ description: "Соглашение Anthropic с Amazon на сумму свыш�
 pubDate: "2026-04-21T09:00:00"
 articleType: "news"
 stage: "drafted"
-status: "approved"
+status: "ready"
 rubrics: ["generations"]
 rubricLabels: ["Генерации"]
 topics: ["Anthropic", "AWS", "Trainium", "compute", "cloud"]
 storyCluster: "frontier-compute-lock-in"
 sourceNote: "Основано на сообщении AP и официальном анонсе Anthropic о расширении партнерства с AWS и закреплении новой вычислительной мощности под Claude."
-readingTime: 2
+readingTime: 1
 publicUrl: "/2026-04-21-anthropic-prishila-sebya-k-aws-na-100-mlrd-dollarov/"
+heroImage: ../../assets/editorial/secondary-generations-hero.svg
 ---
 
 # Anthropic пришила себя к AWS на 100 млрд долларов

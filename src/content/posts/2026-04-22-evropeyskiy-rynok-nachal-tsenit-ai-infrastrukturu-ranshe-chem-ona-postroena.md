@@ -4,14 +4,15 @@ description: "22 апреля 2026 европейские акции, завяз
 pubDate: "2026-04-22T09:00:00"
 articleType: "news"
 stage: "drafted"
-status: "approved"
+status: "ready"
 rubrics: ["tendencies"]
 rubricLabels: ["Тенденции"]
 topics: ["Europe", "markets", "ASM", "ABB", "AI infrastructure"]
 storyCluster: "evropa-ai-capex-rally"
 sourceNote: "Основано на рыночном обзоре Reuters и квартальных материалах ASM и ABB о спросе, связанном с AI-инфраструктурой."
-readingTime: 2
+readingTime: 1
 publicUrl: "/2026-04-22-evropeyskiy-rynok-nachal-tsenit-ai-infrastrukturu-ranshe-chem-ona-postroena/"
+heroImage: ../../assets/editorial/secondary-tendencies-hero.svg
 ---
 
 # Европейский рынок начал ценить AI-инфраструктуру раньше, чем она построена

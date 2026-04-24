@@ -10,7 +10,7 @@ rubricLabels: ["Автоматизации"]
 topics: ["корпоративные агенты", "OpenAI", "Anthropic", "корпоративный рынок", "внедрение"]
 storyCluster: "wave-1-corporate-agents"
 sourceNote: "Подготовлено на основе апрельской заметки OpenAI о следующей фазе корпоративного ИИ и сообщения Anthropic о резком росте числа крупных корпоративных клиентов."
-readingTime: 3
+readingTime: 1
 publicUrl: "/2026-04-24-korporativnye-agenty-vyhodyat-iz-pilota/"
 heroImage: ../../assets/editorial/2026-04-24-korporativnye-agenty-vyhodyat-iz-pilota-hero-v2.png
 ---

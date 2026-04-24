@@ -10,7 +10,7 @@ rubricLabels: ["Тенденции"]
 topics: ["корпоративный рынок", "OpenAI", "выручка", "B2B", "корпоративное внедрение"]
 storyCluster: "wave-1-enterprise-revenue"
 sourceNote: "Подготовлено на основе апрельского текста OpenAI о следующей фазе корпоративного ИИ и декабрьского отчёта компании о состоянии корпоративного внедрения."
-readingTime: 3
+readingTime: 1
 publicUrl: "/2026-04-24-korporativnyy-ai-dogonyaet-potrebitelskiy-rynok/"
 heroImage: ../../assets/editorial/2026-04-24-korporativnyy-ai-dogonyaet-potrebitelskiy-rynok-hero-v2.png
 ---

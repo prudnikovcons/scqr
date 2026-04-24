@@ -10,7 +10,7 @@ rubricLabels: ["Регуляции"]
 topics: ["AI Act", "GPAI", "кодекс практики", "Европа", "комплаенс ИИ"]
 storyCluster: "backfill-governance-layers"
 sourceNote: "Подготовлено на основе публикации European AI Office от 23 марта 2026 года о кодексе практики для general-purpose AI."
-readingTime: 3
+readingTime: 1
 publicUrl: "/2026-03-23-evropa-perevodit-gpai-v-rezhim-prakticheskogo-sootvetstviya/"
 heroImage: ../../assets/editorial/2026-03-23-evropa-perevodit-gpai-v-rezhim-prakticheskogo-sootvetstviya-hero.svg
 ---

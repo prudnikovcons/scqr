@@ -10,7 +10,7 @@ rubricLabels: ["Генерации"]
 topics: ["frontier-модели", "доступ", "корпоративные контуры", "Anthropic", "OpenAI"]
 storyCluster: "wave-1-access-regime"
 sourceNote: "Подготовлено на основе апрельских сообщений OpenAI о корпоративной фазе рынка, материалов компании о бизнес-модели интеллекта и заявления Anthropic о многоплатформенном размещении Claude."
-readingTime: 3
+readingTime: 1
 publicUrl: "/2026-04-24-bolshie-laboratorii-prodayut-ne-prosto-model/"
 heroImage: ../../assets/editorial/2026-04-24-bolshie-laboratorii-prodayut-ne-prosto-model-hero-v2.png
 ---

@@ -10,8 +10,9 @@ rubricLabels: ["Тенденции"]
 topics: ["India", "VC", "startups", "wrappers", "applied AI"]
 storyCluster: "prikladnoy-sloy-ii"
 sourceNote: "Основано на мартовской дискуссии индийских инвесторов о качестве ИИ-стартапов и расширено до разбора прикладного слоя рынка."
-readingTime: 4
+readingTime: 2
 publicUrl: "/2026-03-27-india-vc-i-neprostye-obertki/"
+heroImage: ../../assets/editorial/secondary-tendencies-hero.svg
 ---
 
 # Недооцененный слой: почему "обертки над моделями" тоже строят рынок ИИ

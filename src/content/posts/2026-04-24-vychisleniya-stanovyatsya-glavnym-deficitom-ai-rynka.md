@@ -10,7 +10,7 @@ rubricLabels: ["Тенденции"]
 topics: ["вычисления", "Anthropic", "Google", "Broadcom", "Jensen Huang"]
 storyCluster: "wave-1-compute-shortage"
 sourceNote: "Подготовлено на основе апрельского сообщения Anthropic о многогига-ваттном соглашении с Google и Broadcom, материала OpenAI о связи вычислительных мощностей и выручки, а также мартовского текста Дженсена Хуанга о следующем этапе стройки ИИ-инфраструктуры."
-readingTime: 3
+readingTime: 1
 publicUrl: "/2026-04-24-vychisleniya-stanovyatsya-glavnym-deficitom-ai-rynka/"
 heroImage: ../../assets/editorial/2026-04-24-vychisleniya-stanovyatsya-glavnym-deficitom-ai-rynka-hero-v2.png
 ---

@@ -10,8 +10,9 @@ rubricLabels: ["Траектории"]
 topics: ["China", "Asia", "open source", "Qwen", "USCC"]
 storyCluster: "aziatskiy-tsentr-ii"
 sourceNote: "Текст основан на материалах Boao Forum, докладе USCC и мартовских публикациях о глобальном распространении китайских open-source моделей."
-readingTime: 5
+readingTime: 3
 publicUrl: "/2026-03-28-tsentr-ii-smeshchaetsya-v-aziyu/"
+heroImage: ../../assets/editorial/secondary-trajectories-hero.svg
 ---
 
 # Центр ИИ смещается в Азию

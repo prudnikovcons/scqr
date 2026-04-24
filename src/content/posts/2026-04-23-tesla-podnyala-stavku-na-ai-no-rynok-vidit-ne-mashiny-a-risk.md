@@ -4,14 +4,15 @@ description: "Квартальная отчетность Tesla на этой н
 pubDate: "2026-04-23T09:00:00"
 articleType: "analysis"
 stage: "drafted"
-status: "approved"
+status: "ready"
 rubrics: ["tendencies"]
 rubricLabels: ["Тенденции"]
 topics: ["Tesla", "Elon Musk", "robotaxi", "Optimus", "capex"]
 storyCluster: "tesla-ai-capex"
 sourceNote: "Основано на квартальной отчетности Tesla по версии AP и сообщении Reuters о новом плане капитальных затрат компании на AI, robotaxi и робототехнику."
-readingTime: 3
+readingTime: 2
 publicUrl: "/2026-04-23-tesla-podnyala-stavku-na-ai-no-rynok-vidit-ne-mashiny-a-risk/"
+heroImage: ../../assets/editorial/secondary-tendencies-hero.svg
 ---
 
 # Tesla подняла ставку на AI, но рынок видит не машины, а риск

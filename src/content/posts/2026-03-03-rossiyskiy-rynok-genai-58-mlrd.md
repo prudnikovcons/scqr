@@ -10,8 +10,9 @@ rubricLabels: ["В России"]
 topics: ["Russia", "generative AI", "market", "Just AI", "forecast"]
 storyCluster: "rynok-genai-rossii"
 sourceNote: "Основано на мартовской публикации о росте российского рынка генеративного ИИ и прогнозе его размера к 2030 году."
-readingTime: 2
+readingTime: 1
 publicUrl: "/2026-03-03-rossiyskiy-rynok-genai-58-mlrd/"
+heroImage: ../../assets/editorial/secondary-russia-hero.svg
 ---
 
 # Российский рынок genAI вырос в 4,5 раза. Это еще не зрелость

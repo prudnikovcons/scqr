@@ -10,8 +10,9 @@ rubricLabels: ["Новации"]
 topics: ["Meta", "HyperAgents", "self-improvement", "agents", "safety"]
 storyCluster: "samoizmenyayushchiesya-agenty"
 sourceNote: "Текст основан на мартовском препринте HyperAgents и сопоставлен с работами о некомпозиционности безопасности и механизмах аварийного отключения ИИ."
-readingTime: 5
+readingTime: 2
 publicUrl: "/2026-03-23-meta-hyperagents/"
+heroImage: ../../assets/editorial/secondary-innovations-hero.svg
 ---
 
 # HyperAgents: еще один путь к ИИ, который труднее удержать

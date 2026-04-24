@@ -4,14 +4,16 @@ description: "Украина пытается вернуть свою войну
 pubDate: "2026-04-23T09:00:00"
 articleType: "news"
 stage: "drafted"
-status: "approved"
+status: "ready"
 rubrics: ["russia"]
 rubricLabels: ["В России"]
 topics: ["Ukraine", "Russia", "Zelenskyy", "Putin", "negotiations"]
+editorialFlags: ["archive-noise"]
 storyCluster: "diplomatiya-ukrainy-2026"
 sourceNote: "Основано на сообщениях AP о попытке Киева продвинуть саммит Зеленского и Путина и о продолжающемся тупике переговоров."
-readingTime: 2
+readingTime: 1
 publicUrl: "/2026-04-23-kiev-prosit-sammit-no-voyna-uzhe-vytesnena-iranom/"
+heroImage: ../../assets/editorial/secondary-russia-hero.svg
 ---
 
 # Киев просит саммит, но война уже вытеснена Ираном

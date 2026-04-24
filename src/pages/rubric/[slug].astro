@@ -10,6 +10,7 @@ import { SITE_TITLE } from '../../consts';
 import {
 	buildRubricSummary,
 	RUBRIC_CONFIG,
+	getFeaturePosts,
 	getArticleTypeLabel,
 	getPostHref,
 	getPrimaryRubric,
@@ -39,9 +40,12 @@ export async function getStaticPaths() {
 
 const { rubric, posts, relatedRubrics } = Astro.props;
 const { tone } = rubric;
-const leadPost = posts[0];
-const featurePosts = posts.slice(1, 4);
-const feedPosts = posts.slice(4);
+const visualPosts = getFeaturePosts(posts, 4);
+const leadPost = visualPosts[0] ?? posts[0];
+const featurePosts = visualPosts.slice(1, 4);
+const leadId = leadPost?.id;
+const featureIds = new Set(featurePosts.map((post) => post.id));
+const feedPosts = posts.filter((post) => post.id !== leadId && !featureIds.has(post.id));
 const rubricLinks = relatedRubrics
 	.filter((item) => item.slug && item.slug !== rubric.slug)
 	.slice(0, 4);

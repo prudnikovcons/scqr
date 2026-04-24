@@ -10,7 +10,7 @@ rubricLabels: ["Тенденции"]
 topics: ["маржа", "чипы", "облака", "энергосистема", "OpenAI"]
 storyCluster: "wave-1-value-pools"
 sourceNote: "Подготовлено на основе материалов OpenAI о зависимости бизнеса от вычислительной базы, сообщений Anthropic о росте выручки и инфраструктурных обязательствах, а также публичных выступлений отраслевых лидеров о структуре расходов ИИ."
-readingTime: 6
+readingTime: 2
 publicUrl: "/2026-04-24-kto-zarabatyvaet-na-ai-bume/"
 heroImage: ../../assets/editorial/2026-04-24-kto-zarabatyvaet-na-ai-bume-hero.svg
 ---

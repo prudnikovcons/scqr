@@ -10,6 +10,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import {
 	buildClusterSummary,
 	buildRubricSummary,
+	getFeaturePosts,
 	getArticleTypeLabel,
 	getClusterHref,
 	getPostHref,
@@ -22,8 +23,9 @@ import {
 } from '../lib/site';
 
 const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
-const leadPost = posts[0];
-const visualFrontPosts = posts.slice(1, 5);
+const featurePosts = getFeaturePosts(posts, 5);
+const leadPost = featurePosts[0] ?? posts[0];
+const visualFrontPosts = featurePosts.slice(1, 5);
 const newsPosts = posts.filter((p) => p.data.articleType === 'news').slice(0, 7);
 const analysisPosts = posts.filter((p) => p.data.articleType === 'analysis').slice(0, 5);
 const columnPosts = posts.filter((p) => p.data.articleType === 'column').slice(0, 3);

@@ -4,14 +4,15 @@ description: "Microsoft объявила о вложениях на A$25 млр�
 pubDate: "2026-04-23T09:00:00"
 articleType: "news"
 stage: "drafted"
-status: "approved"
+status: "ready"
 rubrics: ["trajectories"]
 rubricLabels: ["Траектории"]
 topics: ["Microsoft", "Australia", "Azure", "data centers", "AI infrastructure"]
 storyCluster: "avstraliya-ai-infrastruktura"
 sourceNote: "Основано на сообщении Reuters об инвестиции Microsoft в Австралию и официальном анонсе Microsoft Australia."
-readingTime: 2
+readingTime: 1
 publicUrl: "/2026-04-23-microsoft-stroit-avstraliyskiy-uzel-ai-infrastruktury/"
+heroImage: ../../assets/editorial/secondary-trajectories-hero.svg
 ---
 
 # Microsoft строит австралийский узел AI-инфраструктуры

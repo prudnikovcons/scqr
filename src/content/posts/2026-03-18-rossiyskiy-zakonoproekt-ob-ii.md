@@ -10,8 +10,9 @@ rubricLabels: ["Регуляции"]
 topics: ["MinTsifry", "Russia", "bill", "national model", "trusted model registry"]
 storyCluster: "suverennyi-ii-v-rf"
 sourceNote: "Основано на мартовских разборах проекта закона Минцифры об ИИ и первых отраслевых комментариях о его последствиях для российского рынка."
-readingTime: 5
+readingTime: 3
 publicUrl: "/2026-03-18-rossiyskiy-zakonoproekt-ob-ii/"
+heroImage: ../../assets/editorial/secondary-regulations-hero.svg
 ---
 
 # Законопроект Минцифры об ИИ: государство строит не рынок, а контур допуска

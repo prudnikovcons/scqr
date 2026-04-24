@@ -10,7 +10,7 @@ rubricLabels: ["В России"]
 topics: ["МТС Банк", "MWS AI", "внутренний помощник", "российский рынок", "RAG"]
 storyCluster: "backfill-corporate-agents"
 sourceNote: "Подготовлено на основе пресс-релиза МТС Банка от 23 января 2026 года о запуске Corporate AI Copilot на платформе MWS AI Agents Platform."
-readingTime: 3
+readingTime: 1
 publicUrl: "/2026-01-23-mts-bank-zapustil-vnutrennego-ii-pomoshchnika/"
 heroImage: ../../assets/editorial/2026-01-23-mts-bank-zapustil-vnutrennego-ii-pomoshchnika-hero.svg
 ---

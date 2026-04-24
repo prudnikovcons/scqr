@@ -10,7 +10,7 @@ rubricLabels: ["Теории"]
 topics: ["Anthropic Institute", "управление ИИ", "frontier labs", "общественная роль", "институты"]
 storyCluster: "backfill-governance-layers"
 sourceNote: "Подготовлено на основе объявления Anthropic от 11 марта 2026 года о запуске Anthropic Institute."
-readingTime: 5
+readingTime: 1
 publicUrl: "/2026-03-11-institutnyy-yazyk-frontira-stanovitsya-chastyu-produkta/"
 heroImage: ../../assets/editorial/2026-03-11-institutnyy-yazyk-frontira-stanovitsya-chastyu-produkta-hero.svg
 ---

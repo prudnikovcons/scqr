@@ -10,8 +10,9 @@ rubricLabels: ["Регуляции"]
 topics: ["EU AI Act", "China", "Russia", "AI regulation", "sovereignty"]
 storyCluster: "globalnaya-fragmentatsiya-regulation"
 sourceNote: "Основано на мартовских материалах о реализации EU AI Act, обсуждении DSA и генеративного контента, китайской модели AI governance и российском проекте закона об ИИ."
-readingTime: 5
+readingTime: 2
 publicUrl: "/2026-03-28-regulirovanie-ii-raspadaetsya-na-tri-mira/"
+heroImage: ../../assets/editorial/secondary-regulations-hero.svg
 ---
 
 # Регулирование ИИ распадается на три мира

@@ -4,14 +4,15 @@ description: "OpenAI 14 апреля 2026 вывела GPT-5.4-Cyber не как
 pubDate: "2026-04-14T09:00:00"
 articleType: "news"
 stage: "drafted"
-status: "approved"
+status: "ready"
 rubrics: ["automations"]
 rubricLabels: ["Автоматизации"]
 topics: ["OpenAI", "GPT-5.4-Cyber", "cybersecurity", "trusted access", "defense"]
 storyCluster: "cyber-trusted-access"
 sourceNote: "Основано на официальных публикациях OpenAI о Trusted Access for Cyber и запуске GPT-5.4."
-readingTime: 2
+readingTime: 1
 publicUrl: "/2026-04-14-openai-zapustila-gpt-5-4-cyber-kak-model-doverennogo-dostupa/"
+heroImage: ../../assets/editorial/secondary-automations-hero.svg
 ---
 
 # OpenAI запустила GPT-5.4-Cyber как модель доверенного доступа

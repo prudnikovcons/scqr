@@ -10,7 +10,7 @@ rubricLabels: ["Траектории"]
 topics: ["инфраструктура", "рынок приложений", "Jensen Huang", "OpenAI", "Anthropic"]
 storyCluster: "wave-1-infrastructure-race"
 sourceNote: "Подготовлено на основе мартовского эссе Дженсена Хуанга о следующем этапе стройки ИИ, апрельских заявлений OpenAI и Anthropic о росте спроса и вложениях в вычислительную базу."
-readingTime: 6
+readingTime: 2
 publicUrl: "/2026-04-24-rynok-ii-stanovitsya-infrastrukturnoy-gonkoy/"
 heroImage: ../../assets/editorial/2026-04-24-rynok-ii-stanovitsya-infrastrukturnoy-gonkoy-hero.svg
 ---

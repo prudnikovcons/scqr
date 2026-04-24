@@ -10,7 +10,7 @@ rubricLabels: ["Автоматизации"]
 topics: ["ServiceNow", "OpenAI", "рабочие процессы", "корпоративный рынок", "агенты"]
 storyCluster: "backfill-corporate-agents"
 sourceNote: "Подготовлено на основе сообщения OpenAI от 20 января 2026 года о многолетнем соглашении с ServiceNow."
-readingTime: 3
+readingTime: 1
 publicUrl: "/2026-01-20-servicenow-pokazyvaet-kuda-uhodit-korporativnyy-ii/"
 heroImage: ../../assets/editorial/2026-01-20-servicenow-pokazyvaet-kuda-uhodit-korporativnyy-ii-hero.svg
 ---

@@ -10,8 +10,9 @@ rubricLabels: ["Новации"]
 topics: ["OpenAI", "Spud", "GPT-6", "ChatGPT", "Codex"]
 storyCluster: "next-openai-flagship"
 sourceNote: "Основано на мартовских публикациях о завершении предобучения модели Spud и ее предполагаемой роли в следующем продуктовом цикле OpenAI."
-readingTime: 2
+readingTime: 1
 publicUrl: "/2026-03-25-openai-spud/"
+heroImage: ../../assets/editorial/secondary-innovations-hero.svg
 ---
 
 # Spud: зачем OpenAI снова складывает компанию в одну модель

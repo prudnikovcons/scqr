@@ -10,7 +10,7 @@ rubricLabels: ["В России"]
 topics: ["Yandex AI Studio", "российский бизнес", "агенты", "HR", "поддержка"]
 storyCluster: "backfill-corporate-agents"
 sourceNote: "Подготовлено на основе публикации Yandex Cloud от 2 марта 2026 года о применении ИИ-агентов российским бизнесом."
-readingTime: 6
+readingTime: 1
 publicUrl: "/2026-03-02-rossiyskie-agenty-pereshli-iz-demo-v-operatsionnye-nishi/"
 heroImage: ../../assets/editorial/2026-03-02-rossiyskie-agenty-pereshli-iz-demo-v-operatsionnye-nishi-hero.svg
 ---

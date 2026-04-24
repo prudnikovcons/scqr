@@ -16,6 +16,7 @@ const posts = defineCollection({
 			rubrics: z.array(z.string()).default([]),
 			rubricLabels: z.array(z.string()).default([]),
 			topics: z.array(z.string()).default([]),
+			editorialFlags: z.array(z.string()).default([]),
 			storyCluster: z.string().optional(),
 			sourceNote: z.string().optional(),
 			readingTime: z.number().optional(),

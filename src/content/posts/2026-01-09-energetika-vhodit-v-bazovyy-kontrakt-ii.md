@@ -10,7 +10,7 @@ rubricLabels: ["Тенденции"]
 topics: ["Stargate", "SB Energy", "OpenAI", "энергетика", "центры обработки данных"]
 storyCluster: "backfill-energy-basement"
 sourceNote: "Подготовлено на основе заявления OpenAI от 9 января 2026 года о партнёрстве с SoftBank Group и SB Energy в рамках Stargate."
-readingTime: 3
+readingTime: 1
 publicUrl: "/2026-01-09-energetika-vhodit-v-bazovyy-kontrakt-ii/"
 heroImage: ../../assets/editorial/2026-01-09-energetika-vhodit-v-bazovyy-kontrakt-ii-hero.svg
 ---

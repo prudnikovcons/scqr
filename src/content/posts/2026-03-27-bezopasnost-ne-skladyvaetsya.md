@@ -10,8 +10,9 @@ rubricLabels: ["Иллюзии"]
 topics: ["AI safety", "Anthropic", "OpenAI", "agents", "cybersecurity"]
 storyCluster: "krizis-ai-safety"
 sourceNote: "Основано на мартовских публикациях о Claude Mythos, перестройке safety-контуров OpenAI и препринте о некомпозиционности безопасности в агентных системах."
-readingTime: 5
+readingTime: 4
 publicUrl: "/2026-03-27-bezopasnost-ne-skladyvaetsya/"
+heroImage: ../../assets/editorial/secondary-illusions-hero.svg
 ---
 
 # Безопасность ИИ перестала складываться

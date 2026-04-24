@@ -10,7 +10,7 @@ rubricLabels: ["Регуляции"]
 topics: ["регулирование ИИ", "OpenAI", "Anthropic", "ответственное масштабирование", "доступ"]
 storyCluster: "wave-1-regulation-regime"
 sourceNote: "Подготовлено на основе апрельского текста OpenAI о промышленной политике для эпохи интеллекта, мартовского запуска Anthropic Institute и обновлённой версии Responsible Scaling Policy компании Anthropic."
-readingTime: 6
+readingTime: 2
 publicUrl: "/2026-04-24-regulirovanie-ii-kak-rezhim-dopuska/"
 heroImage: ../../assets/editorial/2026-04-24-regulirovanie-ii-kak-rezhim-dopuska-hero.svg
 ---

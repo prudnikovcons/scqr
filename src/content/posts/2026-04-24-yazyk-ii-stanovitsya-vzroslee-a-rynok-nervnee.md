@@ -10,7 +10,7 @@ rubricLabels: ["Теории"]
 topics: ["язык рынка", "Sam Altman", "Dario Amodei", "Jensen Huang", "зрелость рынка"]
 storyCluster: "wave-1-adult-language"
 sourceNote: "Колонка опирается на недавние публичные заявления лидеров отрасли, включая тексты OpenAI о корпоративном ИИ и промышленной политике, инфраструктурные тезисы Дженсена Хуанга и институциональные шаги Anthropic."
-readingTime: 5
+readingTime: 1
 publicUrl: "/2026-04-24-yazyk-ii-stanovitsya-vzroslee-a-rynok-nervnee/"
 heroImage: ../../assets/editorial/2026-04-24-yazyk-ii-stanovitsya-vzroslee-a-rynok-nervnee-hero.svg
 ---

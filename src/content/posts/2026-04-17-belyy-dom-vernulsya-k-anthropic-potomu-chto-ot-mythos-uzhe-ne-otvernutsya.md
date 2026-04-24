@@ -4,14 +4,16 @@ description: "Еще недавно конфликт Anthropic с Пентаго
 pubDate: "2026-04-17T09:00:00"
 articleType: "news"
 stage: "drafted"
-status: "approved"
+status: "ready"
 rubrics: ["regulations"]
 rubricLabels: ["Регуляции"]
 topics: ["Anthropic", "White House", "Mythos", "Pentagon", "AI safety"]
+editorialFlags: ["archive-noise"]
 storyCluster: "anthropic-gosudarstvo-mythos"
 sourceNote: "Основано на сообщениях AP и Reuters о переговорах Белого дома с Anthropic вокруг модели Mythos после конфликта компании с Пентагоном."
-readingTime: 2
+readingTime: 1
 publicUrl: "/2026-04-17-belyy-dom-vernulsya-k-anthropic-potomu-chto-ot-mythos-uzhe-ne-otvernutsya/"
+heroImage: ../../assets/editorial/secondary-regulations-hero.svg
 ---
 
 # Белый дом вернулся к Anthropic, потому что от Mythos уже не отвернуться
