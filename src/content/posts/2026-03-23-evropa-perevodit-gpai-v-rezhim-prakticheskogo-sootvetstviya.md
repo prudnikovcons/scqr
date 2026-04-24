@@ -1,6 +1,8 @@
 ---
 title: "Европа переводит GPAI в режим практического соответствия"
 description: "Публикация кодекса для general-purpose AI важна тем, что рынок получает не новый лозунг, а рабочий инструмент: как именно поставщик должен выглядеть, если хочет спокойно работать в европейском контуре."
+deck: "Публикация кодекса для general-purpose AI важна тем, что рынок получает не новый лозунг, а рабочий инструмент: как именно поставщик должен выглядеть, если хочет спокойно работать в европейском контуре."
+scqrVerdict: "SCQR считает, что именно такие документы и меняют рынок по-настоящему."
 pubDate: "2026-03-23T11:45:00"
 articleType: "news"
 stage: "wave-2"
@@ -12,6 +14,7 @@ storyCluster: "backfill-governance-layers"
 sourceNote: "Подготовлено на основе публикации European AI Office от 23 марта 2026 года о кодексе практики для general-purpose AI."
 readingTime: 1
 publicUrl: "/2026-03-23-evropa-perevodit-gpai-v-rezhim-prakticheskogo-sootvetstviya/"
+heroAlt: "Редакционная обложка SCQR к материалу «Европа переводит GPAI в режим практического соответствия»."
 heroImage: ../../assets/editorial/2026-03-23-evropa-perevodit-gpai-v-rezhim-prakticheskogo-sootvetstviya-hero.svg
 ---
 

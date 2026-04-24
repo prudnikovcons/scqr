@@ -1,6 +1,8 @@
 ---
 title: "Институтный язык фронтира становится частью самого продукта"
 description: "Запуск Anthropic Institute показывает, что фронтирные компании продают рынку уже не только модели, но и собственную способность объяснять, нормировать и сопровождать их общественную роль."
+deck: "Запуск Anthropic Institute показывает, что фронтирные компании продают рынку уже не только модели, но и собственную способность объяснять, нормировать и сопровождать их общественную роль."
+scqrVerdict: "Фронтирные компании уже невозможно воспринимать как обычных поставщиков софта."
 pubDate: "2026-03-11T13:00:00"
 articleType: "column"
 stage: "wave-2"
@@ -12,6 +14,7 @@ storyCluster: "backfill-governance-layers"
 sourceNote: "Подготовлено на основе объявления Anthropic от 11 марта 2026 года о запуске Anthropic Institute."
 readingTime: 1
 publicUrl: "/2026-03-11-institutnyy-yazyk-frontira-stanovitsya-chastyu-produkta/"
+heroAlt: "Редакционная обложка SCQR к материалу «Институтный язык фронтира становится частью самого продукта»."
 heroImage: ../../assets/editorial/2026-03-11-institutnyy-yazyk-frontira-stanovitsya-chastyu-produkta-hero.svg
 ---
 

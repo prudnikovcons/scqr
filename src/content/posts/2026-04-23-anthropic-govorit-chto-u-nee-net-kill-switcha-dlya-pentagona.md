@@ -1,6 +1,8 @@
 ---
 title: "Anthropic говорит, что у нее нет kill switch для Пентагона"
 description: "Anthropic в суде сформулировала вещь, которая будет преследовать весь рынок frontier AI еще долго: после развертывания модели в закрытом государственном контуре у разработчика может не быть никакого реального “рубильника” над ее использованием."
+deck: "Anthropic в суде сформулировала вещь, которая будет преследовать весь рынок frontier AI еще долго: после развертывания модели в закрытом государственном контуре у разработчика может не быть никакого реального “рубильника” над ее использованием."
+scqrVerdict: "Государство хочет получить powerful AI как управляемую систему: с доступом, аудитом, возможностью принуждения и при необходимости остановки."
 pubDate: "2026-04-23T09:00:00"
 articleType: "news"
 stage: "drafted"
@@ -13,6 +15,7 @@ storyCluster: "anthropic-control-boundaries"
 sourceNote: "Основано на сообщении AP о судебной позиции Anthropic и материалах Reuters о споре компании с американским правительством вокруг Mythos."
 readingTime: 1
 publicUrl: "/2026-04-23-anthropic-govorit-chto-u-nee-net-kill-switcha-dlya-pentagona/"
+heroAlt: "Редакционная обложка SCQR к материалу «Anthropic говорит, что у нее нет kill switch для Пентагона»."
 heroImage: ../../assets/editorial/secondary-regulations-hero.svg
 ---
 

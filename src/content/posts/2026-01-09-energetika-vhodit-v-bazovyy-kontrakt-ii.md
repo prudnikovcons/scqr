@@ -1,6 +1,8 @@
 ---
 title: "Энергетика входит в базовый контракт ИИ"
 description: "Партнёрство OpenAI, SoftBank и SB Energy показывает, что рынок ИИ окончательно спускается на нижние этажи: теперь без энергии, земли и стройки не бывает ни модели, ни роста."
+deck: "Партнёрство OpenAI, SoftBank и SB Energy показывает, что рынок ИИ окончательно спускается на нижние этажи: теперь без энергии, земли и стройки не бывает ни модели, ни роста."
+scqrVerdict: "Когда лаборатория начинает обсуждать не параметры модели, а землю, энергетику, строительную дисциплину и защиту тарифов для местных потребителей, рынок резко взрослеет."
 pubDate: "2026-01-09T10:20:00"
 articleType: "news"
 stage: "wave-2"
@@ -12,6 +14,7 @@ storyCluster: "backfill-energy-basement"
 sourceNote: "Подготовлено на основе заявления OpenAI от 9 января 2026 года о партнёрстве с SoftBank Group и SB Energy в рамках Stargate."
 readingTime: 1
 publicUrl: "/2026-01-09-energetika-vhodit-v-bazovyy-kontrakt-ii/"
+heroAlt: "Редакционная обложка SCQR к материалу «Энергетика входит в базовый контракт ИИ»."
 heroImage: ../../assets/editorial/2026-01-09-energetika-vhodit-v-bazovyy-kontrakt-ii-hero.svg
 ---
 

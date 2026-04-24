@@ -10,6 +10,8 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import {
 	buildRubricSummary,
 	getArticleTypeLabel,
+	getDeck,
+	getHeroAlt,
 	getPostHref,
 	getPrimaryRubric,
 	getReadingTimeLabel,
@@ -17,18 +19,31 @@ import {
 	getVisiblePosts,
 	sortPosts,
 } from '../../lib/site';
+import { buildCollectionPageJsonLd } from '../../lib/structuredData';
 
 const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
 const rubricSummary = buildRubricSummary(posts).slice(0, 6);
 const newsPosts = posts.filter((post) => post.data.articleType === 'news');
 const analysisPosts = posts.filter((post) => post.data.articleType === 'analysis');
 const columnPosts = posts.filter((post) => post.data.articleType === 'column');
+const archiveJsonLd = buildCollectionPageJsonLd({
+	title: `${SITE_TITLE} — Архив`,
+	description: SITE_DESCRIPTION,
+	path: '/blog/',
+	image: posts[0]?.data.heroImage,
+});
 ---
 
 <!doctype html>
 <html lang="ru">
 	<head>
-		<BaseHead title={`${SITE_TITLE} — Архив`} description={SITE_DESCRIPTION} image={posts[0]?.data.heroImage} />
+		<BaseHead
+			title={`${SITE_TITLE} — Архив`}
+			description={SITE_DESCRIPTION}
+			image={posts[0]?.data.heroImage}
+			imageAlt={posts[0] ? getHeroAlt(posts[0]) : `${SITE_TITLE} — Архив`}
+			jsonLd={archiveJsonLd}
+		/>
 	</head>
 	<body>
 		<Header />
@@ -81,7 +96,7 @@ const columnPosts = posts.filter((post) => post.data.articleType === 'column');
 									<span>{getReadingTimeLabel(post)}</span>
 								</div>
 								<h2><a href={getPostHref(post)}>{post.data.title}</a></h2>
-								<p>{post.data.description}</p>
+								<p>{getDeck(post)}</p>
 							</div>
 						</article>
 					))}
@@ -104,7 +119,7 @@ const columnPosts = posts.filter((post) => post.data.articleType === 'column');
 									<span>{getReadingTimeLabel(post)}</span>
 								</div>
 								<h2><a href={getPostHref(post)}>{post.data.title}</a></h2>
-								<p>{post.data.description}</p>
+								<p>{getDeck(post)}</p>
 							</div>
 						</article>
 					))}
@@ -127,7 +142,7 @@ const columnPosts = posts.filter((post) => post.data.articleType === 'column');
 									<span>{getReadingTimeLabel(post)}</span>
 								</div>
 								<h2><a href={getPostHref(post)}>{post.data.title}</a></h2>
-								<p>{post.data.description}</p>
+								<p>{getDeck(post)}</p>
 							</div>
 						</article>
 					))}

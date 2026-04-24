@@ -1,6 +1,8 @@
 ---
 title: "Anthropic показала старую истину: безопасность рушится на банальной CMS"
 description: "Anthropic, компания, чье имя почти автоматически связывают с AI safety, потеряла около 3 000 внутренних файлов из-за ошибки конфигурации CMS. В открытом доступе оказались черновики, изображения и документы, связанные в том числе с unreleased-моделью Claude Mythos."
+deck: "Anthropic, компания, чье имя почти автоматически связывают с AI safety, потеряла около 3 000 внутренних файлов из-за ошибки конфигурации CMS. В открытом доступе оказались черновики, изображения и документы, связанные в том числе с unreleased-моделью Claude Mythos."
+scqrVerdict: "Anthropic, компания, чье имя почти автоматически связывают с AI safety, потеряла около 3 000 внутренних файлов из-за ошибки конфигурации CMS."
 pubDate: "2026-03-27T09:00:00"
 articleType: "news"
 stage: "drafted"
@@ -12,6 +14,7 @@ storyCluster: "operatsionnaya-bezopasnost-laboratoriy"
 sourceNote: "Основано на мартовских публикациях об утечке внутренних материалов Anthropic из-за ошибки конфигурации CMS."
 readingTime: 1
 publicUrl: "/2026-03-27-anthropic-cms-i-illyuziya-bezopasnosti/"
+heroAlt: "Редакционная обложка SCQR к материалу «Anthropic показала старую истину: безопасность рушится на банальной CMS»."
 heroImage: ../../assets/editorial/secondary-illusions-hero.svg
 ---
 

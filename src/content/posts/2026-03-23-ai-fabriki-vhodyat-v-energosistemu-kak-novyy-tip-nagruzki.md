@@ -1,6 +1,8 @@
 ---
 title: "AI-фабрики входят в энергосистему как новый тип промышленной нагрузки"
 description: "Сюжет NVIDIA и Emerald AI важен тем, что окончательно связывает ИИ со старой промышленной реальностью: электросеть теперь становится не фоном, а частью продуктовой архитектуры."
+deck: "Сюжет NVIDIA и Emerald AI важен тем, что окончательно связывает ИИ со старой промышленной реальностью: электросеть теперь становится не фоном, а частью продуктовой архитектуры."
+scqrVerdict: "SCQR видит в мартовской новости точку, где инфраструктурная метафора перестаёт быть метафорой."
 pubDate: "2026-03-23T17:30:00"
 articleType: "analysis"
 stage: "wave-2"
@@ -12,6 +14,7 @@ storyCluster: "backfill-energy-basement"
 sourceNote: "Подготовлено на основе сообщения NVIDIA и Emerald AI от 23 марта 2026 года о гибких AI-фабриках как сетевых активах."
 readingTime: 1
 publicUrl: "/2026-03-23-ai-fabriki-vhodyat-v-energosistemu-kak-novyy-tip-nagruzki/"
+heroAlt: "Редакционная обложка SCQR к материалу «AI-фабрики входят в энергосистему как новый тип промышленной нагрузки»."
 heroImage: ../../assets/editorial/2026-03-23-ai-fabriki-vhodyat-v-energosistemu-kak-novyy-tip-nagruzki-hero.svg
 ---
 

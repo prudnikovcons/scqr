@@ -1,6 +1,8 @@
 ---
 title: "Anthropic закрепляет за собой гигаватты, а не просто серверы"
 description: "Апрельская сделка с Google и Broadcom показывает новый масштаб мышления отрасли: сегодня лаборатории резервируют уже не парк ускорителей, а целые пласты будущей энергетической и облачной инфраструктуры."
+deck: "Апрельская сделка с Google и Broadcom показывает новый масштаб мышления отрасли: сегодня лаборатории резервируют уже не парк ускорителей, а целые пласты будущей энергетической и облачной инфраструктуры."
+scqrVerdict: "SCQR считает, что после этой новости слово “масштаб” на рынке ИИ окончательно приобрело энергетический смысл."
 pubDate: "2026-04-06T15:20:00"
 articleType: "news"
 stage: "wave-2"
@@ -12,6 +14,7 @@ storyCluster: "backfill-energy-basement"
 sourceNote: "Подготовлено на основе сообщения Anthropic от 6 апреля 2026 года о многогига-ваттном соглашении с Google и Broadcom."
 readingTime: 1
 publicUrl: "/2026-04-06-anthropic-zakreplyaet-za-soboy-gigavatty-a-ne-prosto-servery/"
+heroAlt: "Редакционная обложка SCQR к материалу «Anthropic закрепляет за собой гигаватты, а не просто серверы»."
 heroImage: ../../assets/editorial/2026-04-06-anthropic-zakreplyaet-za-soboy-gigavatty-a-ne-prosto-servery-hero.svg
 ---
 

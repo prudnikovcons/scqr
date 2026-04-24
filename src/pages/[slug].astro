@@ -2,10 +2,9 @@
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BlogPost from '../layouts/BlogPost.astro';
 import {
-	getAdjacentPosts,
+	getStrongNextPost,
 	getClusterConfig,
 	getClusterPosts,
-	getRelatedPosts,
 	getVisiblePosts,
 	sortPosts,
 } from '../lib/site';
@@ -13,21 +12,17 @@ import {
 export async function getStaticPaths() {
 	const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
 	return posts.map((post) => {
-		const related = getRelatedPosts(posts, post, 4);
-		const { prev, next, scope } = getAdjacentPosts(posts, post);
 		const clusterSlug = post.data.storyCluster;
 		const clusterConfig = clusterSlug ? getClusterConfig(clusterSlug) : undefined;
 		const clusterSize = clusterSlug
 			? getClusterPosts(posts, clusterSlug).length
 			: 0;
+		const nextStrong = getStrongNextPost(posts, post);
 		return {
 			params: { slug: post.id },
 			props: {
 				post,
-				related,
-				prev,
-				next,
-				adjacentScope: scope,
+				nextStrong,
 				clusterSlug: clusterSlug ?? null,
 				clusterTitle: clusterConfig?.title ?? null,
 				clusterSize,
@@ -38,25 +33,19 @@ export async function getStaticPaths() {
 
 type Props = {
 	post: CollectionEntry<'posts'>;
-	related: CollectionEntry<'posts'>[];
-	prev: CollectionEntry<'posts'> | null;
-	next: CollectionEntry<'posts'> | null;
-	adjacentScope: 'cluster' | 'rubric' | null;
+	nextStrong: CollectionEntry<'posts'> | null;
 	clusterSlug: string | null;
 	clusterTitle: string | null;
 	clusterSize: number;
 };
 
-const { post, related, prev, next, adjacentScope, clusterSlug, clusterTitle, clusterSize } = Astro.props as Props;
+const { post, nextStrong, clusterSlug, clusterTitle, clusterSize } = Astro.props as Props;
 const { Content } = await render(post);
 ---
 
 <BlogPost
 	{...post.data}
-	related={related}
-	prev={prev}
-	next={next}
-	adjacentScope={adjacentScope}
+	nextStrong={nextStrong}
 	clusterSlug={clusterSlug}
 	clusterTitle={clusterTitle}
 	clusterSize={clusterSize}

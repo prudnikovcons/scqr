@@ -73,6 +73,8 @@ const publicUrl = `/${today}-${slug}/`;
 const frontmatter = `---
 title: "${rawTitle}"
 description: ""
+deck: ""
+scqrVerdict: ""
 pubDate: "${pubDate}"
 articleType: "${articleType}"
 stage: "draft"
@@ -84,6 +86,7 @@ editorialFlags: []
 sourceNote: ""
 readingTime: 3
 publicUrl: "${publicUrl}"
+heroAlt: "Редакционная обложка SCQR к материалу «${rawTitle}»."
 heroImage: ../../assets/blog-placeholder-1.jpg
 ---
 

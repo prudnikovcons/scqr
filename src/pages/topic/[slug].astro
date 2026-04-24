@@ -9,11 +9,14 @@ import { SITE_TITLE } from '../../consts';
 import {
 	buildTopicIndex,
 	getArticleTypeLabel,
+	getDeck,
+	getHeroAlt,
 	getPostHref,
 	getPrimaryRubric,
 	getVisiblePosts,
 	sortPosts,
 } from '../../lib/site';
+import { buildCollectionPageJsonLd } from '../../lib/structuredData';
 
 export async function getStaticPaths() {
 	const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
@@ -26,12 +29,24 @@ export async function getStaticPaths() {
 
 const { label, posts } = Astro.props;
 const leadPost = posts[0];
+const topicJsonLd = buildCollectionPageJsonLd({
+	title: `${label} — ${SITE_TITLE}`,
+	description: `Материалы SCQR по теме «${label}».`,
+	path: `/topic/${Astro.params.slug}/`,
+	image: leadPost?.data.heroImage,
+});
 ---
 
 <!doctype html>
 <html lang="ru">
 	<head>
-		<BaseHead title={`${label} — ${SITE_TITLE}`} description={`Материалы SCQR по теме «${label}».`} image={leadPost?.data.heroImage} />
+		<BaseHead
+			title={`${label} — ${SITE_TITLE}`}
+			description={`Материалы SCQR по теме «${label}».`}
+			image={leadPost?.data.heroImage}
+			imageAlt={leadPost ? getHeroAlt(leadPost) : label}
+			jsonLd={topicJsonLd}
+		/>
 	</head>
 	<body>
 		<Header />
@@ -59,7 +74,7 @@ const leadPost = posts[0];
 							<span>{post.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
 						</div>
 						<strong class="topic-list__title">{post.data.title}</strong>
-						<p class="topic-list__desc">{post.data.description}</p>
+						<p class="topic-list__desc">{getDeck(post)}</p>
 					</a>
 				))}
 			</section>

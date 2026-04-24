@@ -7,46 +7,100 @@ import PostThumbnail from '../components/PostThumbnail.astro';
 import RubricLabel from '../components/RubricLabel.astro';
 import TickerBar from '../components/TickerBar.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { SITE_CURATION } from '../data/curation';
 import {
 	buildClusterSummary,
 	buildRubricSummary,
-	getFeaturePosts,
 	getArticleTypeLabel,
 	getClusterHref,
+	getCuratedPost,
+	getCuratedPosts,
+	getDeck,
+	getHeroAlt,
 	getPostHref,
 	getPrimaryRubric,
 	getReadingTimeLabel,
 	getRubricHref,
 	getToneClass,
 	getVisiblePosts,
+	isPremiumReadyPost,
 	sortPosts,
+	sortPostsForPresentation,
 } from '../lib/site';
+import { buildCollectionPageJsonLd, buildWebsiteJsonLd } from '../lib/structuredData';
 
 const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
-const featurePosts = getFeaturePosts(posts, 5);
-const leadPost = featurePosts[0] ?? posts[0];
-const visualFrontPosts = featurePosts.slice(1, 5);
-const newsPosts = posts.filter((p) => p.data.articleType === 'news').slice(0, 7);
-const analysisPosts = posts.filter((p) => p.data.articleType === 'analysis').slice(0, 5);
-const columnPosts = posts.filter((p) => p.data.articleType === 'column').slice(0, 3);
-const clusterPosts = buildClusterSummary(posts).slice(0, 3);
-const rubricSummary = buildRubricSummary(posts).filter((r) => r.slug);
+
+const curatedLead = getCuratedPost(posts, SITE_CURATION.homepageLead, isPremiumReadyPost);
+const leadPost = curatedLead ?? sortPostsForPresentation(posts.filter(isPremiumReadyPost))[0] ?? posts[0];
+
+const visualPool = posts.filter((post) => post.id !== leadPost?.id);
+const curatedVisual = getCuratedPosts(visualPool, SITE_CURATION.homepageVisualGrid, isPremiumReadyPost);
+const usedVisualIds = new Set(curatedVisual.map((post) => post.id));
+const fallbackVisual = sortPostsForPresentation(
+	visualPool.filter((post) => isPremiumReadyPost(post) && !usedVisualIds.has(post.id)),
+).slice(0, Math.max(0, 4 - curatedVisual.length));
+const visualFrontPosts = [...curatedVisual, ...fallbackVisual].slice(0, 4);
+
+const clusterPosts = buildClusterSummary(posts, SITE_CURATION.homepageSignalClusters).slice(0, 3);
+
+const curatedEssays = getCuratedPosts(posts, SITE_CURATION.homepageEssays, isPremiumReadyPost);
+const usedEssayIds = new Set(curatedEssays.map((post) => post.id));
+const fallbackEssays = sortPostsForPresentation(
+	posts.filter(
+		(post) =>
+			post.data.articleType === 'column' &&
+			isPremiumReadyPost(post) &&
+			!usedEssayIds.has(post.id),
+	),
+).slice(0, Math.max(0, 2 - curatedEssays.length));
+const columnPosts = [...curatedEssays, ...fallbackEssays].slice(0, 2);
+
+const excludedIds = new Set([
+	leadPost?.id,
+	...visualFrontPosts.map((post) => post.id),
+	...columnPosts.map((post) => post.id),
+].filter(Boolean));
+
+const remainingPosts = posts.filter((post) => !excludedIds.has(post.id));
+const newsPosts = remainingPosts.filter((post) => post.data.articleType === 'news').slice(0, 7);
+const analysisPosts = remainingPosts.filter((post) => post.data.articleType === 'analysis').slice(0, 5);
+const rubricSummary = buildRubricSummary(posts).filter((rubric) => rubric.slug);
+const homeJsonLd = [
+	buildWebsiteJsonLd({
+		title: SITE_TITLE,
+		description: SITE_DESCRIPTION,
+		path: '/',
+		image: leadPost?.data.heroImage,
+	}),
+	buildCollectionPageJsonLd({
+		title: `${SITE_TITLE} — Главная`,
+		description: SITE_DESCRIPTION,
+		path: '/',
+		image: leadPost?.data.heroImage,
+	}),
+];
 ---
 
 <!doctype html>
 <html lang="ru">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} image={leadPost?.data.heroImage} />
+		<BaseHead
+			title={SITE_TITLE}
+			description={SITE_DESCRIPTION}
+			image={leadPost?.data.heroImage}
+			imageAlt={leadPost ? getHeroAlt(leadPost) : SITE_TITLE}
+			jsonLd={homeJsonLd}
+		/>
 	</head>
 	<body>
 		<Header />
 		<TickerBar />
 
 		<main class="main-shell">
-
 			{leadPost && (
 				<article class="lead-story">
-					<PostThumbnail post={leadPost} className="lead-story__media" toneClass={getToneClass(0)} />
+					<PostThumbnail post={leadPost} className="lead-story__media" toneClass={getToneClass(0)} loading="eager" />
 					<div class="lead-story__body">
 						<div class="lead-story__meta">
 							<span class="content-tag"><RubricLabel name={getPrimaryRubric(leadPost)} /></span>
@@ -56,7 +110,7 @@ const rubricSummary = buildRubricSummary(posts).filter((r) => r.slug);
 						<h1 class="lead-story__title">
 							<a href={getPostHref(leadPost)}>{leadPost.data.title}</a>
 						</h1>
-						<p class="lead-story__desc">{leadPost.data.description}</p>
+						<p class="lead-story__desc">{getDeck(leadPost)}</p>
 						<time class="lead-story__date">
 							{leadPost.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}
 						</time>
@@ -65,10 +119,15 @@ const rubricSummary = buildRubricSummary(posts).filter((r) => r.slug);
 			)}
 
 			{visualFrontPosts.length > 0 && (
-				<section class="frontline-grid" aria-label="Свежие материалы">
+				<section class="frontline-grid" aria-label="Премиальная витрина">
 					{visualFrontPosts.map((post, index) => (
 						<article class="frontline-card">
-							<PostThumbnail post={post} className="frontline-card__media" toneClass={getToneClass(index + 1)} />
+							<PostThumbnail
+								post={post}
+								className="frontline-card__media"
+								toneClass={getToneClass(index + 1)}
+								loading={index < 2 ? 'eager' : 'lazy'}
+							/>
 							<div class="frontline-card__body">
 								<div class="frontline-card__meta">
 									<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
@@ -77,7 +136,7 @@ const rubricSummary = buildRubricSummary(posts).filter((r) => r.slug);
 								<h2 class="frontline-card__title">
 									<a href={getPostHref(post)}>{post.data.title}</a>
 								</h2>
-								{post.data.description && <p class="frontline-card__desc">{post.data.description}</p>}
+								<p class="frontline-card__desc">{getDeck(post)}</p>
 								<time class="frontline-card__date">
 									{post.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}
 								</time>
@@ -98,7 +157,7 @@ const rubricSummary = buildRubricSummary(posts).filter((r) => r.slug);
 							<a class="signal-board__item" href={getClusterHref(cluster.slug)}>
 								<span class="signal-board__kicker">Сюжет</span>
 								<strong>{cluster.title}</strong>
-								<p>{cluster.latest.data.description}</p>
+								<p>{getDeck(cluster.latest)}</p>
 								<span class="signal-board__meta">{cluster.count} материалов</span>
 							</a>
 						))}
@@ -118,7 +177,7 @@ const rubricSummary = buildRubricSummary(posts).filter((r) => r.slug);
 							<strong class="post-row__title">{post.data.title}</strong>
 						</a>
 					))}
-					<a class="post-stream__more" href="/blog">Все новости →</a>
+					<a class="post-stream__more" href="/blog#news">Все новости →</a>
 				</section>
 
 				<section class="stream-col">
@@ -132,12 +191,10 @@ const rubricSummary = buildRubricSummary(posts).filter((r) => r.slug);
 								</time>
 							</div>
 							<strong class="post-row__title">{post.data.title}</strong>
-							{post.data.description && (
-								<p class="analysis-row__desc">{post.data.description}</p>
-							)}
+							<p class="analysis-row__desc">{getDeck(post)}</p>
 						</a>
 					))}
-					<a class="post-stream__more" href="/blog">Вся аналитика →</a>
+					<a class="post-stream__more" href="/blog#analysis">Вся аналитика →</a>
 				</section>
 			</div>
 
@@ -152,7 +209,7 @@ const rubricSummary = buildRubricSummary(posts).filter((r) => r.slug);
 							<a class="essay-strip__item" href={getPostHref(post)}>
 								<span class="essay-strip__meta"><RubricLabel name={getPrimaryRubric(post)} /></span>
 								<strong>{post.data.title}</strong>
-								<p>{post.data.description}</p>
+								<p>{getDeck(post)}</p>
 							</a>
 						))}
 					</div>
@@ -169,7 +226,6 @@ const rubricSummary = buildRubricSummary(posts).filter((r) => r.slug);
 					))}
 				</nav>
 			)}
-
 		</main>
 
 		<Footer />

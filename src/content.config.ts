@@ -8,6 +8,8 @@ const posts = defineCollection({
 		z.object({
 			title: z.string(),
 			description: z.string(),
+			deck: z.string(),
+			scqrVerdict: z.string(),
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			articleType: z.enum(['news', 'analysis', 'column', 'illustration']),
@@ -21,6 +23,7 @@ const posts = defineCollection({
 			sourceNote: z.string().optional(),
 			readingTime: z.number().optional(),
 			publicUrl: z.string().optional(),
+			heroAlt: z.string(),
 			heroImage: z.optional(image()),
 		}),
 });

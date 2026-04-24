@@ -1,6 +1,8 @@
 ---
 title: "Российские агенты переходят из демо в операционные ниши"
 description: "Статистика Yandex AI Studio важна не масштабом сама по себе, а тем, что впервые даёт похожую на рынок картину: где именно компании готовы доверять агентам реальные задачи."
+deck: "Статистика Yandex AI Studio важна не масштабом сама по себе, а тем, что впервые даёт похожую на рынок картину: где именно компании готовы доверять агентам реальные задачи."
+scqrVerdict: "Именно поэтому статистика о тысячах агентов важна не сама по себе."
 pubDate: "2026-03-02T09:40:00"
 articleType: "analysis"
 stage: "wave-2"
@@ -12,6 +14,7 @@ storyCluster: "backfill-corporate-agents"
 sourceNote: "Подготовлено на основе публикации Yandex Cloud от 2 марта 2026 года о применении ИИ-агентов российским бизнесом."
 readingTime: 1
 publicUrl: "/2026-03-02-rossiyskie-agenty-pereshli-iz-demo-v-operatsionnye-nishi/"
+heroAlt: "Редакционная обложка SCQR к материалу «Российские агенты переходят из демо в операционные ниши»."
 heroImage: ../../assets/editorial/2026-03-02-rossiyskie-agenty-pereshli-iz-demo-v-operatsionnye-nishi-hero.svg
 ---
 

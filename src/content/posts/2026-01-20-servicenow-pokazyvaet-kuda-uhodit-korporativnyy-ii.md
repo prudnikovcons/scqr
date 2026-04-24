@@ -1,6 +1,8 @@
 ---
 title: "ServiceNow показывает, куда уходит корпоративный ИИ"
 description: "Сделка OpenAI и ServiceNow важна не брендами, а тем, что она закрепляет новый центр тяжести рынка: ИИ заходит в платформы рабочих процессов, а не только в витрину чат-ботов."
+deck: "Сделка OpenAI и ServiceNow важна не брендами, а тем, что она закрепляет новый центр тяжести рынка: ИИ заходит в платформы рабочих процессов, а не только в витрину чат-ботов."
+scqrVerdict: "SCQR считает эту новость ранним, но очень точным маркером 2026 года."
 pubDate: "2026-01-20T12:10:00"
 articleType: "news"
 stage: "wave-2"
@@ -12,6 +14,7 @@ storyCluster: "backfill-corporate-agents"
 sourceNote: "Подготовлено на основе сообщения OpenAI от 20 января 2026 года о многолетнем соглашении с ServiceNow."
 readingTime: 1
 publicUrl: "/2026-01-20-servicenow-pokazyvaet-kuda-uhodit-korporativnyy-ii/"
+heroAlt: "Редакционная обложка SCQR к материалу «ServiceNow показывает, куда уходит корпоративный ИИ»."
 heroImage: ../../assets/editorial/2026-01-20-servicenow-pokazyvaet-kuda-uhodit-korporativnyy-ii-hero.svg
 ---
 

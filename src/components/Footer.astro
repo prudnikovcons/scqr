@@ -1,4 +1,7 @@
 ---
+import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
+
 const year = new Date().getFullYear();
 
 const columns = [
@@ -59,4 +62,7 @@ const columns = [
 		<span>© {year} SCQR</span>
 		<span>Signal × Context × Quality × Reach</span>
 	</div>
+
+	<Analytics />
+	<SpeedInsights />
 </footer>

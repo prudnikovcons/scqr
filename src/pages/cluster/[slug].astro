@@ -7,16 +7,23 @@ import PostThumbnail from '../../components/PostThumbnail.astro';
 import RubricLabel from '../../components/RubricLabel.astro';
 import TickerBar from '../../components/TickerBar.astro';
 import { SITE_TITLE } from '../../consts';
+import { SITE_CURATION } from '../../data/curation';
 import {
 	getArticleTypeLabel,
 	getClusterConfig,
 	getClusterPosts,
+	getCuratedPost,
+	getDeck,
+	getHeroAlt,
 	getPostHref,
 	getPrimaryRubric,
 	getReadingTimeLabel,
 	getVisiblePosts,
+	isPremiumReadyPost,
 	sortPosts,
+	sortPostsForPresentation,
 } from '../../lib/site';
+import { buildCollectionPageJsonLd } from '../../lib/structuredData';
 
 export async function getStaticPaths() {
 	const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
@@ -41,6 +48,16 @@ const title = config?.title ?? slug;
 const description = config?.description ?? 'Материалы, развивающие одну историю.';
 const firstPost = posts[0];
 const latestPost = posts[posts.length - 1];
+const spotlight =
+	getCuratedPost(posts, SITE_CURATION.clusterSpotlightBySlug[slug], isPremiumReadyPost) ??
+	sortPostsForPresentation(posts.filter((post) => isPremiumReadyPost(post) && post.data.articleType !== 'news'))[0] ??
+	latestPost;
+const clusterJsonLd = buildCollectionPageJsonLd({
+	title: `${title} — ${SITE_TITLE}`,
+	description,
+	path: `/cluster/${slug}/`,
+	image: spotlight?.data.heroImage ?? latestPost?.data.heroImage,
+});
 
 const roleLabel = (index: number, total: number) => {
 	if (index === 0) return 'Первая публикация';
@@ -52,7 +69,13 @@ const roleLabel = (index: number, total: number) => {
 <!doctype html>
 <html lang="ru">
 	<head>
-		<BaseHead title={`${title} — ${SITE_TITLE}`} description={description} image={latestPost?.data.heroImage} />
+		<BaseHead
+			title={`${title} — ${SITE_TITLE}`}
+			description={description}
+			image={spotlight?.data.heroImage ?? latestPost?.data.heroImage}
+			imageAlt={spotlight ? getHeroAlt(spotlight) : title}
+			jsonLd={clusterJsonLd}
+		/>
 	</head>
 	<body>
 		<Header />
@@ -68,20 +91,37 @@ const roleLabel = (index: number, total: number) => {
 				</div>
 			</section>
 
+			{spotlight && (
+				<article class="lead-story lead-story--cluster">
+					<PostThumbnail post={spotlight} className="lead-story__media" loading="eager" />
+					<div class="lead-story__body">
+						<div class="lead-story__meta">
+							<span class="content-tag"><RubricLabel name={getPrimaryRubric(spotlight)} /></span>
+							<span>{getArticleTypeLabel(spotlight)}</span>
+							<span>{getReadingTimeLabel(spotlight)}</span>
+						</div>
+						<h2 class="lead-story__title">
+							<a href={getPostHref(spotlight)}>{spotlight.data.title}</a>
+						</h2>
+						<p class="lead-story__desc">{getDeck(spotlight)}</p>
+					</div>
+				</article>
+			)}
+
 			<section class="signal-board cluster-summary-grid">
 				<div class="signal-board__grid">
 					{firstPost && (
 						<a class="signal-board__item" href={getPostHref(firstPost)}>
 							<span class="signal-board__kicker">С чего началось</span>
 							<strong>{firstPost.data.title}</strong>
-							<p>{firstPost.data.description}</p>
+							<p>{getDeck(firstPost)}</p>
 						</a>
 					)}
 					{latestPost && (
 						<a class="signal-board__item" href={getPostHref(latestPost)}>
 							<span class="signal-board__kicker">Где сюжет сейчас</span>
 							<strong>{latestPost.data.title}</strong>
-							<p>{latestPost.data.description}</p>
+							<p>{getDeck(latestPost)}</p>
 						</a>
 					)}
 					<div class="signal-board__item">
@@ -103,15 +143,17 @@ const roleLabel = (index: number, total: number) => {
 						</div>
 						<div class="cluster-timeline__body">
 							<PostThumbnail post={post} className="cluster-timeline__thumb" />
-							<div class="archive-feed__meta">
-								<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
-								<span>{getArticleTypeLabel(post)}</span>
-								<span>{getReadingTimeLabel(post)}</span>
+							<div>
+								<div class="archive-feed__meta">
+									<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
+									<span>{getArticleTypeLabel(post)}</span>
+									<span>{getReadingTimeLabel(post)}</span>
+								</div>
+								<h2 class="cluster-timeline__title">
+									<a href={getPostHref(post)}>{post.data.title}</a>
+								</h2>
+								<p>{getDeck(post)}</p>
 							</div>
-							<h2 class="cluster-timeline__title">
-								<a href={getPostHref(post)}>{post.data.title}</a>
-							</h2>
-							<p>{post.data.description}</p>
 						</div>
 					</article>
 				))}

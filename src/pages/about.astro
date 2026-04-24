@@ -3,12 +3,22 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION } from '../consts';
+import { buildOrganizationJsonLd, buildWebsiteJsonLd } from '../lib/structuredData';
+
+const aboutJsonLd = [
+	buildWebsiteJsonLd({
+		title: 'О проекте — SCQR',
+		description: SITE_DESCRIPTION,
+		path: '/about/',
+	}),
+	buildOrganizationJsonLd(),
+];
 ---
 
 <!doctype html>
 <html lang="ru">
 	<head>
-		<BaseHead title="О проекте — SCQR" description={SITE_DESCRIPTION} />
+		<BaseHead title="О проекте — SCQR" description={SITE_DESCRIPTION} jsonLd={aboutJsonLd} />
 	</head>
 	<body>
 		<Header />

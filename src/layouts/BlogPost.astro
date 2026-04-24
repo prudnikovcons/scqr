@@ -5,27 +5,21 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
-import PostThumbnail from '../components/PostThumbnail.astro';
 import RubricLabel from '../components/RubricLabel.astro';
 import TickerBar from '../components/TickerBar.astro';
 import {
-	getArticleTypeLabel,
 	getArticleTypeLabelFromValue,
 	getClusterHref,
+	getDeck,
 	getPostHref,
-	getPrimaryRubric,
-	getReadingTimeLabel,
-	getToneClass,
 	getTopicHref,
 } from '../lib/site';
+import { buildArticleJsonLd } from '../lib/structuredData';
 
 type PostEntry = CollectionEntry<'posts'>;
 
 type Props = PostEntry['data'] & {
-	related?: PostEntry[];
-	prev?: PostEntry | null;
-	next?: PostEntry | null;
-	adjacentScope?: 'cluster' | 'rubric' | null;
+	nextStrong?: PostEntry | null;
 	clusterSlug?: string | null;
 	clusterTitle?: string | null;
 	clusterSize?: number;
@@ -34,40 +28,53 @@ type Props = PostEntry['data'] & {
 const {
 	title,
 	description,
+	deck,
+	scqrVerdict,
 	pubDate,
 	updatedDate,
 	heroImage,
+	heroAlt,
 	articleType,
 	rubrics = [],
 	rubricLabels = [],
 	topics = [],
 	sourceNote,
-	related = [],
-	prev = null,
-	next = null,
-	adjacentScope = null,
+	nextStrong = null,
 	clusterSlug = null,
 	clusterTitle = null,
 	clusterSize = 0,
+	readingTime = 1,
 } = Astro.props;
 
 const displayRubrics = rubricLabels.length > 0 ? rubricLabels : rubrics;
-const scopeLabel = adjacentScope === 'cluster' ? 'В сюжете' : 'В рубрике';
 const leadRubric = displayRubrics[0] ?? 'SCQR';
-const readingTimeLabel = `${Astro.props.readingTime ?? 1} мин`;
 const topicPreview = topics.slice(0, 8);
+const articleDeck = deck?.trim() || description;
+const articleVerdict = scqrVerdict?.trim() || articleDeck;
+const showClusterCard = Boolean(clusterSlug && clusterTitle && clusterSize > 1);
+const articleJsonLd = buildArticleJsonLd({
+	title,
+	description: articleDeck,
+	path: Astro.url.pathname,
+	image: heroImage,
+	publishedTime: pubDate,
+	updatedTime: updatedDate,
+	section: leadRubric,
+});
 ---
 
 <html lang="ru">
 	<head>
 		<BaseHead
 			title={title}
-			description={description}
+			description={articleDeck}
 			image={heroImage}
+			imageAlt={heroAlt}
 			type="article"
 			publishedTime={pubDate}
 			updatedTime={updatedDate}
 			section={leadRubric}
+			jsonLd={articleJsonLd}
 		/>
 	</head>
 
@@ -86,10 +93,10 @@ const topicPreview = topics.slice(0, 8);
 									))
 								}
 								<span class="article-chip article-chip-muted">{getArticleTypeLabelFromValue(articleType)}</span>
+								<span class="article-chip article-chip-muted">{readingTime} мин</span>
 							</div>
 							<div class="article-date-row">
 								<FormattedDate date={pubDate} />
-								<span>{readingTimeLabel}</span>
 								{
 									updatedDate && (
 										<span class="article-updated">
@@ -99,28 +106,33 @@ const topicPreview = topics.slice(0, 8);
 								}
 							</div>
 						</div>
-						{clusterSlug && clusterTitle && clusterSize > 1 && (
-							<a class="article-cluster-chip" href={getClusterHref(clusterSlug)}>
-								<span class="article-cluster-chip__kicker">Часть сюжета</span>
-								<span class="article-cluster-chip__title">{clusterTitle}</span>
-								<span class="article-cluster-chip__count">{clusterSize} материалов →</span>
-							</a>
-						)}
 						<h1 class="article-title">{title}</h1>
-						<p class="article-dek">{description}</p>
+						<p class="article-dek">{articleDeck}</p>
+					</div>
+				</section>
+
+				{heroImage && (
+					<div class="hero-image">
+						<Image width={1440} height={810} src={heroImage} alt={heroAlt} />
+					</div>
+				)}
+
+				<section class="article-verdict">
+					<span class="article-verdict__kicker">SCQR вывод</span>
+					<p>{articleVerdict}</p>
+				</section>
+
+				<div class="article-reading-layout">
+					<div class="article-frame prose">
+						<slot />
 					</div>
 
-					<aside class="article-head__rail" aria-label="Контекст материала">
-						<div class="article-rail-block article-rail-block--accent">
-							<span class="article-rail__kicker">SCQR вывод</span>
-							<p>{description}</p>
-						</div>
-
+					<aside class="article-reading-rail" aria-label="Контекст материала">
 						<div class="article-rail-block">
 							<span class="article-rail__kicker">Формат</span>
 							<ul class="article-rail__list">
 								<li>{getArticleTypeLabelFromValue(articleType)}</li>
-								<li>{readingTimeLabel}</li>
+								<li>{readingTime} мин</li>
 								<li><FormattedDate date={pubDate} /></li>
 							</ul>
 						</div>
@@ -129,6 +141,16 @@ const topicPreview = topics.slice(0, 8);
 							<div class="article-rail-block">
 								<span class="article-rail__kicker">Основание публикации</span>
 								<p>{sourceNote}</p>
+							</div>
+						)}
+
+						{showClusterCard && (
+							<div class="article-rail-block">
+								<span class="article-rail__kicker">Сюжет</span>
+								<a class="article-reading-rail__story" href={getClusterHref(clusterSlug!)}>
+									<strong>{clusterTitle}</strong>
+									<span>{clusterSize} материалов в одной линии</span>
+								</a>
 							</div>
 						)}
 
@@ -142,86 +164,36 @@ const topicPreview = topics.slice(0, 8);
 								</div>
 							</div>
 						)}
-					</aside>
-				</section>
 
-				{heroImage && (
-					<div class="hero-image">
-						<Image width={1020} height={510} src={heroImage} alt="" />
-					</div>
-				)}
-
-				<div class="article-reading-layout">
-					<div class="article-frame prose">
-						<slot />
-					</div>
-
-					<aside class="article-reading-rail" aria-label="Навигация по статье">
-						{clusterSlug && clusterTitle && clusterSize > 1 && (
+						{nextStrong && (
 							<div class="article-rail-block">
-								<span class="article-rail__kicker">Сюжет</span>
-								<a class="article-reading-rail__story" href={getClusterHref(clusterSlug)}>
-									<strong>{clusterTitle}</strong>
-									<span>{clusterSize} материалов в одной линии</span>
-								</a>
-							</div>
-						)}
-
-						{prev && (
-							<div class="article-rail-block">
-								<span class="article-rail__kicker">{scopeLabel}</span>
-								<a class="article-reading-rail__story" href={getPostHref(prev)}>
-									<strong>{prev.data.title}</strong>
-									<span>Предыдущий материал</span>
+								<span class="article-rail__kicker">Следующий сильный материал</span>
+								<a class="article-reading-rail__story" href={getPostHref(nextStrong)}>
+									<strong>{nextStrong.data.title}</strong>
+									<span>{getDeck(nextStrong)}</span>
 								</a>
 							</div>
 						)}
 					</aside>
 				</div>
 
-				{(prev || next) && (
-					<nav class="article-adjacent" aria-label="Навигация по материалам">
-						<span class="article-adjacent__scope">{scopeLabel}</span>
-						<div class="article-adjacent__row">
-							{prev ? (
-								<a class="article-adjacent__link article-adjacent__link--prev" href={getPostHref(prev)}>
-									<span class="article-adjacent__dir">← Предыдущий</span>
-									<strong>{prev.data.title}</strong>
-								</a>
-							) : <span />}
-							{next ? (
-								<a class="article-adjacent__link article-adjacent__link--next" href={getPostHref(next)}>
-									<span class="article-adjacent__dir">Следующий →</span>
-									<strong>{next.data.title}</strong>
-								</a>
-							) : <span />}
-						</div>
-					</nav>
-				)}
+				<section class="article-exit-grid" aria-label="Следующие переходы">
+					{showClusterCard && (
+						<a class="article-exit-card" href={getClusterHref(clusterSlug!)}>
+							<span class="article-exit-card__kicker">По этому сюжету</span>
+							<strong>{clusterTitle}</strong>
+							<p>{clusterSize} материалов в одной редакционной линии.</p>
+						</a>
+					)}
 
-				{related.length > 0 && (
-					<section class="article-related">
-						<h2 class="article-related__head">Продолжение темы</h2>
-						<div class="article-related__grid">
-							{related.map((item, index) => (
-								<article class="article-related__item">
-									<PostThumbnail post={item} className="article-related__thumb" toneClass={getToneClass(index)} />
-									<div class="article-related__body">
-										<div class="archive-feed__meta">
-											<span class="content-tag"><RubricLabel name={getPrimaryRubric(item)} /></span>
-											<span>{getArticleTypeLabel(item)}</span>
-											<span>{getReadingTimeLabel(item)}</span>
-										</div>
-										<h3 class="article-related__title">
-											<a href={getPostHref(item)}>{item.data.title}</a>
-										</h3>
-										<p>{item.data.description}</p>
-									</div>
-								</article>
-							))}
-						</div>
-					</section>
-				)}
+					{nextStrong && (
+						<a class="article-exit-card article-exit-card--story" href={getPostHref(nextStrong)}>
+							<span class="article-exit-card__kicker">Следующий сильный материал</span>
+							<strong>{nextStrong.data.title}</strong>
+							<p>{getDeck(nextStrong)}</p>
+						</a>
+					)}
+				</section>
 			</article>
 		</main>
 		<Footer />

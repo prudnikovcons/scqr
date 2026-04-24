@@ -1,6 +1,8 @@
 ---
 title: "MCP выходит из стадии моды и становится стандартом"
 description: "Когда протокол получает поддержку OpenAI, Google, Microsoft, Amazon и Anthropic почти одновременно, спор о том, \"нужен ли он рынку\", фактически закрыт. С MCP это уже произошло. По оценке WorkOS, только Python- и TypeScript-SDK протокола дают около 97 млн ежемесячных загрузок, а повестка 2026 года сместилась от знакомства с MCP к его enterprise-доработке."
+deck: "Когда протокол получает поддержку OpenAI, Google, Microsoft, Amazon и Anthropic почти одновременно, спор о том, \\\"нужен ли он рынку\\\", фактически закрыт. С MCP это уже произошло. По оценке WorkOS, только Python- и TypeScript-SDK протокола дают около 97 млн ежемесячных загрузок, а повестка 2026 года сместилась от знакомства с MCP к его enterprise-доработке."
+scqrVerdict: "Коротко: эпоха агентов без общих правил заканчивается."
 pubDate: "2026-03-30T09:00:00"
 articleType: "news"
 stage: "drafted"
@@ -12,6 +14,7 @@ storyCluster: "protokoly-agentnoy-infrastruktury"
 sourceNote: "Основано на мартовских публикациях о росте MCP, его передаче в Linux Foundation и roadmap протокола на 2026 год."
 readingTime: 1
 publicUrl: "/2026-03-30-mcp-stanovitsya-standartom-agentov/"
+heroAlt: "Редакционная обложка SCQR к материалу «MCP выходит из стадии моды и становится стандартом»."
 heroImage: ../../assets/editorial/secondary-automations-hero.svg
 ---
 

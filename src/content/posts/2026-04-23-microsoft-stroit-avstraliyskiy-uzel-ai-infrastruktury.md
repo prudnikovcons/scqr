@@ -1,6 +1,8 @@
 ---
 title: "Microsoft строит австралийский узел AI-инфраструктуры"
 description: "Microsoft объявила о вложениях на A$25 млрд в развитие облачной и AI-инфраструктуры в Австралии до конца 2029 года. Формально это очередная крупная региональная инвестиция Big Tech. По сути — заявка на новый суверенный узел вычислительной мощности в англосаксонском мире."
+deck: "Microsoft объявила о вложениях на A$25 млрд в развитие облачной и AI-инфраструктуры в Австралии до конца 2029 года. Формально это очередная крупная региональная инвестиция Big Tech. По сути — заявка на новый суверенный узел вычислительной мощности в англосаксонском мире."
+scqrVerdict: "В этом смысле Австралия становится не периферией американского облака, а одним из узлов распределенного build-out."
 pubDate: "2026-04-23T09:00:00"
 articleType: "news"
 stage: "drafted"
@@ -12,6 +14,7 @@ storyCluster: "avstraliya-ai-infrastruktura"
 sourceNote: "Основано на сообщении Reuters об инвестиции Microsoft в Австралию и официальном анонсе Microsoft Australia."
 readingTime: 1
 publicUrl: "/2026-04-23-microsoft-stroit-avstraliyskiy-uzel-ai-infrastruktury/"
+heroAlt: "Редакционная обложка SCQR к материалу «Microsoft строит австралийский узел AI-инфраструктуры»."
 heroImage: ../../assets/editorial/secondary-trajectories-hero.svg
 ---
 

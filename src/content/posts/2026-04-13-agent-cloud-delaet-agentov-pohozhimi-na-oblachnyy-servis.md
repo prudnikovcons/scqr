@@ -1,6 +1,8 @@
 ---
 title: "Agent Cloud делает агентов больше похожими на облачный сервис, чем на лабораторный трюк"
 description: "Партнёрство OpenAI и Cloudflare важно тем, что показывает следующий шаг рынка: агентов начинают продавать как стандартную облачную операцию с понятным запуском и масштабированием."
+deck: "Партнёрство OpenAI и Cloudflare важно тем, что показывает следующий шаг рынка: агентов начинают продавать как стандартную облачную операцию с понятным запуском и масштабированием."
+scqrVerdict: "SCQR считает эту новость частью общей апрельской картины: агентность становится не только умнее, но и скучнее."
 pubDate: "2026-04-13T17:55:00"
 articleType: "news"
 stage: "wave-2"
@@ -12,6 +14,7 @@ storyCluster: "backfill-corporate-agents"
 sourceNote: "Подготовлено на основе сообщения OpenAI от 13 апреля 2026 года о работе корпоративных агентных сценариев в Cloudflare Agent Cloud."
 readingTime: 1
 publicUrl: "/2026-04-13-agent-cloud-delaet-agentov-pohozhimi-na-oblachnyy-servis/"
+heroAlt: "Редакционная обложка SCQR к материалу «Agent Cloud делает агентов больше похожими на облачный сервис, чем на лабораторный трюк»."
 heroImage: ../../assets/editorial/2026-04-13-agent-cloud-delaet-agentov-pohozhimi-na-oblachnyy-servis-hero.svg
 ---
 

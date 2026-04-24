@@ -1,4 +1,5 @@
 import type { CollectionEntry } from 'astro:content';
+import { PREMIUM_SLOT_IDS } from '../data/curation';
 
 export type PostEntry = CollectionEntry<'posts'>;
 
@@ -62,12 +63,39 @@ export const hasPremiumHero = (post: PostEntry) => {
 	return Boolean(src) && !src.includes('secondary-') && !src.includes('blog-placeholder');
 };
 
+export const getDeck = (post: PostEntry) => post.data.deck?.trim() || post.data.description;
+
+export const getScqrVerdict = (post: PostEntry) =>
+	post.data.scqrVerdict?.trim() || getDeck(post);
+
+export const getHeroAlt = (post: PostEntry) =>
+	post.data.heroAlt?.trim() || `Редакционная обложка SCQR к материалу «${post.data.title}».`;
+
+export const hasCompleteDeck = (post: PostEntry) => Boolean(post.data.deck?.trim());
+
+export const hasScqrVerdict = (post: PostEntry) => Boolean(post.data.scqrVerdict?.trim());
+
+export const hasHeroAlt = (post: PostEntry) => Boolean(post.data.heroAlt?.trim());
+
+export const isReadyPost = (post: PostEntry) => post.data.status === 'ready';
+
+export const isPremiumSlotCandidate = (post: PostEntry) => PREMIUM_SLOT_IDS.has(post.id);
+
+export const hasPremiumMetadata = (post: PostEntry) =>
+	hasCompleteDeck(post) && hasScqrVerdict(post) && hasHeroAlt(post);
+
+export const isPremiumReadyPost = (post: PostEntry) =>
+	isReadyPost(post) && hasPremiumHero(post) && hasPremiumMetadata(post);
+
 export const getPresentationScore = (post: PostEntry) => {
-	const statusScore = post.data.status === 'ready' ? 100 : post.data.status === 'approved' ? 70 : 0;
-	const premiumScore = hasPremiumHero(post) ? 40 : 0;
-	const secondaryScore = hasSecondaryHero(post) ? 20 : 0;
-	const heroScore = hasHeroImage(post) ? 10 : 0;
-	return statusScore + premiumScore + secondaryScore + heroScore;
+	const readyScore = isReadyPost(post) ? 100 : post.data.status === 'approved' ? 70 : 0;
+	const premiumHeroScore = hasPremiumHero(post) ? 45 : 0;
+	const secondaryHeroScore = hasSecondaryHero(post) ? 15 : 0;
+	const deckScore = hasCompleteDeck(post) ? 12 : 0;
+	const verdictScore = hasScqrVerdict(post) ? 12 : 0;
+	const altScore = hasHeroAlt(post) ? 6 : 0;
+	const premiumSlotScore = isPremiumSlotCandidate(post) ? 18 : 0;
+	return readyScore + premiumHeroScore + secondaryHeroScore + deckScore + verdictScore + altScore + premiumSlotScore;
 };
 
 export const sortPostsForPresentation = (posts: PostEntry[]) =>
@@ -77,8 +105,23 @@ export const sortPostsForPresentation = (posts: PostEntry[]) =>
 		return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
 	});
 
-export const getFeaturePosts = (posts: PostEntry[], count: number) =>
-	sortPostsForPresentation(posts.filter((post) => !isArchiveNoise(post))).slice(0, count);
+export const getFeaturePosts = (posts: PostEntry[], count: number) => {
+	const premium = sortPostsForPresentation(posts.filter(isPremiumReadyPost)).slice(0, count);
+	if (premium.length === count) {
+		return premium;
+	}
+
+	const selected = [...premium];
+	const selectedIds = new Set(selected.map((post) => post.id));
+	for (const post of sortPostsForPresentation(posts)) {
+		if (selectedIds.has(post.id)) continue;
+		selected.push(post);
+		selectedIds.add(post.id);
+		if (selected.length === count) break;
+	}
+
+	return selected;
+};
 
 export const getDisplayRubrics = (post: PostEntry) =>
 	post.data.rubricLabels.length > 0 ? post.data.rubricLabels : post.data.rubrics;
@@ -106,6 +149,28 @@ export const getToneClass = (index: number) => {
 	const tones = ['warm', 'graph', 'paper', 'dark'];
 	return tones[index % tones.length];
 };
+
+export const getPostById = (posts: PostEntry[], id?: string | null) =>
+	id ? posts.find((post) => post.id === id) ?? null : null;
+
+export const getCuratedPost = (
+	posts: PostEntry[],
+	id?: string | null,
+	predicate?: (post: PostEntry) => boolean,
+) => {
+	const post = getPostById(posts, id);
+	if (!post) return null;
+	return predicate && !predicate(post) ? null : post;
+};
+
+export const getCuratedPosts = (
+	posts: PostEntry[],
+	ids: string[],
+	predicate?: (post: PostEntry) => boolean,
+) =>
+	ids
+		.map((id) => getCuratedPost(posts, id, predicate))
+		.filter(Boolean) as PostEntry[];
 
 export const getRubricSlugFromLabel = (label: string) =>
 	RUBRIC_CONFIG.find((r) => r.label === label)?.slug ?? null;
@@ -173,6 +238,9 @@ export const CLUSTER_CONFIG: ClusterConfig[] = [
 	{ slug: 'backfill-frontier-access', title: 'Фронтир и режим доступа', description: 'Капитал, облака и договоры как новая цена доступа к сильнейшим моделям.' },
 	{ slug: 'backfill-governance-layers', title: 'Слои управления фронтиром', description: 'Как рынок строит вокруг сильных моделей язык институтов, комплаенса и допуска.' },
 	{ slug: 'backfill-protocol-security', title: 'Безопасность агентного протокола', description: 'Где стандарт связи агентов сталкивается с реальностью доверия и защиты.' },
+	{ slug: 'wave-1-corporate-agents', title: 'Корпоративные агенты: новая норма', description: 'Как агентные системы выходят из режима эксперимента и входят в рабочий контур компаний.' },
+	{ slug: 'wave-1-agent-protocol-risk', title: 'Протоколы и риск агентной среды', description: 'Почему удобство стандарта связи не отменяет уязвимости и управленческий риск.' },
+	{ slug: 'wave-1-regulation-regime', title: 'Регулирование как режим допуска', description: 'Почему рынок ИИ всё чаще живёт не в логике запрета, а в логике допуска.' },
 ];
 
 export const getClusterConfig = (slug: string) => CLUSTER_CONFIG.find((c) => c.slug === slug);
@@ -184,7 +252,7 @@ export const getClusterHref = (slug: string) => `/cluster/${slug}/`;
 export const getClusterPosts = (posts: PostEntry[], slug: string) =>
 	sortPosts(posts.filter((p) => p.data.storyCluster === slug)).reverse();
 
-export const buildClusterSummary = (posts: PostEntry[]) => {
+export const buildClusterSummary = (posts: PostEntry[], preferredSlugs: string[] = []) => {
 	const map = new Map<string, PostEntry[]>();
 	for (const post of posts) {
 		const slug = post.data.storyCluster;
@@ -192,7 +260,8 @@ export const buildClusterSummary = (posts: PostEntry[]) => {
 		if (!map.has(slug)) map.set(slug, []);
 		map.get(slug)!.push(post);
 	}
-	return [...map.entries()]
+
+	const summaries = [...map.entries()]
 		.filter(([, list]) => list.length >= 2)
 		.map(([slug, list]) => ({
 			slug,
@@ -201,6 +270,17 @@ export const buildClusterSummary = (posts: PostEntry[]) => {
 			latest: sortPosts(list)[0],
 		}))
 		.sort((a, b) => b.latest.data.pubDate.valueOf() - a.latest.data.pubDate.valueOf());
+
+	if (preferredSlugs.length === 0) {
+		return summaries;
+	}
+
+	const ordered = preferredSlugs
+		.map((slug) => summaries.find((summary) => summary.slug === slug))
+		.filter(Boolean);
+	const orderedIds = new Set(ordered.map((summary) => summary!.slug));
+	const rest = summaries.filter((summary) => !orderedIds.has(summary.slug));
+	return [...ordered, ...rest] as typeof summaries;
 };
 
 export const slugifyTopic = (topic: string) =>
@@ -239,23 +319,38 @@ export const getRelatedPosts = (posts: PostEntry[], post: PostEntry, limit = 4) 
 			!sameCluster.includes(p) &&
 			p.data.rubrics.some((r) => post.data.rubrics.includes(r)),
 	);
+
 	return sortPostsForPresentation([...sameCluster, ...sameRubric]).slice(0, limit);
 };
 
-export const getAdjacentPosts = (posts: PostEntry[], post: PostEntry) => {
-	const cluster = post.data.storyCluster;
-	const pool = sortPosts(
-		cluster && posts.some((p) => p.id !== post.id && p.data.storyCluster === cluster)
-			? posts.filter((p) => p.data.storyCluster === cluster)
-			: posts.filter((p) => p.data.rubrics.some((r) => post.data.rubrics.includes(r))),
+export const getStrongNextPost = (posts: PostEntry[], post: PostEntry) => {
+	const others = posts.filter((candidate) => candidate.id !== post.id);
+	const sameCluster = post.data.storyCluster
+		? sortPostsForPresentation(
+				others.filter(
+					(candidate) =>
+						candidate.data.storyCluster === post.data.storyCluster && isPremiumReadyPost(candidate),
+				),
+			)
+		: [];
+
+	if (sameCluster.length > 0) {
+		return sameCluster[0];
+	}
+
+	const sameRubric = sortPostsForPresentation(
+		others.filter(
+			(candidate) =>
+				candidate.data.rubrics.some((rubric) => post.data.rubrics.includes(rubric)) &&
+				isPremiumReadyPost(candidate),
+		),
 	);
-	const idx = pool.findIndex((p) => p.id === post.id);
-	if (idx === -1) return { prev: null, next: null, scope: null };
-	return {
-		prev: idx < pool.length - 1 ? pool[idx + 1] : null,
-		next: idx > 0 ? pool[idx - 1] : null,
-		scope: cluster && pool.length > 1 && pool[0].data.storyCluster === cluster ? 'cluster' : 'rubric',
-	} as { prev: PostEntry | null; next: PostEntry | null; scope: 'cluster' | 'rubric' | null };
+
+	if (sameRubric.length > 0) {
+		return sameRubric[0];
+	}
+
+	return sortPostsForPresentation(others.filter(isPremiumReadyPost))[0] ?? null;
 };
 
 export const buildTimeline = (posts: PostEntry[], maxDays = 7) => {

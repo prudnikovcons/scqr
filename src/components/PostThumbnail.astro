@@ -1,14 +1,16 @@
 ---
+import { Image } from 'astro:assets';
 import type { PostEntry } from '../lib/site';
-import { getPostHref } from '../lib/site';
+import { getHeroAlt, getPostHref } from '../lib/site';
 
 interface Props {
 	post: PostEntry;
 	className?: string;
 	toneClass?: string;
+	loading?: 'lazy' | 'eager';
 }
 
-const { post, className = '', toneClass = 'paper' } = Astro.props;
+const { post, className = '', toneClass = 'paper', loading = 'lazy' } = Astro.props;
 const href = getPostHref(post);
 const heroImage = post.data.heroImage;
 ---
@@ -16,7 +18,7 @@ const heroImage = post.data.heroImage;
 {
 	heroImage ? (
 		<a href={href} class:list={['post-thumbnail', className]}>
-			<img src={heroImage.src} alt="" loading="lazy" />
+			<Image src={heroImage} alt={getHeroAlt(post)} loading={loading} widths={[480, 720, 960]} sizes="(max-width: 720px) 100vw, 33vw" />
 		</a>
 	) : (
 		<a href={href} class:list={['post-thumbnail', className, `media-surface--${toneClass}`]}></a>

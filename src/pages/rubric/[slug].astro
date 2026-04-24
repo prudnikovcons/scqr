@@ -7,19 +7,25 @@ import PostThumbnail from '../../components/PostThumbnail.astro';
 import RubricLabel from '../../components/RubricLabel.astro';
 import TickerBar from '../../components/TickerBar.astro';
 import { SITE_TITLE } from '../../consts';
+import { SITE_CURATION } from '../../data/curation';
 import {
 	buildRubricSummary,
 	RUBRIC_CONFIG,
-	getFeaturePosts,
 	getArticleTypeLabel,
+	getCuratedPost,
+	getDeck,
+	getHeroAlt,
 	getPostHref,
 	getPrimaryRubric,
 	getReadingTimeLabel,
 	getRubricHref,
 	getToneClass,
 	getVisiblePosts,
+	isPremiumReadyPost,
 	sortPosts,
+	sortPostsForPresentation,
 } from '../../lib/site';
+import { buildCollectionPageJsonLd } from '../../lib/structuredData';
 
 export async function getStaticPaths() {
 	const allPosts = await getCollection('posts');
@@ -40,15 +46,22 @@ export async function getStaticPaths() {
 
 const { rubric, posts, relatedRubrics } = Astro.props;
 const { tone } = rubric;
-const visualPosts = getFeaturePosts(posts, 4);
-const leadPost = visualPosts[0] ?? posts[0];
-const featurePosts = visualPosts.slice(1, 4);
+const curatedLead = getCuratedPost(posts, SITE_CURATION.rubricLeadBySlug[rubric.slug], isPremiumReadyPost);
+const premiumPosts = sortPostsForPresentation(posts.filter(isPremiumReadyPost));
+const leadPost = curatedLead ?? premiumPosts[0] ?? posts[0];
 const leadId = leadPost?.id;
+const featurePosts = premiumPosts.filter((post) => post.id !== leadId).slice(0, 4);
 const featureIds = new Set(featurePosts.map((post) => post.id));
 const feedPosts = posts.filter((post) => post.id !== leadId && !featureIds.has(post.id));
 const rubricLinks = relatedRubrics
 	.filter((item) => item.slug && item.slug !== rubric.slug)
 	.slice(0, 4);
+const rubricJsonLd = buildCollectionPageJsonLd({
+	title: `${rubric.label} — ${SITE_TITLE}`,
+	description: rubric.description,
+	path: `/rubric/${rubric.slug}/`,
+	image: leadPost?.data.heroImage,
+});
 ---
 
 <!doctype html>
@@ -58,18 +71,22 @@ const rubricLinks = relatedRubrics
 			title={`${rubric.label} — ${SITE_TITLE}`}
 			description={rubric.description}
 			image={leadPost?.data.heroImage}
+			imageAlt={leadPost ? getHeroAlt(leadPost) : rubric.label}
 			rssUrl={`/rubric/${rubric.slug}/rss.xml`}
+			jsonLd={rubricJsonLd}
 		/>
 	</head>
 	<body>
 		<Header />
 		<TickerBar />
 		<main class="main-shell">
-
 			<section class:list={['rubric-hero', `rubric-hero--${tone}`]}>
-				<h1 class="rubric-hero__title">
-					<RubricLabel name={rubric.label} />
-				</h1>
+				<div>
+					<p class="section-kicker">Рубрика</p>
+					<h1 class="rubric-hero__title">
+						<RubricLabel name={rubric.label} />
+					</h1>
+				</div>
 				<p class="rubric-hero__desc">{rubric.description}</p>
 				<div class="rubric-hero__meta">
 					<span class="rubric-hero__count">{posts.length} материалов</span>
@@ -82,7 +99,7 @@ const rubricLinks = relatedRubrics
 				<>
 					{leadPost && (
 						<article class="lead-story lead-story--rubric">
-							<PostThumbnail post={leadPost} className="lead-story__media" toneClass={getToneClass(0)} />
+							<PostThumbnail post={leadPost} className="lead-story__media" toneClass={getToneClass(0)} loading="eager" />
 							<div class="lead-story__body">
 								<div class="lead-story__meta">
 									<span class="content-tag">
@@ -94,7 +111,7 @@ const rubricLinks = relatedRubrics
 								<h2 class="lead-story__title">
 									<a href={getPostHref(leadPost)}>{leadPost.data.title}</a>
 								</h2>
-								<p class="lead-story__desc">{leadPost.data.description}</p>
+								<p class="lead-story__desc">{getDeck(leadPost)}</p>
 							</div>
 						</article>
 					)}
@@ -103,7 +120,12 @@ const rubricLinks = relatedRubrics
 						<section class="frontline-grid frontline-grid--rubric">
 							{featurePosts.map((post, index) => (
 								<article class="frontline-card">
-									<PostThumbnail post={post} className="frontline-card__media" toneClass={getToneClass(index + 1)} />
+									<PostThumbnail
+										post={post}
+										className="frontline-card__media"
+										toneClass={getToneClass(index + 1)}
+										loading={index === 0 ? 'eager' : 'lazy'}
+									/>
 									<div class="frontline-card__body">
 										<div class="frontline-card__meta">
 											<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
@@ -112,7 +134,7 @@ const rubricLinks = relatedRubrics
 										<h2 class="frontline-card__title">
 											<a href={getPostHref(post)}>{post.data.title}</a>
 										</h2>
-										<p class="frontline-card__desc">{post.data.description}</p>
+										<p class="frontline-card__desc">{getDeck(post)}</p>
 									</div>
 								</article>
 							))}
@@ -136,7 +158,7 @@ const rubricLinks = relatedRubrics
 										<h2 class="archive-feed__item-title">
 											<a href={getPostHref(post)}>{post.data.title}</a>
 										</h2>
-										<p>{post.data.description}</p>
+										<p>{getDeck(post)}</p>
 									</div>
 								</article>
 							))}
@@ -167,7 +189,6 @@ const rubricLinks = relatedRubrics
 					<a href="/blog" class="site-button">Открыть архив</a>
 				</section>
 			)}
-
 		</main>
 		<Footer />
 	</body>

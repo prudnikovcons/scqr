@@ -1,6 +1,8 @@
 ---
 title: "GTC закрепляет главную формулу года: ИИ — это инфраструктура"
 description: "Мартовский анонс GTC важен не как приглашение на конференцию, а как идеологический манифест отрасли. Jensen Huang окончательно перевёл разговор об ИИ с уровня приложения на уровень промышленной системы."
+deck: "Мартовский анонс GTC важен не как приглашение на конференцию, а как идеологический манифест отрасли. Jensen Huang окончательно перевёл разговор об ИИ с уровня приложения на уровень промышленной системы."
+scqrVerdict: "SCQR видит в мартовском GTC не просто выставочный момент, а точку языковой фиксации."
 pubDate: "2026-03-03T19:10:00"
 articleType: "analysis"
 stage: "wave-2"
@@ -12,6 +14,7 @@ storyCluster: "backfill-energy-basement"
 sourceNote: "Подготовлено на основе заявления NVIDIA от 3 марта 2026 года о GTC 2026 и тезиса Дженсена Хуанга о том, что ИИ становится essential infrastructure."
 readingTime: 1
 publicUrl: "/2026-03-03-gtc-zakreplyaet-formulu-chto-ii-eto-infrastruktura/"
+heroAlt: "Редакционная обложка SCQR к материалу «GTC закрепляет главную формулу года: ИИ — это инфраструктура»."
 heroImage: ../../assets/editorial/2026-03-03-gtc-zakreplyaet-formulu-chto-ii-eto-infrastruktura-hero.svg
 ---
 

@@ -1,6 +1,8 @@
 ---
 title: "MCP вырос быстрее, чем защитный слой вокруг него"
 description: "Весенние работы по безопасности протокола и запуск Project Glasswing показывают болезненный парадокс 2026 года: агентная инфраструктура стала отраслевым стандартом раньше, чем научилась быть по-настоящему доверенной."
+deck: "Весенние работы по безопасности протокола и запуск Project Glasswing показывают болезненный парадокс 2026 года: агентная инфраструктура стала отраслевым стандартом раньше, чем научилась быть по-настоящему доверенной."
+scqrVerdict: "SCQR считает апрельскую ситуацию важным предупреждением."
 pubDate: "2026-04-07T21:10:00"
 articleType: "column"
 stage: "wave-2"
@@ -12,6 +14,7 @@ storyCluster: "backfill-protocol-security"
 sourceNote: "Подготовлено на основе Project Glasswing от Anthropic от 7 апреля 2026 года и весенних исследований по защите MCP, включая работы SMCP и MCPSHIELD."
 readingTime: 1
 publicUrl: "/2026-04-07-mcp-vyros-bystree-chem-zashchitnyy-sloy-vokrug-nego/"
+heroAlt: "Редакционная обложка SCQR к материалу «MCP вырос быстрее, чем защитный слой вокруг него»."
 heroImage: ../../assets/editorial/2026-04-07-mcp-vyros-bystree-chem-zashchitnyy-sloy-vokrug-nego-hero.svg
 ---
 
