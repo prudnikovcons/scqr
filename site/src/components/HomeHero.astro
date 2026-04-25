@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import { getDeck, getPostHref } from '../lib/site';
 import FormattedDate from './FormattedDate.astro';
@@ -55,18 +54,7 @@ const subgridItems = subgrid.slice(0, 4).map((post, index) => {
 		</div>
 	</div>
 	<div class="hero-mascot">
-		{
-			lead.data.heroImage ? (
-				<Image
-					src={lead.data.heroImage}
-					alt={lead.data.heroAlt}
-					widths={[480, 720]}
-					sizes="(max-width: 720px) 60vw, 320px"
-				/>
-			) : (
-				<img src="/mascot/mascot-hero.png" alt="" width="320" height="320" loading="eager" />
-			)
-		}
+		<img src="/mascot/mascot-hero.png" alt="" width="320" height="320" loading="eager" />
 	</div>
 </article>
 
@@ -96,7 +84,7 @@ const subgridItems = subgrid.slice(0, 4).map((post, index) => {
 		display: flex;
 		justify-content: center;
 	}
-	.hero-mascot :global(img) {
+	.hero-mascot img {
 		width: 100%;
 		max-width: 280px;
 		height: auto;
