@@ -1,67 +1,49 @@
 ---
 import { getCollection } from 'astro:content';
+import ArchiveRow from '../../components/ArchiveRow.astro';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
-import PostThumbnail from '../../components/PostThumbnail.astro';
-import RubricLabel from '../../components/RubricLabel.astro';
-import TickerBar from '../../components/TickerBar.astro';
 import { SITE_TITLE } from '../../consts';
-import { SITE_CURATION } from '../../data/curation';
 import {
-	buildRubricSummary,
-	RUBRIC_CONFIG,
-	getArticleTypeLabel,
-	getCuratedPost,
-	getDeck,
 	getHeroAlt,
-	getPostHref,
-	getPrimaryRubric,
-	getReadingTimeLabel,
 	getRubricHref,
-	getToneClass,
 	getVisiblePosts,
-	isPremiumReadyPost,
+	RUBRIC_CONFIG,
 	sortPosts,
-	sortPostsForPresentation,
 } from '../../lib/site';
 import { buildCollectionPageJsonLd } from '../../lib/structuredData';
 
 export async function getStaticPaths() {
 	const allPosts = await getCollection('posts');
 	const posts = sortPosts(getVisiblePosts(allPosts));
-	const relatedRubrics = buildRubricSummary(posts);
 
 	return RUBRIC_CONFIG.map((rubric) => {
-		const rubricPosts = posts.filter((post) =>
-			post.data.rubrics.includes(rubric.slug) ||
-			post.data.rubricLabels.includes(rubric.label)
+		const rubricPosts = posts.filter(
+			(post) =>
+				post.data.rubrics.includes(rubric.slug) ||
+				post.data.rubricLabels.includes(rubric.label),
 		);
+		const otherRubrics = RUBRIC_CONFIG.filter((r) => r.slug !== rubric.slug);
 		return {
 			params: { slug: rubric.slug },
-			props: { rubric, posts: rubricPosts, relatedRubrics },
+			props: { rubric, posts: rubricPosts, otherRubrics },
 		};
 	});
 }
 
-const { rubric, posts, relatedRubrics } = Astro.props;
-const { tone } = rubric;
-const curatedLead = getCuratedPost(posts, SITE_CURATION.rubricLeadBySlug[rubric.slug], isPremiumReadyPost);
-const premiumPosts = sortPostsForPresentation(posts.filter(isPremiumReadyPost));
-const leadPost = curatedLead ?? premiumPosts[0] ?? posts[0];
-const leadId = leadPost?.id;
-const featurePosts = premiumPosts.filter((post) => post.id !== leadId).slice(0, 4);
-const featureIds = new Set(featurePosts.map((post) => post.id));
-const feedPosts = posts.filter((post) => post.id !== leadId && !featureIds.has(post.id));
-const rubricLinks = relatedRubrics
-	.filter((item) => item.slug && item.slug !== rubric.slug)
-	.slice(0, 4);
+const { rubric, posts, otherRubrics } = Astro.props;
+const leadPost = posts[0];
 const rubricJsonLd = buildCollectionPageJsonLd({
 	title: `${rubric.label} — ${SITE_TITLE}`,
 	description: rubric.description,
 	path: `/rubric/${rubric.slug}/`,
 	image: leadPost?.data.heroImage,
 });
+
+const newsCount = posts.filter((p) => p.data.articleType === 'news').length;
+const analysisCount = posts.filter((p) => p.data.articleType === 'analysis').length;
+const columnCount = posts.filter((p) => p.data.articleType === 'column').length;
 ---
 
 <!doctype html>
@@ -78,118 +60,219 @@ const rubricJsonLd = buildCollectionPageJsonLd({
 	</head>
 	<body>
 		<Header />
-		<TickerBar />
-		<main class="main-shell">
-			<section class:list={['rubric-hero', `rubric-hero--${tone}`]}>
-				<div>
-					<p class="section-kicker">Рубрика</p>
-					<h1 class="rubric-hero__title">
-						<RubricLabel name={rubric.label} />
-					</h1>
-				</div>
-				<p class="rubric-hero__desc">{rubric.description}</p>
-				<div class="rubric-hero__meta">
-					<span class="rubric-hero__count">{posts.length} материалов</span>
-					<a href={`/rubric/${rubric.slug}/rss.xml`} class="rubric-hero__back">RSS</a>
-					<a href="/blog" class="rubric-hero__back">← Архив</a>
+		<main class="rubric-page container">
+			<section class="rubric-hero">
+				<span class="rubric-hero__pill">РУБРИКА</span>
+				<h1>{rubric.label}</h1>
+				<p>{rubric.description}</p>
+				<div class="rubric-hero__stats">
+					<span><strong>{posts.length}</strong> материалов</span>
+					{newsCount > 0 && <span><strong>{newsCount}</strong> новостей</span>}
+					{analysisCount > 0 && <span><strong>{analysisCount}</strong> аналитики</span>}
+					{columnCount > 0 && <span><strong>{columnCount}</strong> колонок</span>}
+					<a href={`/rubric/${rubric.slug}/rss.xml`} class="rubric-hero__rss">RSS</a>
 				</div>
 			</section>
 
 			{posts.length > 0 ? (
-				<>
-					{leadPost && (
-						<article class="lead-story lead-story--rubric">
-							<PostThumbnail post={leadPost} className="lead-story__media" toneClass={getToneClass(0)} loading="eager" />
-							<div class="lead-story__body">
-								<div class="lead-story__meta">
-									<span class="content-tag">
-										<RubricLabel name={getPrimaryRubric(leadPost)} />
-									</span>
-									<span>{getArticleTypeLabel(leadPost)}</span>
-									<span>{getReadingTimeLabel(leadPost)}</span>
-								</div>
-								<h2 class="lead-story__title">
-									<a href={getPostHref(leadPost)}>{leadPost.data.title}</a>
-								</h2>
-								<p class="lead-story__desc">{getDeck(leadPost)}</p>
-							</div>
-						</article>
-					)}
-
-					{featurePosts.length > 0 && (
-						<section class="frontline-grid frontline-grid--rubric">
-							{featurePosts.map((post, index) => (
-								<article class="frontline-card">
-									<PostThumbnail
-										post={post}
-										className="frontline-card__media"
-										toneClass={getToneClass(index + 1)}
-										loading={index === 0 ? 'eager' : 'lazy'}
-									/>
-									<div class="frontline-card__body">
-										<div class="frontline-card__meta">
-											<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
-											<span>{getArticleTypeLabel(post)}</span>
-										</div>
-										<h2 class="frontline-card__title">
-											<a href={getPostHref(post)}>{post.data.title}</a>
-										</h2>
-										<p class="frontline-card__desc">{getDeck(post)}</p>
-									</div>
-								</article>
-							))}
-						</section>
-					)}
-
-					{feedPosts.length > 0 && (
-						<section class="archive-feed">
-							{feedPosts.map((post, index) => (
-								<article class="archive-feed__item">
-									<PostThumbnail post={post} className="archive-feed__thumb" toneClass={getToneClass(index)} />
-									<div>
-										<div class="archive-feed__meta">
-											<span class="content-tag">
-												<RubricLabel name={getPrimaryRubric(post)} />
-											</span>
-											<span>{getArticleTypeLabel(post)}</span>
-											<span>{getReadingTimeLabel(post)}</span>
-											<span>{post.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-										</div>
-										<h2 class="archive-feed__item-title">
-											<a href={getPostHref(post)}>{post.data.title}</a>
-										</h2>
-										<p>{getDeck(post)}</p>
-									</div>
-								</article>
-							))}
-						</section>
-					)}
-
-					{rubricLinks.length > 0 && (
-						<section class="rubric-crosslinks">
-							<div class="section-head">
-								<h2>Соседние рубрики</h2>
-								<a href="/blog">Весь архив</a>
-							</div>
-							<div class="signal-board__grid">
-								{rubricLinks.map((item) => (
-									<a class="signal-board__item" href={getRubricHref(item.slug!)}>
-										<span class="signal-board__kicker">Рубрика</span>
-										<strong>{item.name}</strong>
-										<p>{item.count} материалов в соседнем разделе архива.</p>
-									</a>
-								))}
-							</div>
-						</section>
-					)}
-				</>
+				<section class="rubric-list">
+					{posts.map((post) => <ArchiveRow post={post} />)}
+				</section>
 			) : (
 				<section class="rubric-empty">
-					<p>Материалов по этой рубрике пока нет.</p>
-					<a href="/blog" class="site-button">Открыть архив</a>
+					<p>Материалов в этой рубрике пока нет.</p>
+					<a href="/blog" class="rubric-empty__btn">Открыть архив</a>
 				</section>
 			)}
+
+			<section class="rubric-cross" aria-label="Соседние рубрики">
+				<header class="rubric-cross__head">
+					<h2>Соседние рубрики</h2>
+					<a href="/blog">Весь архив →</a>
+				</header>
+				<div class="rubric-cross__grid">
+					{
+						otherRubrics.slice(0, 6).map((other) => (
+							<a class="rubric-cross__tile" href={getRubricHref(other.slug)}>
+								<strong>{other.label}</strong>
+								<span>{other.description}</span>
+							</a>
+						))
+					}
+				</div>
+			</section>
 		</main>
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.rubric-page {
+		padding-top: 32px;
+		padding-bottom: 64px;
+	}
+	.rubric-hero {
+		max-width: 800px;
+		text-align: center;
+		margin: 0 auto 40px;
+		padding: 32px 24px;
+		background: linear-gradient(135deg, var(--violet-50) 0%, var(--blue-50) 100%);
+		border: 1px solid var(--violet-100);
+		border-radius: 16px;
+	}
+	.rubric-hero__pill {
+		display: inline-block;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		padding: 5px 12px;
+		border-radius: 999px;
+		background: var(--violet-500);
+		color: #fff;
+		margin-bottom: 16px;
+	}
+	.rubric-hero h1 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 44px;
+		line-height: 1.1;
+		letter-spacing: -0.025em;
+		color: var(--ink-900);
+		margin: 0 0 14px;
+	}
+	.rubric-hero p {
+		font-family: var(--font-body);
+		font-size: 16px;
+		line-height: 1.55;
+		color: var(--ink-700);
+		margin: 0 0 20px;
+		max-width: 600px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.rubric-hero__stats {
+		display: flex;
+		justify-content: center;
+		gap: 18px;
+		flex-wrap: wrap;
+		font-family: var(--font-body);
+		font-size: 13px;
+		color: var(--ink-500);
+		align-items: center;
+	}
+	.rubric-hero__stats strong {
+		font-family: var(--font-display);
+		font-weight: 700;
+		color: var(--ink-900);
+		font-size: 15px;
+	}
+	.rubric-hero__rss {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		padding: 4px 10px;
+		border-radius: 999px;
+		background: #fff;
+		color: var(--violet-600);
+		border: 1px solid var(--violet-100);
+		text-decoration: none;
+	}
+	.rubric-hero__rss:hover {
+		background: var(--violet-100);
+	}
+	.rubric-list {
+		max-width: 1100px;
+		margin: 0 auto 56px;
+	}
+	.rubric-list :global(.archive-row:last-child) {
+		border-bottom: 0;
+	}
+	.rubric-empty {
+		text-align: center;
+		padding: 64px 0;
+		color: var(--ink-500);
+	}
+	.rubric-empty__btn {
+		display: inline-block;
+		margin-top: 16px;
+		padding: 10px 20px;
+		background: var(--violet-500);
+		color: #fff;
+		border-radius: 999px;
+		font-family: var(--font-display);
+		font-weight: 700;
+		text-decoration: none;
+	}
+	.rubric-empty__btn:hover {
+		background: var(--violet-600);
+	}
+	.rubric-cross {
+		margin-top: 40px;
+	}
+	.rubric-cross__head {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		border-bottom: 2px solid var(--ink-900);
+		padding-bottom: 12px;
+		margin-bottom: 16px;
+	}
+	.rubric-cross__head h2 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 22px;
+		margin: 0;
+		color: var(--ink-900);
+	}
+	.rubric-cross__head a {
+		font-family: var(--font-body);
+		font-size: 13px;
+		color: var(--violet-600);
+		text-decoration: none;
+	}
+	.rubric-cross__grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 12px;
+	}
+	.rubric-cross__tile {
+		background: #fff;
+		border: 1px solid var(--line);
+		border-radius: 12px;
+		padding: 16px 18px;
+		text-decoration: none;
+		color: inherit;
+		transition: border-color 120ms, box-shadow 120ms;
+	}
+	.rubric-cross__tile:hover {
+		border-color: var(--line-strong);
+		box-shadow: var(--shadow-1);
+	}
+	.rubric-cross__tile strong {
+		display: block;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 15px;
+		color: var(--ink-900);
+		margin-bottom: 6px;
+	}
+	.rubric-cross__tile span {
+		font-family: var(--font-body);
+		font-size: 12px;
+		line-height: 1.45;
+		color: var(--ink-500);
+	}
+
+	@media (max-width: 720px) {
+		.rubric-hero h1 {
+			font-size: 30px;
+		}
+		.rubric-cross__grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

@@ -2,8 +2,11 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import HomeNewsletterBanner from '../components/HomeNewsletterBanner.astro';
 import { SITE_DESCRIPTION } from '../consts';
 import { buildOrganizationJsonLd, buildWebsiteJsonLd } from '../lib/structuredData';
+import { RUBRIC_CONFIG } from '../lib/site';
+import '../styles/homepage.css';
 
 const aboutJsonLd = [
 	buildWebsiteJsonLd({
@@ -12,6 +15,28 @@ const aboutJsonLd = [
 		path: '/about/',
 	}),
 	buildOrganizationJsonLd(),
+];
+
+const principles = {
+	doing: [
+		'Разбираем сильные сигналы рынка ИИ',
+		'Связываем новости в сюжетные линии',
+		'Атрибутируем каждый факт к первоисточнику',
+		'Публикуем материал только если есть тезис',
+	],
+	notDoing: [
+		'Не гонимся за скоростью',
+		'Не публикуем рерайты без угла',
+		'Не используем форумы и агрегаторы как источник',
+		'Не делаем жёлтых заголовков',
+	],
+};
+
+const steps = [
+	{ kicker: '1', title: 'Сигналы', desc: 'Каждое утро система собирает 70+ источников.', mascot: '/mascot/sticker-1.png' },
+	{ kicker: '2', title: 'Рецензия', desc: 'Редактор читает дайджест и пишет свободную рецензию.', mascot: '/mascot/pose-thinking.png' },
+	{ kicker: '3', title: 'Производство', desc: 'Writer, editor и factchecker готовят материал.', mascot: '/mascot/sticker-2.png' },
+	{ kicker: '4', title: 'Публикация', desc: 'Финальный апрув — и материал на сайте.', mascot: '/mascot/sticker-6.png' },
 ];
 ---
 
@@ -22,61 +47,366 @@ const aboutJsonLd = [
 	</head>
 	<body>
 		<Header />
-		<main class="main-shell">
-			<section class="content-panel prose">
-				<p class="section-kicker">О проекте</p>
-				<h1>SCQR — редакционная карта рынка искусственного интеллекта</h1>
+		<main class="about-page container">
+			<section class="about-hero">
+				<span class="about-hero__pill">О ПРОЕКТЕ</span>
+				<h1>SCQR — аналитическое издание об искусственном интеллекте</h1>
 				<p>
-					SCQR устроен как медиа о рынке ИИ, а не как быстрая лента. Нас интересуют не только
-					модели и анонсы, но и вся система вокруг них: вычисления, энергия, корпоративный спрос,
-					правила допуска, деньги, рынок труда и региональные различия.
-				</p>
-				<p>
-					Каждый материал должен отвечать на один вопрос: почему это важно для рынка ИИ именно
-					сейчас. Поэтому мы собираем сайт не как набор карточек, а как редакционную систему:
-					первая полоса, рубрики, сюжеты, темы, архив и связанные публикации внутри статьи.
-				</p>
-				<p>
-					Главный принцип языка — живой человеческий русский без лишнего канцелярита и без
-					перегруза англицизмами. Если термин нужен для точности, он остаётся. Если можно сказать
-					по-русски яснее, мы говорим по-русски.
-				</p>
-				<h2>Как устроен сайт</h2>
-				<ul>
-					<li><strong>Главная</strong> — первая полоса с ведущим материалом, визуальными карточками, сюжетами и лентой.</li>
-					<li><strong>Архив</strong> — вся база публикаций, разбитая по форматам.</li>
-					<li><strong>Рубрики</strong> — отдельные поверхности для направлений рынка.</li>
-					<li><strong>Сюжеты</strong> — цепочки материалов по одной линии развития.</li>
-					<li><strong>Темы</strong> — лёгкие подборки вокруг одного понятия или повода.</li>
-				</ul>
-				<h2>Рубрики</h2>
-				<ul>
-					<li><strong>Траектории ИИ</strong> — долгосрочные тренды и стратегические сдвиги</li>
-					<li><strong>Генерации ИИ</strong> — фронтирные модели, их возможности и ограничения</li>
-					<li><strong>Автоматизации ИИ</strong> — агенты, инструменты, рынок труда</li>
-					<li><strong>Новации</strong> — новые компании, запуски, анонсы и свежие релизы</li>
-					<li><strong>Иллюзии ИИ</strong> — хайп, риски, провалы</li>
-					<li><strong>В России</strong> — отечественный рынок и регулирование</li>
-					<li><strong>Регуляции</strong> — законодательство и политика в области ИИ</li>
-					<li><strong>Теории</strong> — исследования, концепции, аргументы</li>
-					<li><strong>Тенденции</strong> — рыночная динамика и инвестиции</li>
-				</ul>
-				<h2>Редакционная логика</h2>
-				<p>
-					Новости фиксируют сдвиг. Аналитика объясняет, что именно изменилось в структуре рынка.
-					Колонки собирают позицию и голос проекта. Вместе эти три формата должны давать и ритм,
-					и глубину, и узнаваемый тон SCQR.
-				</p>
-				<p>
-					Визуальная система тоже подчинена этой логике: светлая бумажная основа, кислотно-зелёный
-					акцент, газетная плотность и обложки, которые поддерживают материал, а не спорят с ним.
-				</p>
-				<h2>Контакт</h2>
-				<p>
-					По вопросам сотрудничества и редакционным предложениям: <a href="mailto:hi@scqr.ru">hi@scqr.ru</a>
+					Мы помогаем разобраться, как ИИ меняет рынки, государство, корпоративную работу и
+					научные дисциплины. Не быстрые новости, а вдумчивая аналитика.
 				</p>
 			</section>
+
+			<section class="about-do-grid">
+				<div class="about-card about-card--violet">
+					<h2>Что мы делаем</h2>
+					<ul>
+						{principles.doing.map((item) => <li>{item}</li>)}
+					</ul>
+				</div>
+				<div class="about-card about-card--blue">
+					<h2>Чего мы не делаем</h2>
+					<ul>
+						{principles.notDoing.map((item) => <li>{item}</li>)}
+					</ul>
+				</div>
+			</section>
+
+			<section class="about-process">
+				<header class="about-process__head">
+					<h2>Как устроена редакция</h2>
+				</header>
+				<div class="about-process__grid">
+					{
+						steps.map((step) => (
+							<div class="about-step">
+								<img src={step.mascot} alt="" class="about-step__mascot" loading="lazy" />
+								<span class="about-step__kicker">Шаг {step.kicker}</span>
+								<strong>{step.title}</strong>
+								<p>{step.desc}</p>
+							</div>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="about-credo">
+				<h2>Принципы редакции</h2>
+				<div class="about-credo__cols">
+					<p>
+						SCQR устроен как медиа о рынке ИИ, а не как быстрая лента. Нас интересуют не только
+						модели и анонсы, но и вся система вокруг них: вычисления, энергия, корпоративный
+						спрос, правила допуска, деньги, рынок труда и региональные различия.
+					</p>
+					<p>
+						Каждый материал должен отвечать на один вопрос: почему это важно для рынка ИИ
+						именно сейчас. Поэтому мы собираем сайт не как набор карточек, а как редакционную
+						систему: первая полоса, рубрики, сюжеты, темы, архив и связанные публикации.
+					</p>
+					<p>
+						Главный принцип языка — живой человеческий русский без лишнего канцелярита и без
+						перегруза англицизмами. Если термин нужен для точности, он остаётся. Если можно
+						сказать по-русски яснее, мы говорим по-русски.
+					</p>
+					<p>
+						Новости фиксируют сдвиг. Аналитика объясняет, что именно изменилось в структуре
+						рынка. Колонки собирают позицию и голос проекта. Вместе эти три формата дают и
+						ритм, и глубину, и узнаваемый тон SCQR.
+					</p>
+				</div>
+			</section>
+
+			<section class="about-rubrics">
+				<header class="about-rubrics__head">
+					<h2>Рубрики</h2>
+				</header>
+				<div class="about-rubrics__grid">
+					{
+						RUBRIC_CONFIG.map((rubric) => (
+							<a class="about-rubric" href={`/rubric/${rubric.slug}/`}>
+								<strong>{rubric.label}</strong>
+								<span>{rubric.description}</span>
+							</a>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="about-contact">
+				<h2>Контакт</h2>
+				<p>
+					По вопросам сотрудничества и редакционным предложениям —{' '}
+					<a href="mailto:hi@scqr.ru">hi@scqr.ru</a>
+				</p>
+			</section>
+
+			<HomeNewsletterBanner />
 		</main>
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.about-page {
+		padding-top: 32px;
+		padding-bottom: 64px;
+	}
+	.about-hero {
+		max-width: 760px;
+		text-align: center;
+		margin: 0 auto 48px;
+	}
+	.about-hero__pill {
+		display: inline-block;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		padding: 5px 12px;
+		border-radius: 999px;
+		background: var(--violet-500);
+		color: #fff;
+		margin-bottom: 16px;
+	}
+	.about-hero h1 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 40px;
+		line-height: 1.15;
+		letter-spacing: -0.025em;
+		color: var(--ink-900);
+		margin: 0 0 14px;
+	}
+	.about-hero p {
+		font-family: var(--font-body);
+		font-size: 17px;
+		line-height: 1.6;
+		color: var(--ink-700);
+		margin: 0;
+	}
+
+	.about-do-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 16px;
+		max-width: 1000px;
+		margin: 0 auto 56px;
+	}
+	.about-card {
+		padding: 28px 28px;
+		border-radius: 16px;
+		border: 1px solid var(--line);
+	}
+	.about-card--violet {
+		background: var(--violet-50);
+		border-color: var(--violet-100);
+	}
+	.about-card--blue {
+		background: var(--blue-50);
+		border-color: var(--blue-100);
+	}
+	.about-card h2 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 20px;
+		margin: 0 0 16px;
+		color: var(--ink-900);
+	}
+	.about-card ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	.about-card li {
+		font-family: var(--font-body);
+		font-size: 15px;
+		line-height: 1.5;
+		color: var(--ink-900);
+		padding-left: 22px;
+		position: relative;
+	}
+	.about-card li::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 9px;
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		border: 2px solid var(--violet-500);
+	}
+	.about-card--blue li::before {
+		border-color: var(--blue-500);
+	}
+
+	.about-process {
+		max-width: 1100px;
+		margin: 0 auto 64px;
+	}
+	.about-process__head {
+		border-bottom: 2px solid var(--ink-900);
+		padding-bottom: 12px;
+		margin-bottom: 24px;
+	}
+	.about-process__head h2 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 22px;
+		margin: 0;
+		color: var(--ink-900);
+	}
+	.about-process__grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 16px;
+	}
+	.about-step {
+		background: #fff;
+		border: 1px solid var(--line);
+		border-radius: 12px;
+		padding: 16px 18px 20px;
+		text-align: center;
+	}
+	.about-step__mascot {
+		width: 80px;
+		height: 80px;
+		object-fit: contain;
+		margin: 0 auto 12px;
+	}
+	.about-step__kicker {
+		display: block;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--violet-600);
+		margin-bottom: 6px;
+	}
+	.about-step strong {
+		display: block;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 17px;
+		color: var(--ink-900);
+		margin-bottom: 6px;
+	}
+	.about-step p {
+		font-family: var(--font-body);
+		font-size: 13px;
+		line-height: 1.5;
+		color: var(--ink-700);
+		margin: 0;
+	}
+
+	.about-credo {
+		max-width: 880px;
+		margin: 0 auto 56px;
+	}
+	.about-credo h2 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 22px;
+		margin: 0 0 16px;
+		color: var(--ink-900);
+	}
+	.about-credo__cols {
+		columns: 2;
+		column-gap: 32px;
+	}
+	.about-credo p {
+		font-family: var(--font-body);
+		font-size: 15px;
+		line-height: 1.65;
+		color: var(--ink-700);
+		margin: 0 0 16px;
+		break-inside: avoid;
+	}
+
+	.about-rubrics {
+		max-width: 1100px;
+		margin: 0 auto 56px;
+	}
+	.about-rubrics__head {
+		border-bottom: 2px solid var(--ink-900);
+		padding-bottom: 12px;
+		margin-bottom: 16px;
+	}
+	.about-rubrics__head h2 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 22px;
+		margin: 0;
+		color: var(--ink-900);
+	}
+	.about-rubrics__grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 12px;
+	}
+	.about-rubric {
+		background: #fff;
+		border: 1px solid var(--line);
+		border-radius: 12px;
+		padding: 14px 16px;
+		text-decoration: none;
+		color: inherit;
+		transition: border-color 120ms, box-shadow 120ms;
+	}
+	.about-rubric:hover {
+		border-color: var(--line-strong);
+		box-shadow: var(--shadow-1);
+	}
+	.about-rubric strong {
+		display: block;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 15px;
+		color: var(--ink-900);
+		margin-bottom: 4px;
+	}
+	.about-rubric span {
+		font-family: var(--font-body);
+		font-size: 12px;
+		line-height: 1.45;
+		color: var(--ink-500);
+	}
+
+	.about-contact {
+		max-width: 880px;
+		margin: 0 auto 48px;
+	}
+	.about-contact h2 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 22px;
+		margin: 0 0 8px;
+		color: var(--ink-900);
+	}
+	.about-contact p {
+		font-family: var(--font-body);
+		font-size: 15px;
+		color: var(--ink-700);
+	}
+	.about-contact a {
+		color: var(--violet-600);
+	}
+
+	@media (max-width: 720px) {
+		.about-hero h1 {
+			font-size: 28px;
+		}
+		.about-do-grid,
+		.about-process__grid,
+		.about-rubrics__grid {
+			grid-template-columns: 1fr;
+		}
+		.about-credo__cols {
+			columns: 1;
+		}
+	}
+</style>

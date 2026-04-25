@@ -1,28 +1,21 @@
 ---
 import { getCollection } from 'astro:content';
+import ArchiveRow from '../../components/ArchiveRow.astro';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
-import PostThumbnail from '../../components/PostThumbnail.astro';
-import RubricLabel from '../../components/RubricLabel.astro';
-import TickerBar from '../../components/TickerBar.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import {
 	buildRubricSummary,
-	getArticleTypeLabel,
-	getDeck,
 	getHeroAlt,
-	getPostHref,
-	getPrimaryRubric,
-	getReadingTimeLabel,
-	getToneClass,
+	getRubricHref,
 	getVisiblePosts,
 	sortPosts,
 } from '../../lib/site';
 import { buildCollectionPageJsonLd } from '../../lib/structuredData';
 
 const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
-const rubricSummary = buildRubricSummary(posts).slice(0, 6);
+const rubricSummary = buildRubricSummary(posts);
 const newsPosts = posts.filter((post) => post.data.articleType === 'news');
 const analysisPosts = posts.filter((post) => post.data.articleType === 'analysis');
 const columnPosts = posts.filter((post) => post.data.articleType === 'column');
@@ -47,108 +40,203 @@ const archiveJsonLd = buildCollectionPageJsonLd({
 	</head>
 	<body>
 		<Header />
-		<TickerBar />
-		<main class="main-shell">
-			<section class="archive-hero" id="top">
-				<div>
-					<p class="section-kicker">Архив</p>
-					<h1>Все публикации SCQR</h1>
-				</div>
+		<main class="archive-page container" id="top">
+			<section class="archive-intro">
+				<span class="archive-intro__pill">АРХИВ</span>
+				<h1>Все материалы SCQR</h1>
 				<p>
-					Новости, аналитика и колонки о рынке искусственного интеллекта. Каждый материал снабжён рубрикой, форматом и хронологией.
+					Новости, аналитика и колонки о рынке искусственного интеллекта. Каждый материал
+					снабжён рубрикой, форматом и хронологией.
 				</p>
-			</section>
-
-			<section class="archive-summary-grid">
-				<div class="archive-summary-card">
-					<strong>{posts.length}</strong>
-					<span>материалов импортировано</span>
+				<div class="archive-intro__stats">
+					<span><strong>{posts.length}</strong> материалов</span>
+					<span><strong>{rubricSummary.length}</strong> рубрик</span>
+					<span><strong>{newsPosts.length}</strong> новостей</span>
+					<span><strong>{analysisPosts.length}</strong> аналитики</span>
+					<span><strong>{columnPosts.length}</strong> колонок</span>
 				</div>
-				{
-					rubricSummary.map((rubric) => (
-						<div class="archive-summary-card">
-							<strong><RubricLabel name={rubric.name} /></strong>
-							<span>{rubric.count} публикаций</span>
-						</div>
-					))
-				}
 			</section>
 
-			<nav class="archive-section-nav" aria-label="Разделы архива">
+			<nav class="archive-nav" aria-label="Разделы архива">
 				<a href="#news">Новости</a>
 				<a href="#analysis">Аналитика</a>
 				<a href="#columns">Колонки</a>
+				<span class="archive-nav__divider"></span>
+				{
+					rubricSummary.slice(0, 6).map((rubric) =>
+						rubric.slug ? (
+							<a href={getRubricHref(rubric.slug)} class="archive-nav__rubric">
+								{rubric.name} <em>{rubric.count}</em>
+							</a>
+						) : null,
+					)
+				}
 			</nav>
 
 			<section class="archive-section" id="news">
-				<div class="section-head">
+				<header class="archive-section__head">
 					<h2>Новости</h2>
-					<a href="#top">Наверх · {newsPosts.length}</a>
-				</div>
-				<div class="archive-feed">
-					{newsPosts.map((post, index) => (
-						<article class="archive-feed__item">
-							<PostThumbnail post={post} className="archive-feed__thumb" toneClass={getToneClass(index)} />
-							<div>
-								<div class="archive-feed__meta">
-									<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
-									<span>{getArticleTypeLabel(post)}</span>
-									<span>{getReadingTimeLabel(post)}</span>
-								</div>
-								<h2><a href={getPostHref(post)}>{post.data.title}</a></h2>
-								<p>{getDeck(post)}</p>
-							</div>
-						</article>
-					))}
+					<a href="#top" class="archive-section__top">наверх · {newsPosts.length}</a>
+				</header>
+				<div class="archive-list">
+					{newsPosts.map((post) => <ArchiveRow post={post} />)}
 				</div>
 			</section>
 
 			<section class="archive-section" id="analysis">
-				<div class="section-head">
+				<header class="archive-section__head">
 					<h2>Аналитика</h2>
-					<a href="#top">Наверх · {analysisPosts.length}</a>
-				</div>
-				<div class="archive-feed">
-					{analysisPosts.map((post, index) => (
-						<article class="archive-feed__item">
-							<PostThumbnail post={post} className="archive-feed__thumb" toneClass={getToneClass(index + 1)} />
-							<div>
-								<div class="archive-feed__meta">
-									<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
-									<span>{getArticleTypeLabel(post)}</span>
-									<span>{getReadingTimeLabel(post)}</span>
-								</div>
-								<h2><a href={getPostHref(post)}>{post.data.title}</a></h2>
-								<p>{getDeck(post)}</p>
-							</div>
-						</article>
-					))}
+					<a href="#top" class="archive-section__top">наверх · {analysisPosts.length}</a>
+				</header>
+				<div class="archive-list">
+					{analysisPosts.map((post) => <ArchiveRow post={post} />)}
 				</div>
 			</section>
 
 			<section class="archive-section" id="columns">
-				<div class="section-head">
+				<header class="archive-section__head">
 					<h2>Колонки</h2>
-					<a href="#top">Наверх · {columnPosts.length}</a>
-				</div>
-				<div class="archive-feed">
-					{columnPosts.map((post, index) => (
-						<article class="archive-feed__item">
-							<PostThumbnail post={post} className="archive-feed__thumb" toneClass={getToneClass(index + 2)} />
-							<div>
-								<div class="archive-feed__meta">
-									<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
-									<span>{getArticleTypeLabel(post)}</span>
-									<span>{getReadingTimeLabel(post)}</span>
-								</div>
-								<h2><a href={getPostHref(post)}>{post.data.title}</a></h2>
-								<p>{getDeck(post)}</p>
-							</div>
-						</article>
-					))}
+					<a href="#top" class="archive-section__top">наверх · {columnPosts.length}</a>
+				</header>
+				<div class="archive-list">
+					{columnPosts.map((post) => <ArchiveRow post={post} />)}
 				</div>
 			</section>
 		</main>
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.archive-page {
+		padding-top: 32px;
+		padding-bottom: 64px;
+	}
+	.archive-intro {
+		max-width: 760px;
+		text-align: center;
+		margin: 0 auto 48px;
+	}
+	.archive-intro__pill {
+		display: inline-block;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		padding: 5px 12px;
+		border-radius: 999px;
+		background: var(--violet-50);
+		color: var(--violet-600);
+		border: 1px solid var(--violet-100);
+		margin-bottom: 16px;
+	}
+	.archive-intro h1 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 40px;
+		line-height: 1.15;
+		letter-spacing: -0.025em;
+		color: var(--ink-900);
+		margin: 0 0 12px;
+	}
+	.archive-intro p {
+		font-family: var(--font-body);
+		font-size: 16px;
+		line-height: 1.55;
+		color: var(--ink-700);
+		margin: 0 0 20px;
+	}
+	.archive-intro__stats {
+		display: flex;
+		justify-content: center;
+		gap: 24px;
+		flex-wrap: wrap;
+		font-family: var(--font-body);
+		font-size: 13px;
+		color: var(--ink-500);
+	}
+	.archive-intro__stats strong {
+		font-family: var(--font-display);
+		font-weight: 700;
+		color: var(--ink-900);
+		font-size: 16px;
+	}
+	.archive-nav {
+		display: flex;
+		gap: 16px;
+		flex-wrap: wrap;
+		align-items: center;
+		padding: 14px 18px;
+		background: var(--paper-2);
+		border: 1px solid var(--line);
+		border-radius: 12px;
+		margin-bottom: 32px;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 13px;
+	}
+	.archive-nav a {
+		color: var(--ink-900);
+		text-decoration: none;
+		padding: 4px 10px;
+		border-radius: 999px;
+		transition: background 120ms;
+	}
+	.archive-nav a:hover {
+		background: var(--violet-50);
+		color: var(--violet-700);
+	}
+	.archive-nav__divider {
+		width: 1px;
+		height: 16px;
+		background: var(--line);
+	}
+	.archive-nav__rubric em {
+		font-style: normal;
+		color: var(--ink-500);
+		font-weight: 500;
+		margin-left: 4px;
+	}
+	.archive-section {
+		margin-bottom: 56px;
+		scroll-margin-top: 100px;
+	}
+	.archive-section__head {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		padding: 0 0 12px;
+		border-bottom: 2px solid var(--ink-900);
+		margin-bottom: 8px;
+	}
+	.archive-section__head h2 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 24px;
+		letter-spacing: -0.015em;
+		margin: 0;
+		color: var(--ink-900);
+	}
+	.archive-section__top {
+		font-family: var(--font-body);
+		font-size: 12px;
+		color: var(--ink-500);
+		text-decoration: none;
+	}
+	.archive-section__top:hover {
+		color: var(--violet-600);
+	}
+	.archive-list :global(.archive-row:last-child) {
+		border-bottom: 0;
+	}
+
+	@media (max-width: 720px) {
+		.archive-intro h1 {
+			font-size: 28px;
+		}
+		.archive-intro__stats {
+			gap: 14px;
+		}
+	}
+</style>
