@@ -135,8 +135,8 @@ body { font-family: var(--font-body); }
   gap: 24px;
   overflow: hidden;
 }
-.newsletter .mascot { background: #fff; height: 130px; display: flex; align-items: end; justify-content: center; overflow: hidden; }
-.newsletter .mascot img { width: 130%; max-width: none; height: auto; }
+.newsletter .mascot { background: var(--violet-100, #e8e0ff); height: 130px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px; }
+.newsletter .mascot img { width: auto; max-width: 100%; max-height: 100%; height: auto; object-fit: contain; }
 .newsletter .pitch { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--ink-900); line-height: 1.2; letter-spacing: -0.015em; }
 .newsletter .pitch .ru { color: var(--violet-600); }
 .newsletter .feats { display: flex; gap: 22px; margin-top: 10px; flex-wrap: wrap; }

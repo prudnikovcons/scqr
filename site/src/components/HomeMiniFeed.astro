@@ -1,6 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import { getPostHref, getPrimaryRubric, RUBRIC_CONFIG } from '../lib/site';
+import { getHeroAlt, getPostHref, getPrimaryRubric, RUBRIC_CONFIG } from '../lib/site';
 
 const rubricLabelLookup = new Map(RUBRIC_CONFIG.map((r) => [r.slug, r.label]));
 
@@ -31,27 +32,17 @@ function formatTimestamp(date: Date): string {
 	return date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
 }
 
-const logoStyles = [
-	{ bg: '#f4f4f5', fg: '#0D1117' },
-	{ bg: '#000', fg: '#fff' },
-	{ bg: '#76b900', fg: '#fff' },
-	{ bg: 'linear-gradient(135deg,#3AA0FF,#6C4DFF)', fg: '#fff' },
-	{ bg: 'linear-gradient(135deg,#6C4DFF,#3AA0FF)', fg: '#fff' },
-];
-
-const feedItems = items.slice(0, 5).map((post, index) => {
+const feedItems = items.slice(0, 5).map((post) => {
 	const rubricSlug = getPrimaryRubric(post);
 	const rubricLabel = rubricLabelLookup.get(rubricSlug) ?? 'НОВОСТИ';
-	const logoStyle = logoStyles[index % logoStyles.length];
-	const firstChar = (post.data.title || '?').charAt(0).toUpperCase();
 	return {
 		href: getPostHref(post),
 		ts: formatTimestamp(post.data.pubDate),
 		rubricLabel: rubricLabel.toUpperCase(),
 		title: post.data.title,
-		logoBg: logoStyle.bg,
-		logoFg: logoStyle.fg,
-		mark: firstChar,
+		heroImage: post.data.heroImage,
+		heroAlt: getHeroAlt(post),
+		mark: (post.data.title || '?').charAt(0).toUpperCase(),
 	};
 });
 ---
@@ -69,8 +60,18 @@ const feedItems = items.slice(0, 5).map((post, index) => {
 					<span class="eb">/ {item.rubricLabel}</span>
 					<div class="title">{item.title}</div>
 				</div>
-				<div class="logo" style={`background:${item.logoBg};color:${item.logoFg};`}>
-					{item.mark}
+				<div class="thumb">
+					{item.heroImage ? (
+						<Image
+							src={item.heroImage}
+							alt={item.heroAlt}
+							loading="lazy"
+							widths={[80, 120, 160]}
+							sizes="80px"
+						/>
+					) : (
+						<span class="thumb-fallback">{item.mark}</span>
+					)}
 				</div>
 			</a>
 		))
@@ -83,5 +84,33 @@ const feedItems = items.slice(0, 5).map((post, index) => {
 	.feed-more {
 		text-decoration: none;
 		color: inherit;
+	}
+	.feed-item .thumb {
+		position: relative;
+		width: 56px;
+		height: 56px;
+		border-radius: 8px;
+		overflow: hidden;
+		background: var(--paper-2);
+		flex-shrink: 0;
+	}
+	.feed-item .thumb :global(img) {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	.feed-item .thumb-fallback {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		height: 100%;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 18px;
+		color: var(--violet-500);
+		background: linear-gradient(135deg, var(--paper-2), var(--violet-50, #f5f0ff));
 	}
 </style>

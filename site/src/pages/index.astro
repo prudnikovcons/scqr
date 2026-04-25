@@ -3,27 +3,19 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import HomeEventsCard from '../components/HomeEventsCard.astro';
 import HomeHero from '../components/HomeHero.astro';
 import HomeMiniFeed from '../components/HomeMiniFeed.astro';
 import HomeNewsletterBanner from '../components/HomeNewsletterBanner.astro';
-import HomePodcastCard from '../components/HomePodcastCard.astro';
-import HomePopularSection from '../components/HomePopularSection.astro';
 import HomeRubricsGrid from '../components/HomeRubricsGrid.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import { getVisiblePosts, sortPosts } from '../lib/site';
+import { buildClusterSummary, getVisiblePosts, sortPosts } from '../lib/site';
 import { buildCollectionPageJsonLd, buildWebsiteJsonLd } from '../lib/structuredData';
 
 const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
 const lead = posts[0];
 const subgrid = posts.slice(1, 5);
 const miniFeed = posts.slice(5, 10);
-const popularPool = posts.slice(10);
-const popularFeature =
-	popularPool.find((p) => p.data.articleType === 'analysis') ?? popularPool[0];
-const popularRows = popularPool
-	.filter((p) => p.id !== popularFeature?.id)
-	.slice(0, 3);
+const clusters = buildClusterSummary(posts).slice(0, 4);
 
 const jsonLd = [
 	buildWebsiteJsonLd({ title: SITE_TITLE, description: SITE_DESCRIPTION }),
@@ -51,42 +43,66 @@ const jsonLd = [
 			</div>
 			<HomeNewsletterBanner />
 			<section class="section">
-				<div class="section-grid">
-					<div>
-						<div class="section-hdr">
-							<h2>
-								<span class="icon">
-									<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-										<path d="M13 2 3 14h7v8l10-12h-7z"></path>
-									</svg>
-								</span>
-								Популярное
-							</h2>
-						</div>
-						{popularFeature && <HomePopularSection feature={popularFeature} rows={popularRows} />}
-					</div>
-					<div>
-						<div class="section-hdr"><h2 style="font-size:18px">&nbsp;</h2></div>
-						<HomeEventsCard />
-					</div>
+				<div class="section-hdr">
+					<h2>Рубрики</h2>
+					<a href="/about/">Зачем каждая рубрика →</a>
 				</div>
+				<HomeRubricsGrid />
 			</section>
-			<section class="section">
-				<div class="section-grid">
-					<div>
+			{
+				clusters.length > 0 && (
+					<section class="section">
 						<div class="section-hdr">
-							<h2>Рубрики</h2>
-							<a href="/blog/">Все рубрики →</a>
+							<h2>Сюжетные линии</h2>
+							<a href="/blog/">Архив →</a>
 						</div>
-						<HomeRubricsGrid />
-					</div>
-					<div>
-						<div class="section-hdr"><h2 style="font-size:18px">&nbsp;</h2></div>
-						<HomePodcastCard />
-					</div>
-				</div>
-			</section>
+						<div class="home-clusters">
+							{clusters.map((cluster) => (
+								<a class="home-cluster" href={`/cluster/${cluster.slug}/`}>
+									<div class="home-cluster__title">{cluster.title}</div>
+									<div class="home-cluster__count">{cluster.count} материалов</div>
+								</a>
+							))}
+						</div>
+					</section>
+				)
+			}
 		</main>
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.home-clusters {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+		gap: 12px;
+	}
+	.home-cluster {
+		text-decoration: none;
+		color: inherit;
+		display: block;
+		padding: 18px 20px;
+		background: #fff;
+		border: 1px solid var(--line);
+		border-radius: 12px;
+		transition: border-color 120ms, box-shadow 120ms;
+	}
+	.home-cluster:hover {
+		border-color: var(--line-strong);
+		box-shadow: var(--shadow-1);
+	}
+	.home-cluster__title {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 15px;
+		color: var(--ink-900);
+		line-height: 1.35;
+		margin-bottom: 6px;
+	}
+	.home-cluster__count {
+		font-family: var(--font-body);
+		font-size: 12px;
+		color: var(--ink-500);
+	}
+</style>
