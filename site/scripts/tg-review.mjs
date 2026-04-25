@@ -220,38 +220,60 @@ async function processCallback(cb, state) {
 		return;
 	}
 
+	// Acknowledge the callback first so Telegram doesn't expire the query
+	// while we publish (callback_query has a 5-minute window). If the ack
+	// itself fails because the query was already old, we still proceed.
+	const safeAnswer = async (text, alert = false) => {
+		try {
+			await tg('answerCallbackQuery', { callback_query_id: cb.id, text, show_alert: alert });
+		} catch (err) {
+			console.warn(`answerCallbackQuery soft-fail: ${err.message}`);
+		}
+	};
+
 	if (action === 'approve') {
+		await safeAnswer('Публикую в канал…');
 		try {
 			const link = await publishToChannel(pending.slug, pending.channel_text);
+			delete state.pending[pending.slug];
+			saveState(state);
+			try {
+				await tg('editMessageText', {
+					chat_id: pending.owner_id,
+					message_id: pending.dm_message_id,
+					text: `<b>Опубликовано</b>\n\n${pending.slug}\n${link}`,
+					parse_mode: 'HTML',
+					disable_web_page_preview: true,
+				});
+			} catch (err) {
+				console.warn(`edit DM soft-fail: ${err.message}`);
+			}
+			console.log(`approved + posted slug=${pending.slug} link=${link}`);
+		} catch (err) {
+			console.error('publish error:', err.message);
+			try {
+				await tg('editMessageText', {
+					chat_id: pending.owner_id,
+					message_id: pending.dm_message_id,
+					text: `<b>Ошибка публикации</b>\n\n${pending.slug}\n${err.message.slice(0, 300)}`,
+					parse_mode: 'HTML',
+				});
+			} catch (_) {}
+		}
+	} else if (action === 'reject') {
+		await safeAnswer('Отклонено');
+		delete state.pending[pending.slug];
+		saveState(state);
+		try {
 			await tg('editMessageText', {
 				chat_id: pending.owner_id,
 				message_id: pending.dm_message_id,
-				text: `<b>Опубликовано</b>\n\n${pending.slug}\n${link}`,
+				text: `<b>Отклонено</b>\n\n${pending.slug}\n\nЖду комментариев — что переделать.`,
 				parse_mode: 'HTML',
-				disable_web_page_preview: true,
 			});
-			await tg('answerCallbackQuery', { callback_query_id: cb.id, text: 'Опубликовано в канал.' });
-			delete state.pending[pending.slug];
-			saveState(state);
-			console.log(`approved + posted slug=${pending.slug} link=${link}`);
 		} catch (err) {
-			await tg('answerCallbackQuery', {
-				callback_query_id: cb.id,
-				text: `Ошибка публикации: ${err.message.slice(0, 180)}`,
-				show_alert: true,
-			});
-			console.error('publish error:', err.message);
+			console.warn(`edit DM soft-fail: ${err.message}`);
 		}
-	} else if (action === 'reject') {
-		await tg('editMessageText', {
-			chat_id: pending.owner_id,
-			message_id: pending.dm_message_id,
-			text: `<b>Отклонено</b>\n\n${pending.slug}\n\nЖду комментариев — что переделать.`,
-			parse_mode: 'HTML',
-		});
-		await tg('answerCallbackQuery', { callback_query_id: cb.id, text: 'Отклонено.' });
-		delete state.pending[pending.slug];
-		saveState(state);
 		console.log(`rejected slug=${pending.slug}`);
 	}
 }
