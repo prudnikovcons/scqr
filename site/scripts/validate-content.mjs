@@ -110,7 +110,7 @@ const HIGH_VISIBILITY_SLOT_IDS = new Set([
 function parseFrontmatter(content) {
 	const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
 	if (!match) return null;
-	const raw = match[1];
+	const raw = match[1].replace(/\r\n?/g, '\n');
 	const obj = {};
 
 	for (const line of raw.split('\n')) {
