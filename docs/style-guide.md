@@ -1,6 +1,8 @@
 # SCQR Style Guide
 
-> Писательский гайд SCQR. Дополняет [editorial-rules.md](editorial-rules.md) — там жёсткие правила, здесь практика. Основан на корпусе из 65 статей, опубликованных за январь–апрель 2026, и на образцах в [.scqr/style-corpus/](../.scqr/style-corpus/).
+> Писательский гайд SCQR. Дополняет [editorial-rules.md](editorial-rules.md) и [russian-voice.md](russian-voice.md). Основан на корпусе из 65 статей, опубликованных за январь–апрель 2026, и на образцах в [.scqr/style-corpus/](../.scqr/style-corpus/).
+>
+> **Базовый фильтр любого текста SCQR — [russian-voice.md](russian-voice.md).** Без него этот гайд не работает: тон, лид, структура — всё бесполезно, если текст всё равно звучит как ассистент-обзор. Перед сдачей материал проходит самопроверку из russian-voice.md.
 
 ## 1. Тон
 
