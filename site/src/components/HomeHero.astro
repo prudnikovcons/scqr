@@ -1,0 +1,96 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getDeck, getPostHref } from '../lib/site';
+import FormattedDate from './FormattedDate.astro';
+
+type PostEntry = CollectionEntry<'posts'>;
+
+interface Props {
+	lead: PostEntry;
+	subgrid: PostEntry[];
+}
+
+const { lead, subgrid } = Astro.props;
+const leadHref = getPostHref(lead);
+const leadDeck = getDeck(lead);
+const subgridStyles = [
+	{ bg: 'linear-gradient(135deg,#fff,#f7f7fb)', fg: 'var(--ink-700)' },
+	{ bg: 'linear-gradient(135deg,#0d1117,#333a45)', fg: '#fff' },
+	{ bg: 'linear-gradient(135deg,#475569,#1e293b)', fg: '#fff' },
+	{ bg: 'linear-gradient(135deg,#6C4DFF,#3AA0FF)', fg: '#fff' },
+];
+
+const subgridItems = subgrid.slice(0, 4).map((post, index) => {
+	const style = subgridStyles[index] ?? subgridStyles[0];
+	const firstChar = (post.data.title || '?').charAt(0).toUpperCase();
+	return {
+		post,
+		href: getPostHref(post),
+		title: post.data.title,
+		mark: firstChar,
+		bg: style.bg,
+		fg: style.fg,
+	};
+});
+---
+
+<article class="hero-feature">
+	<div>
+		<span class="pill">ГЛАВНОЕ</span>
+		<h1>
+			<a href={leadHref} class="hero-feature-link">{lead.data.title}</a>
+		</h1>
+		<p>{leadDeck}</p>
+		<div class="meta">
+			<FormattedDate date={lead.data.pubDate} />
+			<span class="dot"></span>
+			{
+				lead.data.readingTime && (
+					<span>
+						{lead.data.readingTime} мин чтения
+					</span>
+				)
+			}
+		</div>
+	</div>
+	<div class="hero-mascot">
+		<img src="/mascot/hero.png" alt="" width="320" height="320" loading="eager" />
+	</div>
+</article>
+
+<div class="hero-sub-grid">
+	{
+		subgridItems.map((item) => (
+			<a class="sub-card" href={item.href}>
+				<div class="thumb" style={`background:${item.bg};color:${item.fg};`}>
+					{item.mark}
+				</div>
+				<h4>{item.title}</h4>
+			</a>
+		))
+	}
+</div>
+
+<style>
+	.hero-feature-link {
+		color: inherit;
+		text-decoration: none;
+	}
+	.hero-feature-link:hover {
+		color: var(--violet-700);
+	}
+	.hero-mascot {
+		align-self: end;
+		display: flex;
+		justify-content: center;
+	}
+	.hero-mascot img {
+		width: 100%;
+		max-width: 280px;
+		height: auto;
+	}
+	.sub-card {
+		text-decoration: none;
+		color: inherit;
+	}
+</style>

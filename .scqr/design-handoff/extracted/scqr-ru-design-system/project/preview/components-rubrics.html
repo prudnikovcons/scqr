@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Rubric icons</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 22px 24px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .rub {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+  }
+  .chip {
+    width: 44px; height: 44px;
+    background: var(--violet-50);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--violet-500);
+    flex-shrink: 0;
+  }
+  .name { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--ink-900); line-height: 1.1; }
+  .sub  { font-family: var(--font-body); font-size: 12px; color: var(--ink-500); margin-top: 2px; line-height: 1.4; }
+</style>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+<div class="grid">
+  <div class="rub"><div class="chip"><i data-lucide="boxes"></i></div><div><div class="name">Модели</div><div class="sub">новости о нейросетях</div></div></div>
+  <div class="rub"><div class="chip"><i data-lucide="wrench"></i></div><div><div class="name">Инструменты</div><div class="sub">сервисы и платформы</div></div></div>
+  <div class="rub"><div class="chip"><i data-lucide="briefcase"></i></div><div><div class="name">Бизнес</div><div class="sub">ИИ в компаниях</div></div></div>
+  <div class="rub"><div class="chip"><i data-lucide="flask-conical"></i></div><div><div class="name">Исследования</div><div class="sub">научные достижения</div></div></div>
+  <div class="rub"><div class="chip"><i data-lucide="book-open"></i></div><div><div class="name">Обучение</div><div class="sub">курсы и материалы</div></div></div>
+  <div class="rub"><div class="chip"><i data-lucide="message-square"></i></div><div><div class="name">Мнение</div><div class="sub">колонки экспертов</div></div></div>
+</div>
+<script>lucide.createIcons({attrs:{width:20,height:20,'stroke-width':2}});</script>
+</body></html>

@@ -1,18 +1,13 @@
 ---
 import { getCollection } from 'astro:content';
+import ArchiveRow from '../../components/ArchiveRow.astro';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
-import RubricLabel from '../../components/RubricLabel.astro';
-import TickerBar from '../../components/TickerBar.astro';
 import { SITE_TITLE } from '../../consts';
 import {
 	buildTopicIndex,
-	getArticleTypeLabel,
-	getDeck,
 	getHeroAlt,
-	getPostHref,
-	getPrimaryRubric,
 	getVisiblePosts,
 	sortPosts,
 } from '../../lib/site';
@@ -50,35 +45,92 @@ const topicJsonLd = buildCollectionPageJsonLd({
 	</head>
 	<body>
 		<Header />
-		<TickerBar />
-		<main class="main-shell">
+		<main class="topic-page container">
 			<section class="topic-hero">
-				<p class="section-kicker">Тема</p>
-				<h1 class="topic-hero__title">{label}</h1>
-				<p class="topic-hero__desc">
-					Подборка материалов SCQR по одной теме: короткие сигналы, более длинные разборы и
-					колонки, которые помогают увидеть не одну новость, а движение всей линии.
-				</p>
-				<div class="topic-hero__meta">
-					<span>{posts.length} материалов</span>
+				<span class="topic-hero__pill">ТЕМА</span>
+				<h1>{label}</h1>
+				<p>Материалы SCQR, упоминающие тему «{label}» — короткие сигналы, разборы и колонки в одной подборке.</p>
+				<div class="topic-hero__stats">
+					<span><strong>{posts.length}</strong> материалов</span>
 					<a href="/blog" class="topic-hero__back">← Архив</a>
 				</div>
 			</section>
 
 			<section class="topic-list">
-				{posts.map((post) => (
-					<a class="topic-list__item" href={getPostHref(post)}>
-						<div class="topic-list__meta">
-							<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
-							<span>{getArticleTypeLabel(post)}</span>
-							<span>{post.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-						</div>
-						<strong class="topic-list__title">{post.data.title}</strong>
-						<p class="topic-list__desc">{getDeck(post)}</p>
-					</a>
-				))}
+				{posts.map((post) => <ArchiveRow post={post} />)}
 			</section>
 		</main>
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.topic-page {
+		padding-top: 32px;
+		padding-bottom: 64px;
+	}
+	.topic-hero {
+		max-width: 800px;
+		margin: 0 auto 32px;
+		padding-bottom: 24px;
+		border-bottom: 2px solid var(--violet-500);
+	}
+	.topic-hero__pill {
+		display: inline-block;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		padding: 4px 10px;
+		border-radius: 999px;
+		background: var(--violet-50);
+		color: var(--violet-600);
+		border: 1px solid var(--violet-100);
+		margin-bottom: 12px;
+	}
+	.topic-hero h1 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 32px;
+		line-height: 1.15;
+		letter-spacing: -0.025em;
+		color: var(--ink-900);
+		margin: 0 0 10px;
+	}
+	.topic-hero p {
+		font-family: var(--font-body);
+		font-size: 15px;
+		line-height: 1.55;
+		color: var(--ink-700);
+		margin: 0 0 16px;
+	}
+	.topic-hero__stats {
+		display: flex;
+		gap: 18px;
+		align-items: center;
+		font-family: var(--font-body);
+		font-size: 13px;
+		color: var(--ink-500);
+	}
+	.topic-hero__stats strong {
+		font-family: var(--font-display);
+		font-weight: 700;
+		color: var(--ink-900);
+		font-size: 14px;
+	}
+	.topic-hero__back {
+		color: var(--violet-600);
+		text-decoration: none;
+	}
+	.topic-hero__back:hover {
+		text-decoration: underline;
+	}
+	.topic-list {
+		max-width: 1100px;
+		margin: 0 auto;
+	}
+	.topic-list :global(.archive-row:last-child) {
+		border-bottom: 0;
+	}
+</style>

@@ -5,8 +5,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
-import RubricLabel from '../components/RubricLabel.astro';
-import TickerBar from '../components/TickerBar.astro';
+import HomeNewsletterBanner from '../components/HomeNewsletterBanner.astro';
 import {
 	getArticleTypeLabelFromValue,
 	getClusterHref,
@@ -15,7 +14,6 @@ import {
 	getTopicHref,
 } from '../lib/site';
 import { buildArticleJsonLd } from '../lib/structuredData';
-
 type PostEntry = CollectionEntry<'posts'>;
 
 type Props = PostEntry['data'] & {
@@ -48,6 +46,7 @@ const {
 
 const displayRubrics = rubricLabels.length > 0 ? rubricLabels : rubrics;
 const leadRubric = displayRubrics[0] ?? 'SCQR';
+const primaryRubricSlug = rubrics[0] ?? '';
 const topicPreview = topics.slice(0, 8);
 const articleDeck = deck?.trim() || description;
 const articleVerdict = scqrVerdict?.trim() || articleDeck;
@@ -80,125 +79,465 @@ const articleJsonLd = buildArticleJsonLd({
 
 	<body>
 		<Header />
-		<TickerBar />
-		<main class="main-shell">
+		<main class="article-page container">
 			<article class="article-shell">
-				<section class="article-hero">
-					<div class:list={['article-hero__frame', !heroImage && 'article-hero__frame--text-only']}>
-						<div class="article-hero__content">
-							<div class="article-meta-row">
-								<div class="article-chip-row">
-									{
-										displayRubrics.map((rubric) => (
-											<span class="article-chip"><RubricLabel name={rubric} /></span>
-										))
-									}
-									<span class="article-chip article-chip-muted">{getArticleTypeLabelFromValue(articleType)}</span>
-									<span class="article-chip article-chip-muted">{readingTime} мин</span>
-								</div>
-								<div class="article-date-row">
-									<FormattedDate date={pubDate} />
-									{
-										updatedDate && (
-											<span class="article-updated">
-												Обновлено <FormattedDate date={updatedDate} />
-											</span>
-										)
-									}
-								</div>
-							</div>
-							<h1 class="article-title">{title}</h1>
-							<p class="article-dek">{articleDeck}</p>
-						</div>
+				<header class="article-header">
+					<div class="article-meta-row">
 						{
-							heroImage && (
-								<div class="article-hero__media">
-									<Image width={1440} height={960} src={heroImage} alt={heroAlt} />
-								</div>
+							primaryRubricSlug && displayRubrics[0] && (
+								<a href={`/rubric/${primaryRubricSlug}/`} class="article-pill article-pill--rubric">
+									{displayRubrics[0]}
+								</a>
+							)
+						}
+						<span class="article-pill article-pill--type">{getArticleTypeLabelFromValue(articleType)}</span>
+						<span class="article-time">{readingTime} мин</span>
+						<span class="article-meta-divider"></span>
+						<time class="article-date" datetime={pubDate.toISOString()}>
+							<FormattedDate date={pubDate} />
+						</time>
+						{
+							updatedDate && (
+								<span class="article-updated">
+									обновлено <FormattedDate date={updatedDate} />
+								</span>
 							)
 						}
 					</div>
-				</section>
+					<h1 class="article-title">{title}</h1>
+					<p class="article-deck">{articleDeck}</p>
+				</header>
 
-				<section class="article-verdict">
-					<span class="article-verdict__kicker">SCQR вывод</span>
-					<p>{articleVerdict}</p>
-				</section>
+				{
+					heroImage && (
+						<figure class="article-cover">
+							<Image width={1440} height={810} src={heroImage} alt={heroAlt} />
+						</figure>
+					)
+				}
 
-				<div class="article-reading-layout">
-					<div class="article-frame prose">
+				<div class="article-grid">
+					<div class="article-body prose">
 						<slot />
 					</div>
 
-					<aside class="article-reading-rail" aria-label="Контекст материала">
-						<div class="article-rail-block">
-							<span class="article-rail__kicker">Формат</span>
-							<ul class="article-rail__list">
-								<li>{getArticleTypeLabelFromValue(articleType)}</li>
-								<li>{readingTime} мин</li>
-								<li><FormattedDate date={pubDate} /></li>
-							</ul>
+					<aside class="article-sidebar" aria-label="Контекст материала">
+						<div class="article-rail article-rail--verdict">
+							<span class="article-rail__kicker">Вывод SCQR</span>
+							<p>{articleVerdict}</p>
 						</div>
 
-						{sourceNote && (
-							<div class="article-rail-block">
-								<span class="article-rail__kicker">Основание публикации</span>
-								<p>{sourceNote}</p>
-							</div>
-						)}
-
-						{showClusterCard && (
-							<div class="article-rail-block">
-								<span class="article-rail__kicker">Сюжет</span>
-								<a class="article-reading-rail__story" href={getClusterHref(clusterSlug!)}>
-									<strong>{clusterTitle}</strong>
-									<span>{clusterSize} материалов в одной линии</span>
-								</a>
-							</div>
-						)}
-
-						{topicPreview.length > 0 && (
-							<div class="article-rail-block">
-								<span class="article-rail__kicker">Темы</span>
-								<div class="article-chip-row article-chip-row--tight">
-									{topicPreview.map((topic) => (
-										<a href={getTopicHref(topic)} class="article-chip article-chip-muted article-chip-link">{topic}</a>
-									))}
+						{
+							sourceNote && (
+								<div class="article-rail">
+									<span class="article-rail__kicker">Основание публикации</span>
+									<p>{sourceNote}</p>
 								</div>
-							</div>
-						)}
+							)
+						}
 
-						{nextStrong && (
-							<div class="article-rail-block">
-								<span class="article-rail__kicker">Следующий сильный материал</span>
-								<a class="article-reading-rail__story" href={getPostHref(nextStrong)}>
-									<strong>{nextStrong.data.title}</strong>
-									<span>{getDeck(nextStrong)}</span>
+						{
+							topicPreview.length > 0 && (
+								<div class="article-rail">
+									<span class="article-rail__kicker">Темы</span>
+									<div class="article-tags">
+										{topicPreview.map((topic) => (
+											<a href={getTopicHref(topic)} class="article-tag">{topic}</a>
+										))}
+									</div>
+								</div>
+							)
+						}
+
+						{
+							showClusterCard && (
+								<a class="article-rail article-rail--story" href={getClusterHref(clusterSlug!)}>
+									<span class="article-rail__kicker">Сюжет</span>
+									<strong>{clusterTitle}</strong>
+									<span class="article-rail__sub">{clusterSize} материалов в одной линии</span>
 								</a>
-							</div>
-						)}
+							)
+						}
 					</aside>
 				</div>
 
-				<section class="article-exit-grid" aria-label="Следующие переходы">
-					{showClusterCard && (
-						<a class="article-exit-card" href={getClusterHref(clusterSlug!)}>
-							<span class="article-exit-card__kicker">По этому сюжету</span>
-							<strong>{clusterTitle}</strong>
-							<p>{clusterSize} материалов в одной редакционной линии.</p>
-						</a>
-					)}
+				{
+					nextStrong && (
+						<section class="article-exit" aria-label="Следующий сильный материал">
+							<a class="article-exit-card" href={getPostHref(nextStrong)}>
+								<span class="article-exit__kicker">Следующий сильный материал</span>
+								<strong>{nextStrong.data.title}</strong>
+								<p>{getDeck(nextStrong)}</p>
+							</a>
+						</section>
+					)
+				}
 
-					{nextStrong && (
-						<a class="article-exit-card article-exit-card--story" href={getPostHref(nextStrong)}>
-							<span class="article-exit-card__kicker">Следующий сильный материал</span>
-							<strong>{nextStrong.data.title}</strong>
-							<p>{getDeck(nextStrong)}</p>
-						</a>
-					)}
-				</section>
+				<div class="article-newsletter">
+					<HomeNewsletterBanner />
+				</div>
 			</article>
 		</main>
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.article-page {
+		padding-top: 32px;
+		padding-bottom: 64px;
+	}
+	.article-shell {
+		max-width: 1100px;
+		margin: 0 auto;
+	}
+
+	/* ---- Header ---- */
+	.article-header {
+		max-width: 760px;
+	}
+	.article-meta-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		align-items: center;
+		margin-bottom: 16px;
+	}
+	.article-pill {
+		display: inline-flex;
+		align-items: center;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		padding: 5px 10px;
+		border-radius: 999px;
+		text-decoration: none;
+	}
+	.article-pill--rubric {
+		background: var(--violet-50);
+		color: var(--violet-600);
+		border: 1px solid var(--violet-100);
+	}
+	.article-pill--rubric:hover {
+		background: var(--violet-100);
+	}
+	.article-pill--type {
+		background: #fff;
+		color: var(--ink-700);
+		border: 1px solid var(--line);
+	}
+	.article-time {
+		font-family: var(--font-mono);
+		font-size: 13px;
+		color: var(--ink-500);
+		font-weight: 500;
+	}
+	.article-meta-divider {
+		width: 3px;
+		height: 3px;
+		border-radius: 50%;
+		background: var(--ink-300);
+	}
+	.article-date {
+		font-family: var(--font-body);
+		font-size: 13px;
+		color: var(--ink-500);
+	}
+	.article-updated {
+		font-family: var(--font-body);
+		font-size: 12px;
+		color: var(--ink-400);
+	}
+	.article-title {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 40px;
+		line-height: 1.15;
+		letter-spacing: -0.025em;
+		color: var(--ink-900);
+		margin: 0 0 16px;
+		text-wrap: balance;
+	}
+	.article-deck {
+		font-family: var(--font-body);
+		font-size: 18px;
+		line-height: 1.55;
+		color: var(--ink-700);
+		margin: 0;
+		text-wrap: pretty;
+	}
+
+	/* ---- Cover ---- */
+	.article-cover {
+		margin: 28px 0 0;
+		border-radius: 12px;
+		overflow: hidden;
+		border: 1px solid var(--line);
+		max-width: 760px;
+	}
+	.article-cover :global(img) {
+		width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	/* ---- Grid ---- */
+	.article-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 320px;
+		gap: 48px;
+		margin-top: 32px;
+		align-items: start;
+	}
+
+	/* ---- Body / prose ---- */
+	.article-body {
+		max-width: 720px;
+	}
+	.prose {
+		font-family: var(--font-body);
+		font-size: 17px;
+		line-height: 1.7;
+		color: var(--ink-900);
+	}
+	.prose :global(p) {
+		margin: 0 0 18px;
+		text-wrap: pretty;
+	}
+	.prose :global(p:last-child) {
+		margin-bottom: 0;
+	}
+	.prose :global(h2) {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 26px;
+		line-height: 1.25;
+		letter-spacing: -0.02em;
+		margin: 32px 0 14px;
+		color: var(--ink-900);
+	}
+	.prose :global(h3) {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 20px;
+		line-height: 1.3;
+		margin: 28px 0 12px;
+		color: var(--ink-900);
+	}
+	.prose :global(a) {
+		color: var(--violet-600);
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 2px;
+	}
+	.prose :global(a:hover) {
+		color: var(--violet-700);
+	}
+	.prose :global(blockquote) {
+		margin: 24px 0;
+		padding: 4px 0 4px 20px;
+		border-left: 3px solid var(--violet-500);
+		color: var(--ink-700);
+		font-style: normal;
+	}
+	.prose :global(strong) {
+		font-weight: 600;
+		color: var(--ink-900);
+	}
+	.prose :global(em) {
+		font-style: italic;
+	}
+	.prose :global(ul),
+	.prose :global(ol) {
+		margin: 0 0 18px;
+		padding-left: 22px;
+	}
+	.prose :global(li) {
+		margin-bottom: 6px;
+	}
+	.prose :global(figure) {
+		margin: 28px 0;
+	}
+	.prose :global(figure img) {
+		width: 100%;
+		height: auto;
+		display: block;
+		border-radius: 8px;
+		border: 1px solid var(--line);
+	}
+	.prose :global(figcaption) {
+		font-family: var(--font-body);
+		font-size: 13px;
+		color: var(--ink-500);
+		margin-top: 10px;
+		line-height: 1.45;
+		text-align: center;
+	}
+	.prose :global(hr) {
+		border: 0;
+		border-top: 1px solid var(--line);
+		margin: 32px 0;
+	}
+
+	/* ---- Sidebar ---- */
+	.article-sidebar {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		position: sticky;
+		top: 96px;
+	}
+	.article-rail {
+		background: #fff;
+		border: 1px solid var(--line);
+		border-radius: 12px;
+		padding: 18px 20px;
+		text-decoration: none;
+		color: inherit;
+		display: block;
+	}
+	.article-rail--verdict {
+		background: var(--violet-50);
+		border-color: var(--violet-100);
+	}
+	.article-rail--story {
+		background: var(--blue-50);
+		border-color: var(--blue-100);
+	}
+	.article-rail--story:hover {
+		background: var(--blue-100);
+	}
+	.article-rail__kicker {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--violet-600);
+		display: block;
+		margin-bottom: 10px;
+	}
+	.article-rail--verdict .article-rail__kicker {
+		color: var(--violet-700);
+	}
+	.article-rail p {
+		font-family: var(--font-body);
+		font-size: 14px;
+		line-height: 1.55;
+		color: var(--ink-900);
+		margin: 0;
+	}
+	.article-rail--verdict p {
+		font-size: 15px;
+		font-weight: 500;
+	}
+	.article-rail strong {
+		display: block;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 15px;
+		line-height: 1.3;
+		color: var(--ink-900);
+		margin-bottom: 6px;
+	}
+	.article-rail__sub {
+		font-family: var(--font-body);
+		font-size: 12px;
+		color: var(--ink-500);
+	}
+	.article-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+	}
+	.article-tag {
+		font-family: var(--font-body);
+		font-size: 12px;
+		color: var(--ink-700);
+		background: var(--paper-3);
+		padding: 4px 10px;
+		border-radius: 999px;
+		border: 1px solid var(--line);
+		text-decoration: none;
+	}
+	.article-tag:hover {
+		background: var(--violet-50);
+		color: var(--violet-700);
+		border-color: var(--violet-100);
+	}
+
+	/* ---- Exit / next ---- */
+	.article-exit {
+		max-width: 760px;
+		margin: 48px 0 0;
+	}
+	.article-exit-card {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+		background: var(--paper-2);
+		border: 1px solid var(--line);
+		border-radius: 12px;
+		padding: 24px 28px;
+		transition: border-color 120ms, box-shadow 120ms, background 120ms;
+	}
+	.article-exit-card:hover {
+		border-color: var(--line-strong);
+		background: #fff;
+		box-shadow: var(--shadow-1);
+	}
+	.article-exit__kicker {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--violet-600);
+		display: block;
+		margin-bottom: 8px;
+	}
+	.article-exit-card strong {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 22px;
+		line-height: 1.25;
+		letter-spacing: -0.015em;
+		color: var(--ink-900);
+		display: block;
+		margin-bottom: 8px;
+	}
+	.article-exit-card p {
+		font-family: var(--font-body);
+		font-size: 15px;
+		line-height: 1.55;
+		color: var(--ink-700);
+		margin: 0;
+	}
+
+	.article-newsletter {
+		margin-top: 48px;
+	}
+
+	/* ---- Mobile ---- */
+	@media (max-width: 920px) {
+		.article-grid {
+			grid-template-columns: 1fr;
+			gap: 32px;
+		}
+		.article-sidebar {
+			position: static;
+			top: auto;
+		}
+		.article-title {
+			font-size: 30px;
+		}
+		.article-deck {
+			font-size: 16px;
+		}
+		.prose {
+			font-size: 16px;
+		}
+	}
+</style>

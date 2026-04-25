@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Body type</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 24px; }
+  .row { display: flex; flex-direction: column; gap: 14px; }
+  .item { display: flex; align-items: flex-start; gap: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .item:last-child { border: 0; }
+  .specimen { font-family: var(--font-body); color: var(--ink-700); flex: 1; line-height: 1.6; max-width: 460px; }
+  .meta { font-family: var(--font-mono); font-size: 11px; color: var(--ink-500); white-space: nowrap; min-width: 180px; padding-top: 4px; }
+</style></head>
+<body>
+<div class="row">
+  <div class="item"><div class="specimen" style="font-size:18px; line-height:1.55;">Lede — модель понимает текст, изображения и звук одновременно.</div><div class="meta">Inter 400 · 18 / 1.55</div></div>
+  <div class="item"><div class="specimen" style="font-size:16px;">Body — Anthropic выпустила Claude 3.5 Sonnet — лидер в бенчмарках. Модель показывает уверенный рост на тестах рассуждения и кода.</div><div class="meta">Inter 400 · 16 / 1.6</div></div>
+  <div class="item"><div class="specimen" style="font-size:14px; line-height:1.55;">Body small — для подписей карточек, sidebar-feed заголовков и компактных описаний рубрик.</div><div class="meta">Inter 400 · 14 / 1.55</div></div>
+  <div class="item"><div class="specimen" style="font-size:13px; color: var(--ink-500);">Meta — 16 мая 2024 · 12 684 просмотров · 4 мин чтения</div><div class="meta">Inter 400 · 13 · ink-500</div></div>
+</div>
+</body></html>

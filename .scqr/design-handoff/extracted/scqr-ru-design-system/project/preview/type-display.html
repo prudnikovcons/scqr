@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Display type</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 24px 24px 20px; }
+  .row { display: flex; flex-direction: column; gap: 14px; }
+  .item { display: flex; align-items: baseline; gap: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .item:last-child { border: 0; }
+  .specimen { font-family: var(--font-display); color: var(--ink-900); flex: 1; line-height: 1.1; letter-spacing: -0.022em; font-weight: 700; }
+  .meta { font-family: var(--font-mono); font-size: 11px; color: var(--ink-500); white-space: nowrap; }
+</style></head>
+<body>
+<div class="row">
+  <div class="item"><div class="specimen" style="font-size:42px; letter-spacing:-0.025em;">Заголовок H1</div><div class="meta">Manrope 700 · 48 / 1.15 · -0.025em</div></div>
+  <div class="item"><div class="specimen" style="font-size:30px;">Заголовок H2</div><div class="meta">Manrope 700 · 32 / 1.15 · -0.02em</div></div>
+  <div class="item"><div class="specimen" style="font-size:22px; letter-spacing:-0.01em;">Заголовок H3</div><div class="meta">Manrope 700 · 24 / 1.15 · -0.01em</div></div>
+  <div class="item"><div class="specimen" style="font-size:18px; letter-spacing:-0.01em;">Заголовок H4</div><div class="meta">Manrope 700 · 20 / 1.15 · -0.01em</div></div>
+</div>
+</body></html>

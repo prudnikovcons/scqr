@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Buttons</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 24px; }
+  .stack { display: flex; flex-direction: column; gap: 14px; }
+  .group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .label { font-family: var(--font-mono); font-size: 11px; color: var(--ink-500); width: 80px; }
+  .btn {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 11px 18px;
+    cursor: pointer;
+    transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+    letter-spacing: -0.005em;
+  }
+  /* Primary */
+  .btn-primary { background: var(--violet-500); color: #fff; }
+  .btn-primary.hover { background: var(--violet-600); }
+  .btn-primary.press { background: var(--violet-700); }
+  .btn-primary.disabled { background: var(--ink-300); cursor: default; }
+  /* Secondary */
+  .btn-secondary { background: #fff; color: var(--ink-900); border-color: var(--line); }
+  .btn-secondary.hover { border-color: var(--ink-900); }
+  .btn-secondary.press { background: var(--paper-3); border-color: var(--ink-900); }
+  /* Ghost */
+  .btn-ghost { background: transparent; color: var(--violet-600); }
+  .btn-ghost.hover { background: var(--violet-50); }
+  .btn-ghost.press { background: var(--violet-100); }
+
+  .sm { font-size: 13px; padding: 8px 14px; border-radius: 6px; }
+</style></head>
+<body>
+<div class="stack">
+  <div class="group">
+    <span class="label">Primary</span>
+    <button class="btn btn-primary">Подписаться</button>
+    <button class="btn btn-primary hover">Подписаться</button>
+    <button class="btn btn-primary press">Подписаться</button>
+    <button class="btn btn-primary disabled">Подписаться</button>
+  </div>
+  <div class="group">
+    <span class="label">Secondary</span>
+    <button class="btn btn-secondary">Все новости</button>
+    <button class="btn btn-secondary hover">Все новости</button>
+    <button class="btn btn-secondary press">Все новости</button>
+  </div>
+  <div class="group">
+    <span class="label">Ghost</span>
+    <button class="btn btn-ghost">Читать дальше</button>
+    <button class="btn btn-ghost hover">Читать дальше</button>
+    <button class="btn btn-ghost press">Читать дальше</button>
+  </div>
+  <div class="group">
+    <span class="label">Sizes</span>
+    <button class="btn btn-primary sm">Подписаться</button>
+    <button class="btn btn-primary">Подписаться</button>
+    <button class="btn btn-primary" style="font-size:15px; padding:14px 22px;">Подписаться на рассылку</button>
+  </div>
+</div>
+</body></html>

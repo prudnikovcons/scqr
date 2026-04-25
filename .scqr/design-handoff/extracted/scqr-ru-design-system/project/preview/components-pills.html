@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Pills &amp; tags</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 24px; }
+  .row { display: flex; flex-direction: column; gap: 14px; }
+  .group { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .label { font-family: var(--font-mono); font-size: 11px; color: var(--ink-500); width: 110px; }
+
+  .pill {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 999px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pill-filled { background: var(--violet-500); color: #fff; }
+  .pill-soft   { background: var(--violet-50); color: var(--violet-600); }
+  .pill-soft-blue { background: var(--blue-50); color: #1c70c9; }
+  .pill-outline{ background: #fff; border: 1px solid var(--line-strong); color: var(--ink-700); }
+  .pill-event-violet { background: var(--violet-50); color: var(--violet-600); }
+
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .9; }
+</style></head>
+<body>
+<div class="row">
+  <div class="group">
+    <span class="label">Featured</span>
+    <span class="pill pill-filled">ГЛАВНОЕ</span>
+    <span class="pill pill-filled">ЭКСКЛЮЗИВ</span>
+  </div>
+  <div class="group">
+    <span class="label">Outline</span>
+    <span class="pill pill-outline">Модели</span>
+    <span class="pill pill-outline">Инструменты</span>
+    <span class="pill pill-outline">Бизнес</span>
+    <span class="pill pill-outline">Исследования</span>
+  </div>
+  <div class="group">
+    <span class="label">Soft violet</span>
+    <span class="pill pill-soft"><span class="dot"></span>Новый выпуск</span>
+    <span class="pill pill-soft">Конференция</span>
+    <span class="pill pill-soft">Митап</span>
+    <span class="pill pill-soft">Вебинар</span>
+  </div>
+  <div class="group">
+    <span class="label">Soft blue</span>
+    <span class="pill pill-soft-blue">Обновление</span>
+    <span class="pill pill-soft-blue">Анонс</span>
+  </div>
+</div>
+</body></html>

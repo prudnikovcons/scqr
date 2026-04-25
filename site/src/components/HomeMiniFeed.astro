@@ -1,0 +1,87 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getPostHref, getPrimaryRubric, RUBRIC_CONFIG } from '../lib/site';
+
+const rubricLabelLookup = new Map(RUBRIC_CONFIG.map((r) => [r.slug, r.label]));
+
+type PostEntry = CollectionEntry<'posts'>;
+
+interface Props {
+	items: PostEntry[];
+}
+
+const { items } = Astro.props;
+
+function formatTimestamp(date: Date): string {
+	const now = new Date();
+	const sameDay =
+		date.getFullYear() === now.getFullYear() &&
+		date.getMonth() === now.getMonth() &&
+		date.getDate() === now.getDate();
+	const yesterday = new Date(now);
+	yesterday.setDate(now.getDate() - 1);
+	const isYesterday =
+		date.getFullYear() === yesterday.getFullYear() &&
+		date.getMonth() === yesterday.getMonth() &&
+		date.getDate() === yesterday.getDate();
+	const hh = String(date.getHours()).padStart(2, '0');
+	const mm = String(date.getMinutes()).padStart(2, '0');
+	if (sameDay) return `${hh}:${mm}`;
+	if (isYesterday) return `Вчера, ${hh}:${mm}`;
+	return date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
+}
+
+const logoStyles = [
+	{ bg: '#f4f4f5', fg: '#0D1117' },
+	{ bg: '#000', fg: '#fff' },
+	{ bg: '#76b900', fg: '#fff' },
+	{ bg: 'linear-gradient(135deg,#3AA0FF,#6C4DFF)', fg: '#fff' },
+	{ bg: 'linear-gradient(135deg,#6C4DFF,#3AA0FF)', fg: '#fff' },
+];
+
+const feedItems = items.slice(0, 5).map((post, index) => {
+	const rubricSlug = getPrimaryRubric(post);
+	const rubricLabel = rubricLabelLookup.get(rubricSlug) ?? 'НОВОСТИ';
+	const logoStyle = logoStyles[index % logoStyles.length];
+	const firstChar = (post.data.title || '?').charAt(0).toUpperCase();
+	return {
+		href: getPostHref(post),
+		ts: formatTimestamp(post.data.pubDate),
+		rubricLabel: rubricLabel.toUpperCase(),
+		title: post.data.title,
+		logoBg: logoStyle.bg,
+		logoFg: logoStyle.fg,
+		mark: firstChar,
+	};
+});
+---
+
+<aside class="feed">
+	<div class="feed-hdr">
+		<h4>Лента новостей</h4>
+		<a href="/blog/">Все новости →</a>
+	</div>
+	{
+		feedItems.map((item) => (
+			<a class="feed-item" href={item.href}>
+				<div>
+					<span class="ts">{item.ts}</span>
+					<span class="eb">/ {item.rubricLabel}</span>
+					<div class="title">{item.title}</div>
+				</div>
+				<div class="logo" style={`background:${item.logoBg};color:${item.logoFg};`}>
+					{item.mark}
+				</div>
+			</a>
+		))
+	}
+	<a class="feed-more" href="/blog/">Больше новостей</a>
+</aside>
+
+<style>
+	.feed-item,
+	.feed-more {
+		text-decoration: none;
+		color: inherit;
+	}
+</style>

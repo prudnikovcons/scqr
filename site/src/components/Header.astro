@@ -1,35 +1,179 @@
 ---
-import { SITE_TITLE } from '../consts';
-import { RUBRIC_CONFIG } from '../lib/site';
-import RubricLabel from './RubricLabel.astro';
+const navItems = [
+	{ href: '/', label: 'Новости' },
+	{ href: '/blog/', label: 'Статьи' },
+	{ href: '/blog/?type=analysis', label: 'Обзоры' },
+	{ href: '/rubric/instrumenty/', label: 'Инструменты' },
+	{ href: '#', label: 'Конкурсы' },
+	{ href: '#', label: 'События' },
+	{ href: '#', label: 'Видео' },
+	{ href: '#', label: 'Подкасты' },
+	{ href: '/about/', label: 'Словарь' },
+];
+
+const currentPath = Astro.url.pathname;
 ---
 
-<header class="site-header">
-	<div class="site-header__inner">
-		<a class="site-brand" href="/">
-			<span class="site-brand__mark">{SITE_TITLE}<i>.</i></span>
-		</a>
-
-		<nav class="site-rubric-nav" aria-label="Рубрики">
+<header class="nav-wrap">
+	<div class="container">
+		<div class="nav-row1">
+			<a class="nav-logo" href="/" aria-label="SCQR.RU — на главную">
+				SCQ<span class="ru">R.RU</span>
+			</a>
+			<span class="nav-tagline">новости искусственного интеллекта</span>
+			<span class="nav-actions">
+				<button class="nav-search-icon" aria-label="Поиск" type="button">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<circle cx="11" cy="11" r="7" />
+						<path d="m21 21-4.3-4.3" />
+					</svg>
+				</button>
+				<a href="#subscribe" class="nav-cta">Подписаться</a>
+				<a class="nav-avatar" href="/about/" aria-label="О проекте">
+					<img src="/mascot/avatar.png" alt="" width="38" height="38" loading="lazy" />
+				</a>
+			</span>
+		</div>
+		<nav class="nav-row2" aria-label="Разделы">
 			{
-				RUBRIC_CONFIG.map((rubric) => (
-					<a href={`/rubric/${rubric.slug}/`} class={`site-rubric-nav__item tone--${rubric.tone}`}>
-						<RubricLabel name={rubric.label} />
-					</a>
-				))
+				navItems.map((item) => {
+					const isActive = item.href === currentPath || (item.href === '/' && currentPath === '/');
+					return (
+						<a href={item.href} class={isActive ? 'active' : ''}>
+							{item.label}
+						</a>
+					);
+				})
 			}
 		</nav>
-
-		<div class="site-header__aside">
-			<a href="/blog" class="site-header__link">Архив</a>
-			<a href="/rss.xml" class="site-header__link site-header__rss" aria-label="RSS">
-				<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<circle cx="2.5" cy="11.5" r="1.5" fill="currentColor"/>
-					<path d="M1 6.5C4.03757 6.5 6.5 8.96243 6.5 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-					<path d="M1 2C6.52285 2 11 6.47715 11 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-				</svg>
-				RSS
-			</a>
-		</div>
 	</div>
 </header>
+
+<style>
+	/* TopNav — ported from Claude Design handoff (ui_kits/website/site.css) */
+	.nav-wrap {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		background: rgba(255, 255, 255, 0.95);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+		border-bottom: 1px solid var(--line);
+	}
+	.nav-row1 {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		padding: 14px 0;
+	}
+	.nav-logo {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: 22px;
+		letter-spacing: -0.025em;
+		color: var(--ink-900);
+		line-height: 1;
+		text-decoration: none;
+	}
+	.nav-logo .ru {
+		color: var(--violet-500);
+	}
+	.nav-tagline {
+		font-family: var(--font-body);
+		font-size: 12px;
+		color: var(--ink-500);
+		max-width: 150px;
+		line-height: 1.3;
+	}
+	.nav-actions {
+		margin-left: auto;
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+	.nav-search-icon {
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		border: 1px solid var(--line);
+		background: #fff;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--ink-700);
+		cursor: pointer;
+		transition: border-color 120ms;
+	}
+	.nav-search-icon:hover {
+		border-color: var(--line-strong);
+		color: var(--violet-600);
+	}
+	.nav-cta {
+		border: 1px solid var(--violet-500);
+		background: #fff;
+		color: var(--violet-600);
+		border-radius: 999px;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 14px;
+		padding: 8px 18px;
+		cursor: pointer;
+		text-decoration: none;
+		transition: background 120ms, color 120ms;
+	}
+	.nav-cta:hover {
+		background: var(--violet-500);
+		color: #fff;
+	}
+	.nav-avatar {
+		width: 38px;
+		height: 38px;
+		border-radius: 50%;
+		overflow: hidden;
+		background: var(--paper-3);
+		border: 1px solid var(--line);
+		display: block;
+	}
+	.nav-avatar img {
+		width: 130%;
+		height: auto;
+		max-width: none;
+		transform: translate(-12%, 8%);
+	}
+	.nav-row2 {
+		display: flex;
+		gap: 22px;
+		padding: 0 0 12px;
+		flex-wrap: wrap;
+	}
+	.nav-row2 a {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 14px;
+		color: var(--ink-900);
+		text-decoration: none;
+		padding: 4px 0;
+		transition: color 120ms;
+	}
+	.nav-row2 a.active {
+		color: var(--violet-600);
+	}
+	.nav-row2 a:hover {
+		color: var(--violet-600);
+	}
+
+	@media (max-width: 720px) {
+		.nav-tagline {
+			display: none;
+		}
+		.nav-row2 {
+			gap: 14px;
+			overflow-x: auto;
+			-webkit-overflow-scrolling: touch;
+			padding-bottom: 12px;
+		}
+		.nav-row2 a {
+			white-space: nowrap;
+		}
+	}
+</style>

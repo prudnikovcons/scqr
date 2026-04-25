@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Pills &amp; tags</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 24px; }
+  .stack { display: flex; flex-direction: column; gap: 14px; }
+  .group { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .label { font-family: var(--font-mono); font-size: 11px; color: var(--ink-500); width: 110px; flex-shrink: 0; }
+  .pill {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 999px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pill.filled { background: var(--violet-500); color: #fff; }
+  .pill.outline { background: #fff; color: var(--ink-700); border: 1px solid var(--line-strong); }
+  .pill.outline-violet { background: #fff; color: var(--violet-600); border: 1px solid var(--violet-100); }
+  .pill.soft { background: var(--violet-50); color: var(--violet-600); }
+  .pill.soft-blue { background: var(--blue-50); color: #1568B8; }
+  .pill.event { background: var(--violet-50); color: var(--violet-600); text-transform: none; letter-spacing: 0; font-weight: 600; font-size: 12px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+</style></head>
+<body>
+<div class="stack">
+  <div class="group">
+    <span class="label">Featured</span>
+    <span class="pill filled">ГЛАВНОЕ</span>
+    <span class="pill filled"><span class="dot" style="background:#fff;"></span>NEW</span>
+  </div>
+  <div class="group">
+    <span class="label">Categories</span>
+    <span class="pill outline">МОДЕЛИ</span>
+    <span class="pill outline">ИНСТРУМЕНТЫ</span>
+    <span class="pill outline">БИЗНЕС</span>
+    <span class="pill outline">ИССЛЕДОВАНИЯ</span>
+    <span class="pill outline">МНЕНИЕ</span>
+  </div>
+  <div class="group">
+    <span class="label">Soft / status</span>
+    <span class="pill soft">Новый выпуск</span>
+    <span class="pill soft">Обновление</span>
+    <span class="pill soft-blue">В прямом эфире</span>
+  </div>
+  <div class="group">
+    <span class="label">Event</span>
+    <span class="pill event">Конференция</span>
+    <span class="pill event">Митап</span>
+    <span class="pill event">Вебинар</span>
+  </div>
+</div>
+</body></html>

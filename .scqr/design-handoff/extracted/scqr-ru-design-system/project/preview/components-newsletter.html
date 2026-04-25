@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Newsletter banner</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 18px; }
+  .banner {
+    background: var(--violet-50);
+    border-radius: 16px;
+    border: 1px solid var(--violet-100);
+    padding: 0 24px 0 0;
+    display: grid;
+    grid-template-columns: 130px 1fr auto;
+    align-items: center;
+    gap: 18px;
+    overflow: hidden;
+  }
+  .mascot { width: 130px; height: 130px; background: #fff; display: flex; align-items: end; justify-content: center; overflow: hidden; }
+  .mascot img { width: 130%; object-fit: cover; }
+  .copy { padding: 18px 0; }
+  .pitch { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--ink-900); line-height: 1.2; }
+  .pitch .ru { color: var(--violet-600); }
+  .feats { display: flex; gap: 18px; margin-top: 10px; }
+  .feat { font-family: var(--font-body); font-size: 11px; color: var(--ink-700); display: flex; align-items: center; gap: 6px; }
+  .feat .dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--violet-500); }
+  button {
+    background: var(--violet-500); color: #fff; border: 0; border-radius: 10px;
+    font-family: var(--font-display); font-weight: 700; font-size: 13px;
+    padding: 12px 18px; cursor: pointer; line-height: 1;
+  }
+</style></head>
+<body>
+<div class="banner">
+  <div class="mascot"><img src="../assets/mascot/mascot-hero.png" alt=""/></div>
+  <div class="copy">
+    <div class="pitch">Будь в курсе будущего вместе с <span class="ru">SCQR.RU</span></div>
+    <div class="feats">
+      <span class="feat"><span class="dot"></span>Только проверенные новости</span>
+      <span class="feat"><span class="dot"></span>Экспертные мнения и аналитика</span>
+      <span class="feat"><span class="dot"></span>Удобно, быстро и без воды</span>
+    </div>
+  </div>
+  <button>Подписаться на рассылку</button>
+</div>
+</body></html>

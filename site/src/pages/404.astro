@@ -1,0 +1,111 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="ru">
+	<head>
+		<BaseHead title={`Страница не нашлась — ${SITE_TITLE}`} description="Адрес исчез или его никогда не было." />
+	</head>
+	<body>
+		<Header />
+		<main class="not-found container">
+			<div class="not-found__panel">
+				<img src="/mascot/lost.png" alt="" class="not-found__mascot" />
+				<span class="not-found__pill">404</span>
+				<h1>Страница не нашлась</h1>
+				<p>Адрес исчез или его никогда не было. Бывает.</p>
+				<div class="not-found__actions">
+					<a href="/" class="not-found__btn not-found__btn--primary">← На главную</a>
+					<a href="/blog" class="not-found__btn">Открыть архив</a>
+					<a href="/about" class="not-found__btn">О проекте</a>
+				</div>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.not-found {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 60vh;
+		padding: 48px 24px;
+	}
+	.not-found__panel {
+		max-width: 600px;
+		text-align: center;
+	}
+	.not-found__mascot {
+		width: 160px;
+		height: 160px;
+		object-fit: contain;
+		margin: 0 auto 24px;
+	}
+	.not-found__pill {
+		display: inline-block;
+		font-family: var(--font-mono);
+		font-weight: 500;
+		font-size: 13px;
+		letter-spacing: 0.08em;
+		padding: 4px 14px;
+		border-radius: 999px;
+		background: var(--violet-50);
+		color: var(--violet-600);
+		border: 1px solid var(--violet-100);
+		margin-bottom: 16px;
+	}
+	.not-found h1 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 36px;
+		line-height: 1.15;
+		letter-spacing: -0.025em;
+		color: var(--ink-900);
+		margin: 0 0 12px;
+	}
+	.not-found p {
+		font-family: var(--font-body);
+		font-size: 16px;
+		color: var(--ink-700);
+		margin: 0 0 24px;
+	}
+	.not-found__actions {
+		display: flex;
+		justify-content: center;
+		gap: 10px;
+		flex-wrap: wrap;
+	}
+	.not-found__btn {
+		display: inline-flex;
+		align-items: center;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 14px;
+		padding: 10px 18px;
+		border-radius: 999px;
+		text-decoration: none;
+		border: 1px solid var(--line);
+		background: #fff;
+		color: var(--ink-900);
+		transition: border-color 120ms, background 120ms, color 120ms;
+	}
+	.not-found__btn:hover {
+		border-color: var(--violet-500);
+		color: var(--violet-600);
+	}
+	.not-found__btn--primary {
+		background: var(--violet-500);
+		color: #fff;
+		border-color: var(--violet-500);
+	}
+	.not-found__btn--primary:hover {
+		background: var(--violet-600);
+		color: #fff;
+	}
+</style>
