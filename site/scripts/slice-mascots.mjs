@@ -116,16 +116,22 @@ async function slice() {
 		const cellH = Math.floor(meta.height / sheet.rows);
 		console.log(`${sheet.file}: ${meta.width}×${meta.height} → ${sheet.cols}×${sheet.rows} cells (${cellW}×${cellH} each)`);
 
+		// Inset ~6% of cell side to avoid neighbour-cell bleeds.
+		// Per-sheet override possible via sheet.inset.
+		const inset = sheet.inset ?? Math.round(Math.min(cellW, cellH) * 0.06);
+		const cropW = cellW - inset * 2;
+		const cropH = cellH - inset * 2;
+
 		let i = 1;
 		for (let r = 0; r < sheet.rows; r++) {
 			for (let c = 0; c < sheet.cols; c++) {
-				const left = c * cellW;
-				const top = r * cellH;
+				const left = c * cellW + inset;
+				const top = r * cellH + inset;
 				const outName = `${sheet.prefix}-${i}.png`;
 				const outPath = resolve(outDir, outName);
 				const previewPath = resolve(previewDir, outName);
 				await sharp(path)
-					.extract({ left, top, width: cellW, height: cellH })
+					.extract({ left, top, width: cropW, height: cropH })
 					.toFile(outPath);
 				// also write a smaller preview copy for inspection
 				await sharp(outPath)
