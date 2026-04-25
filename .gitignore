@@ -37,10 +37,13 @@ Thumbs.db
 .scqr/data.db
 .scqr/data.db-*
 .scqr/packs/
+.scqr/reviews/
 .scqr/jobs/
 .scqr/visual-queue/
 .scqr/style-corpus/
 .scqr/logs/
+.scqr/mascot-v2-preview/
+.scqr/mascot-v2-sheets/
 
 # Vercel
 .vercel/
