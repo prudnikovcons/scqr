@@ -1,14 +1,11 @@
 ---
 const navItems = [
-	{ href: '/', label: 'Новости' },
-	{ href: '/blog/', label: 'Статьи' },
-	{ href: '/blog/?type=analysis', label: 'Обзоры' },
-	{ href: '/rubric/instrumenty/', label: 'Инструменты' },
-	{ href: '#', label: 'Конкурсы' },
-	{ href: '#', label: 'События' },
-	{ href: '#', label: 'Видео' },
-	{ href: '#', label: 'Подкасты' },
-	{ href: '/about/', label: 'Словарь' },
+	{ href: '/', label: 'Главная' },
+	{ href: '/blog/', label: 'Архив' },
+	{ href: '/digest/', label: 'Дайджест' },
+	{ href: '/curated/', label: 'Подборка' },
+	{ href: '/glossary/', label: 'Словарь' },
+	{ href: '/about/', label: 'О проекте' },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -37,7 +34,10 @@ const currentPath = Astro.url.pathname;
 		<nav class="nav-row2" aria-label="Разделы">
 			{
 				navItems.map((item) => {
-					const isActive = item.href === currentPath || (item.href === '/' && currentPath === '/');
+					const isActive =
+						item.href === '/'
+							? currentPath === '/'
+							: currentPath === item.href || currentPath.startsWith(item.href);
 					return (
 						<a href={item.href} class={isActive ? 'active' : ''}>
 							{item.label}

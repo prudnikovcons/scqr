@@ -7,18 +7,49 @@ import Header from '../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import {
 	buildRubricSummary,
+	getDisplayRubrics,
 	getHeroAlt,
-	getRubricHref,
 	getVisiblePosts,
 	sortPosts,
 } from '../../lib/site';
 import { buildCollectionPageJsonLd } from '../../lib/structuredData';
 
 const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
-const rubricSummary = buildRubricSummary(posts);
+const rubricSummary = buildRubricSummary(posts).filter((rubric) => rubric.slug);
 const newsPosts = posts.filter((post) => post.data.articleType === 'news');
 const analysisPosts = posts.filter((post) => post.data.articleType === 'analysis');
 const columnPosts = posts.filter((post) => post.data.articleType === 'column');
+
+const rubricSections = rubricSummary.map((rubric) => ({
+	id: `rubric-${rubric.slug}`,
+	label: rubric.name,
+	count: rubric.count,
+	slug: rubric.slug,
+	posts: posts.filter((post) => getDisplayRubrics(post).includes(rubric.name)),
+}));
+
+type TabKind = 'type' | 'rubric';
+interface Tab {
+	id: string;
+	label: string;
+	count: number;
+	kind: TabKind;
+}
+
+const tabs: Tab[] = [
+	{ id: 'news', label: 'Новости', count: newsPosts.length, kind: 'type' },
+	{ id: 'analysis', label: 'Аналитика', count: analysisPosts.length, kind: 'type' },
+	{ id: 'columns', label: 'Колонки', count: columnPosts.length, kind: 'type' },
+	...rubricSections.map(
+		(section): Tab => ({
+			id: section.id,
+			label: section.label,
+			count: section.count,
+			kind: 'rubric',
+		}),
+	),
+];
+
 const archiveJsonLd = buildCollectionPageJsonLd({
 	title: `${SITE_TITLE} — Архив`,
 	description: SITE_DESCRIPTION,
@@ -45,65 +76,141 @@ const archiveJsonLd = buildCollectionPageJsonLd({
 				<span class="archive-intro__pill">АРХИВ</span>
 				<h1>Все материалы SCQR</h1>
 				<p>
-					Новости, аналитика и колонки о рынке искусственного интеллекта. Каждый материал
-					снабжён рубрикой, форматом и хронологией.
+					Новости, аналитика и колонки о рынке искусственного интеллекта. Переключайтесь
+					между форматами и рубриками — материалы остаются на одной странице.
 				</p>
-				<div class="archive-intro__stats">
-					<span><strong>{posts.length}</strong> материалов</span>
-					<span><strong>{rubricSummary.length}</strong> рубрик</span>
-					<span><strong>{newsPosts.length}</strong> новостей</span>
-					<span><strong>{analysisPosts.length}</strong> аналитики</span>
-					<span><strong>{columnPosts.length}</strong> колонок</span>
-				</div>
 			</section>
 
-			<nav class="archive-nav" aria-label="Разделы архива">
-				<a href="#news">Новости</a>
-				<a href="#analysis">Аналитика</a>
-				<a href="#columns">Колонки</a>
-				<span class="archive-nav__divider"></span>
+			<div class="archive-tabs" role="tablist" aria-label="Фильтры архива">
 				{
-					rubricSummary.slice(0, 6).map((rubric) =>
-						rubric.slug ? (
-							<a href={getRubricHref(rubric.slug)} class="archive-nav__rubric">
-								{rubric.name} <em>{rubric.count}</em>
-							</a>
-						) : null,
-					)
+					tabs.map((tab, index) => (
+						<>
+							{index === 3 && <span class="archive-tabs__divider" aria-hidden="true" />}
+							<button
+								type="button"
+								class={`archive-tab archive-tab--${tab.kind}`}
+								data-tab={tab.id}
+								role="tab"
+								aria-selected={tab.id === 'news' ? 'true' : 'false'}
+								aria-controls={`section-${tab.id}`}
+							>
+								<span class="archive-tab__label">{tab.label}</span>
+								{tab.count > 0 && <em class="archive-tab__count">{tab.count}</em>}
+							</button>
+						</>
+					))
 				}
-			</nav>
+			</div>
 
-			<section class="archive-section" id="news">
+			<section
+				class="archive-section"
+				id="section-news"
+				data-section="news"
+				data-active
+				aria-labelledby="head-news"
+			>
 				<header class="archive-section__head">
-					<h2>Новости</h2>
-					<a href="#top" class="archive-section__top">наверх · {newsPosts.length}</a>
+					<h2 id="head-news">Новости</h2>
+					<span class="archive-section__count">{newsPosts.length} материалов</span>
 				</header>
 				<div class="archive-list">
 					{newsPosts.map((post) => <ArchiveRow post={post} />)}
 				</div>
 			</section>
 
-			<section class="archive-section" id="analysis">
+			<section
+				class="archive-section"
+				id="section-analysis"
+				data-section="analysis"
+				aria-labelledby="head-analysis"
+			>
 				<header class="archive-section__head">
-					<h2>Аналитика</h2>
-					<a href="#top" class="archive-section__top">наверх · {analysisPosts.length}</a>
+					<h2 id="head-analysis">Аналитика</h2>
+					<span class="archive-section__count">{analysisPosts.length} материалов</span>
 				</header>
 				<div class="archive-list">
 					{analysisPosts.map((post) => <ArchiveRow post={post} />)}
 				</div>
 			</section>
 
-			<section class="archive-section" id="columns">
+			<section
+				class="archive-section"
+				id="section-columns"
+				data-section="columns"
+				aria-labelledby="head-columns"
+			>
 				<header class="archive-section__head">
-					<h2>Колонки</h2>
-					<a href="#top" class="archive-section__top">наверх · {columnPosts.length}</a>
+					<h2 id="head-columns">Колонки</h2>
+					<span class="archive-section__count">{columnPosts.length} материалов</span>
 				</header>
 				<div class="archive-list">
 					{columnPosts.map((post) => <ArchiveRow post={post} />)}
 				</div>
 			</section>
+
+			{
+				rubricSections.map((section) => (
+					<section
+						class="archive-section"
+						id={`section-${section.id}`}
+						data-section={section.id}
+						aria-labelledby={`head-${section.id}`}
+					>
+						<header class="archive-section__head">
+							<h2 id={`head-${section.id}`}>{section.label}</h2>
+							<span class="archive-section__count">{section.count} материалов</span>
+						</header>
+						<div class="archive-list">
+							{section.posts.map((post) => (
+								<ArchiveRow post={post} />
+							))}
+						</div>
+					</section>
+				))
+			}
 		</main>
 		<Footer />
+
+		<script is:inline>
+			(function () {
+				const tabs = document.querySelectorAll('.archive-tab');
+				const sections = document.querySelectorAll('[data-section]');
+				if (!tabs.length || !sections.length) return;
+
+				function activate(id) {
+					let matched = false;
+					tabs.forEach((tab) => {
+						const isActive = tab.dataset.tab === id;
+						tab.classList.toggle('active', isActive);
+						tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+						if (isActive) matched = true;
+					});
+					sections.forEach((section) => {
+						const isActive = section.dataset.section === id;
+						if (isActive) section.setAttribute('data-active', '');
+						else section.removeAttribute('data-active');
+					});
+					return matched;
+				}
+
+				tabs.forEach((tab) => {
+					tab.addEventListener('click', () => {
+						const id = tab.dataset.tab;
+						if (!id) return;
+						activate(id);
+						const url = new URL(window.location.href);
+						url.hash = id;
+						history.replaceState(null, '', url.toString());
+						window.scrollTo({ top: tab.closest('.archive-tabs').offsetTop - 80, behavior: 'smooth' });
+					});
+				});
+
+				const initial = window.location.hash ? window.location.hash.slice(1) : '';
+				if (!initial || !activate(initial)) {
+					activate('news');
+				}
+			})();
+		</script>
 	</body>
 </html>
 
@@ -115,7 +222,7 @@ const archiveJsonLd = buildCollectionPageJsonLd({
 	.archive-intro {
 		max-width: 760px;
 		text-align: center;
-		margin: 0 auto 48px;
+		margin: 0 auto 32px;
 	}
 	.archive-intro__pill {
 		display: inline-block;
@@ -145,62 +252,94 @@ const archiveJsonLd = buildCollectionPageJsonLd({
 		font-size: 16px;
 		line-height: 1.55;
 		color: var(--ink-700);
-		margin: 0 0 20px;
+		margin: 0;
 	}
-	.archive-intro__stats {
+
+	.archive-tabs {
 		display: flex;
-		justify-content: center;
-		gap: 24px;
-		flex-wrap: wrap;
-		font-family: var(--font-body);
-		font-size: 13px;
-		color: var(--ink-500);
-	}
-	.archive-intro__stats strong {
-		font-family: var(--font-display);
-		font-weight: 700;
-		color: var(--ink-900);
-		font-size: 16px;
-	}
-	.archive-nav {
-		display: flex;
-		gap: 16px;
-		flex-wrap: wrap;
-		align-items: center;
-		padding: 14px 18px;
-		background: var(--paper-2);
-		border: 1px solid var(--line);
-		border-radius: 12px;
+		gap: 8px;
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		padding: 12px 4px;
 		margin-bottom: 32px;
+		scroll-padding: 12px;
+		scrollbar-width: thin;
+		scrollbar-color: var(--line-strong) transparent;
+		position: sticky;
+		top: 88px;
+		background: rgba(255, 255, 255, 0.95);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+		z-index: 30;
+		border-bottom: 1px solid var(--line);
+	}
+	.archive-tabs::-webkit-scrollbar {
+		height: 6px;
+	}
+	.archive-tabs::-webkit-scrollbar-thumb {
+		background: var(--line-strong);
+		border-radius: 999px;
+	}
+	.archive-tabs__divider {
+		flex: 0 0 1px;
+		height: 22px;
+		align-self: center;
+		background: var(--line);
+		margin: 0 6px;
+	}
+	.archive-tab {
+		flex: 0 0 auto;
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
 		font-family: var(--font-display);
 		font-weight: 600;
 		font-size: 13px;
-	}
-	.archive-nav a {
-		color: var(--ink-900);
-		text-decoration: none;
-		padding: 4px 10px;
+		padding: 8px 14px;
 		border-radius: 999px;
-		transition: background 120ms;
+		border: 1px solid var(--line);
+		background: #fff;
+		color: var(--ink-900);
+		cursor: pointer;
+		white-space: nowrap;
+		transition: border-color 120ms, background 120ms, color 120ms;
 	}
-	.archive-nav a:hover {
-		background: var(--violet-50);
-		color: var(--violet-700);
+	.archive-tab:hover {
+		border-color: var(--line-strong);
+		color: var(--violet-600);
 	}
-	.archive-nav__divider {
-		width: 1px;
-		height: 16px;
-		background: var(--line);
+	.archive-tab.active {
+		background: var(--violet-500);
+		border-color: var(--violet-500);
+		color: #fff;
 	}
-	.archive-nav__rubric em {
+	.archive-tab.active:hover {
+		background: var(--violet-600);
+		border-color: var(--violet-600);
+	}
+	.archive-tab__count {
 		font-style: normal;
-		color: var(--ink-500);
+		font-family: var(--font-mono);
 		font-weight: 500;
-		margin-left: 4px;
+		font-size: 11px;
+		padding: 2px 7px;
+		border-radius: 999px;
+		background: var(--paper-2);
+		color: var(--ink-500);
 	}
+	.archive-tab.active .archive-tab__count {
+		background: rgba(255, 255, 255, 0.22);
+		color: #fff;
+	}
+
 	.archive-section {
-		margin-bottom: 56px;
+		display: none;
+		margin-bottom: 32px;
 		scroll-margin-top: 100px;
+	}
+	.archive-section[data-active] {
+		display: block;
 	}
 	.archive-section__head {
 		display: flex;
@@ -218,14 +357,10 @@ const archiveJsonLd = buildCollectionPageJsonLd({
 		margin: 0;
 		color: var(--ink-900);
 	}
-	.archive-section__top {
+	.archive-section__count {
 		font-family: var(--font-body);
 		font-size: 12px;
 		color: var(--ink-500);
-		text-decoration: none;
-	}
-	.archive-section__top:hover {
-		color: var(--violet-600);
 	}
 	.archive-list :global(.archive-row:last-child) {
 		border-bottom: 0;
@@ -235,8 +370,13 @@ const archiveJsonLd = buildCollectionPageJsonLd({
 		.archive-intro h1 {
 			font-size: 28px;
 		}
-		.archive-intro__stats {
-			gap: 14px;
+		.archive-tabs {
+			top: 76px;
+			padding: 10px 4px;
+		}
+		.archive-tab {
+			font-size: 12px;
+			padding: 7px 12px;
 		}
 	}
 </style>

@@ -1,0 +1,145 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import HomeNewsletterBanner from '../components/HomeNewsletterBanner.astro';
+import { SITE_TITLE } from '../consts';
+import { buildWebsiteJsonLd } from '../lib/structuredData';
+
+const description =
+	'Подборка SCQR — что смотреть и слушать про ИИ: видео и подкасты от российских и зарубежных авторов с короткими редакционными комментариями.';
+
+const jsonLd = buildWebsiteJsonLd({
+	title: `Подборка — ${SITE_TITLE}`,
+	description,
+	path: '/curated/',
+});
+---
+
+<!doctype html>
+<html lang="ru">
+	<head>
+		<BaseHead title={`Подборка — ${SITE_TITLE}`} description={description} jsonLd={jsonLd} />
+	</head>
+	<body>
+		<Header />
+		<main class="soon-page container">
+			<section class="soon-hero">
+				<span class="soon-hero__pill">СКОРО</span>
+				<h1>Видео и подкасты</h1>
+				<p>
+					Подборка интересных видео и подкастов про ИИ — российских и зарубежных. Короткий
+					редакционный комментарий к каждому: о чём, кому смотреть, что забрать.
+				</p>
+				<p class="soon-hero__when">Первая подборка появится в течение пары недель.</p>
+			</section>
+
+			<section class="soon-promise">
+				<h2>Что попадает в подборку</h2>
+				<ul>
+					<li>Долгие интервью с инженерами и инвесторами рынка ИИ</li>
+					<li>Российские подкасты, которые держат плотную фактологию</li>
+					<li>Короткие видео-разборы продуктовых решений и регуляции</li>
+					<li>Записи конференций, которые стоит посмотреть целиком</li>
+				</ul>
+			</section>
+
+			<HomeNewsletterBanner />
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.soon-page {
+		padding-top: 32px;
+		padding-bottom: 64px;
+	}
+	.soon-hero {
+		max-width: 760px;
+		text-align: center;
+		margin: 0 auto 48px;
+	}
+	.soon-hero__pill {
+		display: inline-block;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		padding: 5px 12px;
+		border-radius: 999px;
+		background: var(--violet-500);
+		color: #fff;
+		margin-bottom: 16px;
+	}
+	.soon-hero h1 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 40px;
+		line-height: 1.15;
+		letter-spacing: -0.025em;
+		color: var(--ink-900);
+		margin: 0 0 14px;
+	}
+	.soon-hero p {
+		font-family: var(--font-body);
+		font-size: 17px;
+		line-height: 1.6;
+		color: var(--ink-700);
+		margin: 0 0 12px;
+	}
+	.soon-hero__when {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 14px;
+		color: var(--violet-600);
+	}
+	.soon-promise {
+		max-width: 720px;
+		margin: 0 auto 48px;
+		padding: 24px 28px;
+		background: var(--paper-2);
+		border: 1px solid var(--line);
+		border-radius: 16px;
+	}
+	.soon-promise h2 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 18px;
+		margin: 0 0 14px;
+		color: var(--ink-900);
+	}
+	.soon-promise ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.soon-promise li {
+		font-family: var(--font-body);
+		font-size: 15px;
+		line-height: 1.55;
+		color: var(--ink-900);
+		padding-left: 22px;
+		position: relative;
+	}
+	.soon-promise li::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 9px;
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		border: 2px solid var(--violet-500);
+	}
+
+	@media (max-width: 720px) {
+		.soon-hero h1 {
+			font-size: 28px;
+		}
+	}
+</style>

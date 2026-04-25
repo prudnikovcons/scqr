@@ -1,0 +1,146 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import HomeNewsletterBanner from '../components/HomeNewsletterBanner.astro';
+import { SITE_TITLE } from '../consts';
+import { buildWebsiteJsonLd } from '../lib/structuredData';
+
+const description =
+	'Словарь SCQR — короткие определения ключевых терминов рынка ИИ на русском: модели, инфраструктура, регуляция, корпоративная адаптация.';
+
+const jsonLd = buildWebsiteJsonLd({
+	title: `Словарь — ${SITE_TITLE}`,
+	description,
+	path: '/glossary/',
+});
+---
+
+<!doctype html>
+<html lang="ru">
+	<head>
+		<BaseHead title={`Словарь — ${SITE_TITLE}`} description={description} jsonLd={jsonLd} />
+	</head>
+	<body>
+		<Header />
+		<main class="soon-page container">
+			<section class="soon-hero">
+				<span class="soon-hero__pill">СКОРО</span>
+				<h1>Словарь рынка ИИ</h1>
+				<p>
+					Короткие определения терминов, которые встречаются в материалах SCQR. На русском,
+					без академических преамбул, с примерами из практики. Соберём 50–100 терминов и
+					будем расширять под новые сюжеты.
+				</p>
+				<p class="soon-hero__when">Запустим, как только наберём первый стартовый набор.</p>
+			</section>
+
+			<section class="soon-promise">
+				<h2>Что войдёт</h2>
+				<ul>
+					<li>Архитектура и обучение моделей: latent space, distillation, RAG, MoE</li>
+					<li>Инфраструктура: AI factory, gigawatt deal, HBM, fluid inference</li>
+					<li>Корпоративные паттерны: agent cloud, workspace agents, MCP-стек</li>
+					<li>Регуляция и допуск: GPAI, AI Act, режимы доступа, трастовый реестр</li>
+				</ul>
+			</section>
+
+			<HomeNewsletterBanner />
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.soon-page {
+		padding-top: 32px;
+		padding-bottom: 64px;
+	}
+	.soon-hero {
+		max-width: 760px;
+		text-align: center;
+		margin: 0 auto 48px;
+	}
+	.soon-hero__pill {
+		display: inline-block;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		padding: 5px 12px;
+		border-radius: 999px;
+		background: var(--violet-500);
+		color: #fff;
+		margin-bottom: 16px;
+	}
+	.soon-hero h1 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 40px;
+		line-height: 1.15;
+		letter-spacing: -0.025em;
+		color: var(--ink-900);
+		margin: 0 0 14px;
+	}
+	.soon-hero p {
+		font-family: var(--font-body);
+		font-size: 17px;
+		line-height: 1.6;
+		color: var(--ink-700);
+		margin: 0 0 12px;
+	}
+	.soon-hero__when {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 14px;
+		color: var(--violet-600);
+	}
+	.soon-promise {
+		max-width: 720px;
+		margin: 0 auto 48px;
+		padding: 24px 28px;
+		background: var(--paper-2);
+		border: 1px solid var(--line);
+		border-radius: 16px;
+	}
+	.soon-promise h2 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 18px;
+		margin: 0 0 14px;
+		color: var(--ink-900);
+	}
+	.soon-promise ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.soon-promise li {
+		font-family: var(--font-body);
+		font-size: 15px;
+		line-height: 1.55;
+		color: var(--ink-900);
+		padding-left: 22px;
+		position: relative;
+	}
+	.soon-promise li::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 9px;
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		border: 2px solid var(--violet-500);
+	}
+
+	@media (max-width: 720px) {
+		.soon-hero h1 {
+			font-size: 28px;
+		}
+	}
+</style>
