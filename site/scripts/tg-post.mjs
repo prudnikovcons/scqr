@@ -88,7 +88,14 @@ const tagFromString = (s) => {
 
 function buildPostText(fm, body, slug) {
 	const siteUrl = process.env.SITE_URL || 'https://ai.scqr.ru';
-	const url = `${siteUrl}${fm.publicUrl || `/${slug}/`}`;
+	// utm tag doubles as a TG-side OG cache buster: when og:image content changes
+	// on the canonical URL, Telegram still serves the originally cached preview
+	// for that URL. A unique query suffix forces TG to treat each post as a new
+	// page and re-fetch og:image.
+	const cacheBust = process.env.SCQR_TG_CACHE_BUST || '';
+	const path = fm.publicUrl || `/${slug}/`;
+	const sep = path.includes('?') ? '&' : '?';
+	const url = `${siteUrl}${path}${cacheBust ? `${sep}utm_source=tg&v=${cacheBust}` : '?utm_source=tg'}`;
 	const title = fm.title || slug;
 	const deck = fm.deck || fm.description || '';
 	const typeLabel = TYPE_LABELS[fm.articleType] || fm.articleType || '';
