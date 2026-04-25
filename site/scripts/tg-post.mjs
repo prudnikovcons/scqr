@@ -75,10 +75,15 @@ const cyrToLat = (s) => {
 const escapeHtml = (s) =>
 	s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-const cleanTopicForTag = (topic) => {
-	const lat = cyrToLat(topic);
-	const slug = lat.replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
-	return slug ? `#${slug}` : '';
+// Cyrillic hashtags are valid in Telegram and idiomatic for RU channels.
+// Keep cyrillic letters, lowercase, replace whitespace/punctuation with underscore.
+const tagFromString = (s) => {
+	const cleaned = s
+		.toLowerCase()
+		.trim()
+		.replace(/[^\p{L}\p{N}]+/gu, '_')
+		.replace(/^_+|_+$/g, '');
+	return cleaned ? `#${cleaned}` : '';
 };
 
 function buildPostText(fm, body, slug) {
@@ -98,13 +103,16 @@ function buildPostText(fm, body, slug) {
 	const metaParts = [rubricLabel, typeLabel, reading].filter(Boolean);
 	const metaLine = metaParts.join(' · ');
 
-	// Hashtags: rubric (russian-letterless), type, up to 2 topics
+	// Hashtags: rubric (cyrillic) + up to 3 topics (preserve cyrillic for RU readers).
+	// Skip the type tag — overlaps with the kicker line and adds noise.
 	const tagSet = new Set();
-	if (rubricLabel) tagSet.add(`#${cyrToLat(rubricLabel).replace(/[^a-z]/g, '')}`);
-	if (typeLabel) tagSet.add(`#${cyrToLat(typeLabel).replace(/[^a-z]/g, '')}`);
+	if (rubricLabel) {
+		const t = tagFromString(rubricLabel);
+		if (t) tagSet.add(t);
+	}
 	if (Array.isArray(fm.topics)) {
-		for (const topic of fm.topics.slice(0, 2)) {
-			const tag = cleanTopicForTag(topic);
+		for (const topic of fm.topics) {
+			const tag = tagFromString(topic);
 			if (tag) tagSet.add(tag);
 			if (tagSet.size >= 4) break;
 		}
