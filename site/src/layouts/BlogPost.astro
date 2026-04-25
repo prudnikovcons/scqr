@@ -27,7 +27,6 @@ const {
 	title,
 	description,
 	deck,
-	scqrVerdict,
 	pubDate,
 	updatedDate,
 	heroImage,
@@ -36,7 +35,6 @@ const {
 	rubrics = [],
 	rubricLabels = [],
 	topics = [],
-	sourceNote,
 	nextStrong = null,
 	clusterSlug = null,
 	clusterTitle = null,
@@ -49,8 +47,8 @@ const leadRubric = displayRubrics[0] ?? 'SCQR';
 const primaryRubricSlug = rubrics[0] ?? '';
 const topicPreview = topics.slice(0, 8);
 const articleDeck = deck?.trim() || description;
-const articleVerdict = scqrVerdict?.trim() || articleDeck;
 const showClusterCard = Boolean(clusterSlug && clusterTitle && clusterSize > 1);
+const showSidebar = topicPreview.length > 0 || showClusterCard;
 const articleJsonLd = buildArticleJsonLd({
 	title,
 	description: articleDeck,
@@ -116,49 +114,35 @@ const articleJsonLd = buildArticleJsonLd({
 					)
 				}
 
-				<div class="article-grid">
+				<div class={`article-grid ${showSidebar ? '' : 'article-grid--single'}`.trim()}>
 					<div class="article-body prose">
 						<slot />
 					</div>
 
-					<aside class="article-sidebar" aria-label="Контекст материала">
-						<div class="article-rail article-rail--verdict">
-							<span class="article-rail__kicker">Вывод SCQR</span>
-							<p>{articleVerdict}</p>
-						</div>
-
-						{
-							sourceNote && (
-								<div class="article-rail">
-									<span class="article-rail__kicker">Основание публикации</span>
-									<p>{sourceNote}</p>
-								</div>
-							)
-						}
-
-						{
-							topicPreview.length > 0 && (
-								<div class="article-rail">
-									<span class="article-rail__kicker">Темы</span>
-									<div class="article-tags">
-										{topicPreview.map((topic) => (
-											<a href={getTopicHref(topic)} class="article-tag">{topic}</a>
-										))}
+					{
+						showSidebar && (
+							<aside class="article-sidebar" aria-label="Контекст материала">
+								{topicPreview.length > 0 && (
+									<div class="article-rail">
+										<span class="article-rail__kicker">Темы</span>
+										<div class="article-tags">
+											{topicPreview.map((topic) => (
+												<a href={getTopicHref(topic)} class="article-tag">{topic}</a>
+											))}
+										</div>
 									</div>
-								</div>
-							)
-						}
+								)}
 
-						{
-							showClusterCard && (
-								<a class="article-rail article-rail--story" href={getClusterHref(clusterSlug!)}>
-									<span class="article-rail__kicker">Сюжет</span>
-									<strong>{clusterTitle}</strong>
-									<span class="article-rail__sub">{clusterSize} материалов в одной линии</span>
-								</a>
-							)
-						}
-					</aside>
+								{showClusterCard && (
+									<a class="article-rail article-rail--story" href={getClusterHref(clusterSlug!)}>
+										<span class="article-rail__kicker">Сюжет</span>
+										<strong>{clusterTitle}</strong>
+										<span class="article-rail__sub">{clusterSize} материалов в одной линии</span>
+									</a>
+								)}
+							</aside>
+						)
+					}
 				</div>
 
 				{
@@ -290,6 +274,13 @@ const articleJsonLd = buildArticleJsonLd({
 		gap: 48px;
 		margin-top: 32px;
 		align-items: start;
+	}
+	.article-grid--single {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.article-grid--single .article-body {
+		max-width: 760px;
+		margin: 0 auto;
 	}
 
 	/* ---- Body / prose ---- */
