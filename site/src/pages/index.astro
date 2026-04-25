@@ -13,7 +13,6 @@ import HomeRubricsGrid from '../components/HomeRubricsGrid.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import { getVisiblePosts, sortPosts } from '../lib/site';
 import { buildCollectionPageJsonLd, buildWebsiteJsonLd } from '../lib/structuredData';
-import '../styles/homepage.css';
 
 const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
 const lead = posts[0];

@@ -6,7 +6,6 @@ import HomeNewsletterBanner from '../components/HomeNewsletterBanner.astro';
 import { SITE_DESCRIPTION } from '../consts';
 import { buildOrganizationJsonLd, buildWebsiteJsonLd } from '../lib/structuredData';
 import { RUBRIC_CONFIG } from '../lib/site';
-import '../styles/homepage.css';
 
 const aboutJsonLd = [
 	buildWebsiteJsonLd({
@@ -34,7 +33,7 @@ const principles = {
 
 const steps = [
 	{ kicker: '1', title: 'Сигналы', desc: 'Каждое утро система собирает 70+ источников.', mascot: '/mascot/sticker-1.png' },
-	{ kicker: '2', title: 'Рецензия', desc: 'Редактор читает дайджест и пишет свободную рецензию.', mascot: '/mascot/pose-thinking.png' },
+	{ kicker: '2', title: 'Рецензия', desc: 'Редактор читает дайджест и пишет свободную рецензию.', mascot: '/mascot/sticker-4.png' },
 	{ kicker: '3', title: 'Производство', desc: 'Writer, editor и factchecker готовят материал.', mascot: '/mascot/sticker-2.png' },
 	{ kicker: '4', title: 'Публикация', desc: 'Финальный апрув — и материал на сайте.', mascot: '/mascot/sticker-6.png' },
 ];
