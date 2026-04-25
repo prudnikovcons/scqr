@@ -3,81 +3,35 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import PostThumbnail from '../components/PostThumbnail.astro';
-import RubricLabel from '../components/RubricLabel.astro';
-import TickerBar from '../components/TickerBar.astro';
+import HomeEventsCard from '../components/HomeEventsCard.astro';
+import HomeHero from '../components/HomeHero.astro';
+import HomeMiniFeed from '../components/HomeMiniFeed.astro';
+import HomeNewsletterBanner from '../components/HomeNewsletterBanner.astro';
+import HomePodcastCard from '../components/HomePodcastCard.astro';
+import HomePopularSection from '../components/HomePopularSection.astro';
+import HomeRubricsGrid from '../components/HomeRubricsGrid.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import { SITE_CURATION } from '../data/curation';
-import {
-	buildClusterSummary,
-	buildRubricSummary,
-	getArticleTypeLabel,
-	getClusterHref,
-	getCuratedPost,
-	getCuratedPosts,
-	getDeck,
-	getHeroAlt,
-	getPostHref,
-	getPrimaryRubric,
-	getReadingTimeLabel,
-	getRubricHref,
-	getToneClass,
-	getVisiblePosts,
-	isPremiumReadyPost,
-	sortPosts,
-	sortPostsForPresentation,
-} from '../lib/site';
+import { getVisiblePosts, sortPosts } from '../lib/site';
 import { buildCollectionPageJsonLd, buildWebsiteJsonLd } from '../lib/structuredData';
+import '../styles/homepage.css';
 
 const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
+const lead = posts[0];
+const subgrid = posts.slice(1, 5);
+const miniFeed = posts.slice(5, 10);
+const popularPool = posts.slice(10);
+const popularFeature =
+	popularPool.find((p) => p.data.articleType === 'analysis') ?? popularPool[0];
+const popularRows = popularPool
+	.filter((p) => p.id !== popularFeature?.id)
+	.slice(0, 3);
 
-const curatedLead = getCuratedPost(posts, SITE_CURATION.homepageLead, isPremiumReadyPost);
-const leadPost = curatedLead ?? sortPostsForPresentation(posts.filter(isPremiumReadyPost))[0] ?? posts[0];
-
-const visualPool = posts.filter((post) => post.id !== leadPost?.id);
-const curatedVisual = getCuratedPosts(visualPool, SITE_CURATION.homepageVisualGrid, isPremiumReadyPost);
-const usedVisualIds = new Set(curatedVisual.map((post) => post.id));
-const fallbackVisual = sortPostsForPresentation(
-	visualPool.filter((post) => isPremiumReadyPost(post) && !usedVisualIds.has(post.id)),
-).slice(0, Math.max(0, 4 - curatedVisual.length));
-const visualFrontPosts = [...curatedVisual, ...fallbackVisual].slice(0, 4);
-
-const clusterPosts = buildClusterSummary(posts, SITE_CURATION.homepageSignalClusters).slice(0, 3);
-
-const curatedEssays = getCuratedPosts(posts, SITE_CURATION.homepageEssays, isPremiumReadyPost);
-const usedEssayIds = new Set(curatedEssays.map((post) => post.id));
-const fallbackEssays = sortPostsForPresentation(
-	posts.filter(
-		(post) =>
-			post.data.articleType === 'column' &&
-			isPremiumReadyPost(post) &&
-			!usedEssayIds.has(post.id),
-	),
-).slice(0, Math.max(0, 2 - curatedEssays.length));
-const columnPosts = [...curatedEssays, ...fallbackEssays].slice(0, 2);
-
-const excludedIds = new Set([
-	leadPost?.id,
-	...visualFrontPosts.map((post) => post.id),
-	...columnPosts.map((post) => post.id),
-].filter(Boolean));
-
-const remainingPosts = posts.filter((post) => !excludedIds.has(post.id));
-const newsPosts = remainingPosts.filter((post) => post.data.articleType === 'news').slice(0, 7);
-const analysisPosts = remainingPosts.filter((post) => post.data.articleType === 'analysis').slice(0, 5);
-const rubricSummary = buildRubricSummary(posts).filter((rubric) => rubric.slug);
-const homeJsonLd = [
-	buildWebsiteJsonLd({
+const jsonLd = [
+	buildWebsiteJsonLd({ title: SITE_TITLE, description: SITE_DESCRIPTION }),
+	buildCollectionPageJsonLd({
 		title: SITE_TITLE,
 		description: SITE_DESCRIPTION,
-		path: '/',
-		image: leadPost?.data.heroImage,
-	}),
-	buildCollectionPageJsonLd({
-		title: `${SITE_TITLE} — Главная`,
-		description: SITE_DESCRIPTION,
-		path: '/',
-		image: leadPost?.data.heroImage,
+		posts: posts.slice(0, 12),
 	}),
 ];
 ---
@@ -85,149 +39,55 @@ const homeJsonLd = [
 <!doctype html>
 <html lang="ru">
 	<head>
-		<BaseHead
-			title={SITE_TITLE}
-			description={SITE_DESCRIPTION}
-			image={leadPost?.data.heroImage}
-			imageAlt={leadPost ? getHeroAlt(leadPost) : SITE_TITLE}
-			jsonLd={homeJsonLd}
-		/>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} jsonLd={jsonLd} />
 	</head>
 	<body>
 		<Header />
-		<TickerBar />
-
-		<main class="main-shell">
-			{leadPost && (
-				<article class="lead-story">
-					<PostThumbnail post={leadPost} className="lead-story__media" toneClass={getToneClass(0)} loading="eager" />
-					<div class="lead-story__body">
-						<div class="lead-story__meta">
-							<span class="content-tag"><RubricLabel name={getPrimaryRubric(leadPost)} /></span>
-							<span>{getArticleTypeLabel(leadPost)}</span>
-							<span>{getReadingTimeLabel(leadPost)}</span>
-						</div>
-						<h1 class="lead-story__title">
-							<a href={getPostHref(leadPost)}>{leadPost.data.title}</a>
-						</h1>
-						<p class="lead-story__desc">{getDeck(leadPost)}</p>
-						<time class="lead-story__date">
-							{leadPost.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}
-						</time>
-					</div>
-				</article>
-			)}
-
-			{visualFrontPosts.length > 0 && (
-				<section class="frontline-grid" aria-label="Премиальная витрина">
-					{visualFrontPosts.map((post, index) => (
-						<article class="frontline-card">
-							<PostThumbnail
-								post={post}
-								className="frontline-card__media"
-								toneClass={getToneClass(index + 1)}
-								loading={index < 2 ? 'eager' : 'lazy'}
-							/>
-							<div class="frontline-card__body">
-								<div class="frontline-card__meta">
-									<span class="content-tag"><RubricLabel name={getPrimaryRubric(post)} /></span>
-									<span>{getArticleTypeLabel(post)}</span>
-								</div>
-								<h2 class="frontline-card__title">
-									<a href={getPostHref(post)}>{post.data.title}</a>
-								</h2>
-								<p class="frontline-card__desc">{getDeck(post)}</p>
-								<time class="frontline-card__date">
-									{post.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}
-								</time>
-							</div>
-						</article>
-					))}
-				</section>
-			)}
-
-			{clusterPosts.length > 0 && (
-				<section class="signal-board" aria-label="Редакционные сюжеты">
-					<div class="section-head">
-						<h2>Сюжеты</h2>
-						<a href="/blog">Архив всех материалов</a>
-					</div>
-					<div class="signal-board__grid">
-						{clusterPosts.map((cluster) => (
-							<a class="signal-board__item" href={getClusterHref(cluster.slug)}>
-								<span class="signal-board__kicker">Сюжет</span>
-								<strong>{cluster.title}</strong>
-								<p>{getDeck(cluster.latest)}</p>
-								<span class="signal-board__meta">{cluster.count} материалов</span>
-							</a>
-						))}
-					</div>
-				</section>
-			)}
-
-			<div class="dual-stream">
-				<section class="stream-col">
-					<h2 class="stream-col__head">Новости</h2>
-					{newsPosts.map((post) => (
-						<a class="post-row" href={getPostHref(post)}>
-							<time class="post-row__date">
-								{post.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
-							</time>
-							<span class="post-row__rubric"><RubricLabel name={getPrimaryRubric(post)} /></span>
-							<strong class="post-row__title">{post.data.title}</strong>
-						</a>
-					))}
-					<a class="post-stream__more" href="/blog#news">Все новости →</a>
-				</section>
-
-				<section class="stream-col">
-					<h2 class="stream-col__head">Аналитика</h2>
-					{analysisPosts.map((post) => (
-						<a class="analysis-row" href={getPostHref(post)}>
-							<div class="analysis-row__top">
-								<span class="post-row__rubric"><RubricLabel name={getPrimaryRubric(post)} /></span>
-								<time class="post-row__date">
-									{post.data.pubDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
-								</time>
-							</div>
-							<strong class="post-row__title">{post.data.title}</strong>
-							<p class="analysis-row__desc">{getDeck(post)}</p>
-						</a>
-					))}
-					<a class="post-stream__more" href="/blog#analysis">Вся аналитика →</a>
-				</section>
+		<main class="container">
+			<div class="hero-grid">
+				<div>
+					<HomeHero lead={lead} subgrid={subgrid} />
+				</div>
+				<HomeMiniFeed items={miniFeed} />
 			</div>
-
-			{columnPosts.length > 0 && (
-				<section class="essay-strip" aria-label="Колонки">
-					<div class="section-head">
-						<h2>Колонки</h2>
-						<a href="/blog#columns">Все колонки</a>
+			<HomeNewsletterBanner />
+			<section class="section">
+				<div class="section-grid">
+					<div>
+						<div class="section-hdr">
+							<h2>
+								<span class="icon">
+									<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+										<path d="M13 2 3 14h7v8l10-12h-7z"></path>
+									</svg>
+								</span>
+								Популярное
+							</h2>
+						</div>
+						{popularFeature && <HomePopularSection feature={popularFeature} rows={popularRows} />}
 					</div>
-					<div class="essay-strip__grid">
-						{columnPosts.map((post) => (
-							<a class="essay-strip__item" href={getPostHref(post)}>
-								<span class="essay-strip__meta"><RubricLabel name={getPrimaryRubric(post)} /></span>
-								<strong>{post.data.title}</strong>
-								<p>{getDeck(post)}</p>
-							</a>
-						))}
+					<div>
+						<div class="section-hdr"><h2 style="font-size:18px">&nbsp;</h2></div>
+						<HomeEventsCard />
 					</div>
-				</section>
-			)}
-
-			{rubricSummary.length > 0 && (
-				<nav class="rubric-nav-strip" aria-label="Рубрики">
-					{rubricSummary.map((rubric) => (
-						<a class="rubric-nav-tile" href={getRubricHref(rubric.slug!)}>
-							<strong><RubricLabel name={rubric.name} /></strong>
-							<span>{rubric.count}</span>
-						</a>
-					))}
-				</nav>
-			)}
+				</div>
+			</section>
+			<section class="section">
+				<div class="section-grid">
+					<div>
+						<div class="section-hdr">
+							<h2>Рубрики</h2>
+							<a href="/blog/">Все рубрики →</a>
+						</div>
+						<HomeRubricsGrid />
+					</div>
+					<div>
+						<div class="section-hdr"><h2 style="font-size:18px">&nbsp;</h2></div>
+						<HomePodcastCard />
+					</div>
+				</div>
+			</section>
 		</main>
-
 		<Footer />
 	</body>
 </html>

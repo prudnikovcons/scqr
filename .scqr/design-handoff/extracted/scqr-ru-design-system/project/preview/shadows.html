@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Shadows</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 28px 24px; background: #FAFBFC; }
+  .row { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
+  .item { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .box { width: 100%; height: 80px; background: #fff; border-radius: 8px; border: 1px solid var(--line); }
+  .s1 { box-shadow: 0 1px 2px rgba(13,17,23,0.04), 0 1px 0 rgba(13,17,23,0.02); }
+  .s2 { box-shadow: 0 2px 8px rgba(13,17,23,0.05), 0 1px 2px rgba(13,17,23,0.04); }
+  .s3 { box-shadow: 0 8px 24px rgba(13,17,23,0.06), 0 2px 6px rgba(13,17,23,0.04); }
+  .focus { box-shadow: 0 0 0 3px rgba(108,77,255,0.25); border-color: var(--violet-500); }
+  .name { font-family: var(--font-display); font-weight: 700; font-size: 12px; color: var(--ink-900); }
+  .role { font-family: var(--font-mono); font-size: 10px; color: var(--ink-500); text-align: center; }
+</style></head>
+<body>
+<div class="row">
+  <div class="item"><div class="box"></div><div class="name">shadow-0</div><div class="role">default cards</div></div>
+  <div class="item"><div class="box s1"></div><div class="name">shadow-1</div><div class="role">hover lift</div></div>
+  <div class="item"><div class="box s2"></div><div class="name">shadow-2</div><div class="role">menus, tooltips</div></div>
+  <div class="item"><div class="box s3"></div><div class="name">shadow-3</div><div class="role">modal, popovers</div></div>
+</div>
+<div style="margin-top:18px; display:flex; gap:18px; align-items:center;">
+  <div class="box focus" style="width:140px;"></div>
+  <div>
+    <div class="name">focus-ring</div>
+    <div class="role">3px violet @ 25% — keyboard focus</div>
+  </div>
+</div>
+</body></html>

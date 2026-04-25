@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Brand accents</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 20px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .swatch { height: 110px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; }
+  .name { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
+  .hex { font-family: var(--font-mono); font-size: 12px; }
+  .light { color: var(--paper); }
+  .dark { color: var(--ink-900); }
+</style></head>
+<body>
+<div class="grid">
+  <div class="swatch light" style="background:#6C4DFF; border-color: transparent;">
+    <div><div class="name">Violet 500</div><div style="font-size:11px; opacity:.85; margin-top:2px;">Primary accent</div></div>
+    <div class="hex">#6C4DFF</div>
+  </div>
+  <div class="swatch light" style="background:#3AA0FF; border-color: transparent;">
+    <div><div class="name">Blue 500</div><div style="font-size:11px; opacity:.85; margin-top:2px;">Secondary accent</div></div>
+    <div class="hex">#3AA0FF</div>
+  </div>
+  <div class="swatch dark" style="background:#F1EDFF;">
+    <div><div class="name">Violet 50</div><div style="font-size:11px; color:var(--ink-500); margin-top:2px;">Soft tint — banners, pills</div></div>
+    <div class="hex">#F1EDFF</div>
+  </div>
+  <div class="swatch dark" style="background:#EBF5FF;">
+    <div><div class="name">Blue 50</div><div style="font-size:11px; color:var(--ink-500); margin-top:2px;">Soft tint — cards, mini-feed</div></div>
+    <div class="hex">#EBF5FF</div>
+  </div>
+</div>
+</body></html>

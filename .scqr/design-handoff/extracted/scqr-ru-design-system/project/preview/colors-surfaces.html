@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Surface & lines</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 20px; background: #FAFBFC; }
+  .grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; }
+  .sw { height: 110px; border-radius: 6px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid var(--line); }
+  .name { font-family: var(--font-display); font-weight: 700; font-size: 12px; }
+  .role { font-size: 10px; color: var(--ink-500); margin-top: 2px; }
+  .hex { font-family: var(--font-mono); font-size: 11px; color: var(--ink-700); }
+  .line-demo { height: 32px; border-bottom: 1px solid var(--line); position: relative; margin-top: 8px; }
+  .line-demo.strong { border-bottom-color: var(--line-strong); }
+  .line-label { font-family: var(--font-mono); font-size: 10px; color: var(--ink-500); }
+</style></head>
+<body>
+<div class="grid">
+  <div class="sw" style="background:#FFFFFF;">
+    <div><div class="name">Paper</div><div class="role">Page bg</div></div>
+    <div class="hex">#FFFFFF</div>
+  </div>
+  <div class="sw" style="background:#FAFBFC;">
+    <div><div class="name">Paper 2</div><div class="role">Subtle alt</div></div>
+    <div class="hex">#FAFBFC</div>
+  </div>
+  <div class="sw" style="background:#F4F5F7;">
+    <div><div class="name">Paper 3</div><div class="role">Card-on-card</div></div>
+    <div class="hex">#F4F5F7</div>
+  </div>
+  <div class="sw" style="background:#fff;">
+    <div><div class="name">Line</div><div class="role">Default border</div></div>
+    <div style="height:1px; background:#E6E8EC; margin-top:auto;"></div>
+    <div class="hex" style="margin-top:6px;">#E6E8EC</div>
+  </div>
+  <div class="sw" style="background:#fff;">
+    <div><div class="name">Line strong</div><div class="role">Hover, dividers</div></div>
+    <div style="height:1px; background:#D2D6DD; margin-top:auto;"></div>
+    <div class="hex" style="margin-top:6px;">#D2D6DD</div>
+  </div>
+</div>
+</body></html>

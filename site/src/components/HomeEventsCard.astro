@@ -1,0 +1,44 @@
+---
+const events = [
+	{ day: '27', mon: 'мая', title: 'Конференция AI Journey 2024', loc: 'Москва, офлайн', tag: 'Конференция' },
+	{ day: '03', mon: 'июн', title: 'Митап AI Makers Saint Petersburg', loc: 'Санкт-Петербург', tag: 'Митап' },
+	{ day: '10', mon: 'июн', title: 'Вебинар: Как внедрить ИИ в бизнес без боли', loc: 'Онлайн', tag: 'Вебинар' },
+];
+---
+
+<aside class="events">
+	<div class="hdr">
+		<h4>События</h4>
+		<a href="#">Все события →</a>
+	</div>
+	{
+		events.map((event) => (
+			<div class="event-row">
+				<div class="date">
+					<div class="day">{event.day}</div>
+					<div class="mon">{event.mon}</div>
+				</div>
+				<div>
+					<div class="title">{event.title}</div>
+					<div class="loc">
+						<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+							<circle cx="12" cy="10" r="3" />
+						</svg>
+						{event.loc}
+					</div>
+				</div>
+				<span class="pill">{event.tag}</span>
+			</div>
+		))
+	}
+	<a class="all" href="#">Календарь событий</a>
+</aside>
+
+<style>
+	.events .all {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+	}
+</style>

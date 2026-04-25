@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Mini news feed</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 16px; }
+  .feed {
+    background: #fff; border: 1px solid var(--line); border-radius: 12px;
+    overflow: hidden; max-width: 360px;
+  }
+  .hdr { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 16px 10px; border-bottom: 1px solid var(--line); }
+  .hdr h4 { font-family: var(--font-display); font-weight: 700; font-size: 14px; margin: 0; color: var(--ink-900); }
+  .hdr a { font-family: var(--font-body); font-size: 12px; color: var(--violet-600); }
+  .item { display: grid; grid-template-columns: 1fr 56px; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+  .item:last-child { border: 0; }
+  .ts { font-family: var(--font-mono); font-size: 12px; color: var(--ink-500); font-weight: 500; }
+  .eb { font-family: var(--font-display); font-weight: 700; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-500); margin-left: 8px; }
+  .title { font-family: var(--font-display); font-weight: 700; font-size: 13px; line-height: 1.3; color: var(--ink-900); margin-top: 4px; letter-spacing: -0.005em; }
+  .logo { width: 56px; height: 56px; border-radius: 8px; border: 1px solid var(--line); display:flex; align-items:center; justify-content:center; font-family: var(--font-display); font-weight: 800; font-size: 22px; }
+  .l-a { background: #f4f4f5; color: #0D1117; }
+  .l-r { background: #000; color: #fff; }
+  .l-n { background: #76b900; color: #fff; }
+  .l-c { background: linear-gradient(135deg, #6C4DFF, #3AA0FF); color:#fff; }
+</style></head>
+<body>
+<div class="feed">
+  <div class="hdr"><h4>Лента новостей</h4><a>Все новости →</a></div>
+  <div class="item">
+    <div>
+      <span class="ts">12:42</span><span class="eb">МОДЕЛИ</span>
+      <div class="title">Anthropic выпустила Claude 3.5 Sonnet — лидер в бенчмарках</div>
+    </div>
+    <div class="logo l-a">A</div>
+  </div>
+  <div class="item">
+    <div>
+      <span class="ts">11:31</span><span class="eb">ИНСТРУМЕНТЫ</span>
+      <div class="title">Runway представила Gen-3 Alpha для генерации видео</div>
+    </div>
+    <div class="logo l-r">R</div>
+  </div>
+  <div class="item">
+    <div>
+      <span class="ts">10:15</span><span class="eb">БИЗНЕС</span>
+      <div class="title">NVIDIA вложит $2 млрд в стартапы в сфере ИИ</div>
+    </div>
+    <div class="logo l-n">N</div>
+  </div>
+  <div class="item">
+    <div>
+      <span class="ts">Вчера, 23:12</span><span class="eb">ОБНОВЛЕНИЯ</span>
+      <div class="title">ChatGPT теперь помнит всё — новая функция памяти</div>
+    </div>
+    <div class="logo l-c">C</div>
+  </div>
+</div>
+</body></html>

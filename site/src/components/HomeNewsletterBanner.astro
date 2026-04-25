@@ -1,0 +1,38 @@
+---
+const features = [
+	'Только проверенные новости',
+	'Экспертные мнения и аналитика',
+	'Удобно, быстро и без воды',
+];
+---
+
+<section class="newsletter" id="subscribe">
+	<div class="mascot">
+		<img src="/mascot/mascot-hero.png" alt="" loading="lazy" />
+	</div>
+	<div>
+		<div class="pitch">
+			Будь в курсе будущего вместе с <span class="ru">SCQR.RU</span>
+		</div>
+		<div class="feats">
+			{
+				features.map((feature) => (
+					<span class="feat">
+						<span class="dot" />
+						{feature}
+					</span>
+				))
+			}
+		</div>
+	</div>
+	<a href="https://t.me/scqr" class="cta" target="_blank" rel="noopener">Подписаться на рассылку</a>
+</section>
+
+<style>
+	.newsletter .cta {
+		text-decoration: none;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+</style>

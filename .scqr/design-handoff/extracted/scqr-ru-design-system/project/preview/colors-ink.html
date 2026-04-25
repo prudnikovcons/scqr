@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Ink scale</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 20px; }
+  .row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .sw { height: 130px; border-radius: 6px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid var(--line); }
+  .name { font-family: var(--font-display); font-weight: 700; font-size: 12px; }
+  .hex { font-family: var(--font-mono); font-size: 11px; }
+  .role { font-size: 10px; opacity: .8; margin-top: 2px; }
+</style></head>
+<body>
+<div class="row">
+  <div class="sw" style="background:#0D1117; color:#fff; border-color:transparent;">
+    <div><div class="name">Ink 900</div><div class="role">Headlines, primary text</div></div>
+    <div class="hex">#0D1117</div>
+  </div>
+  <div class="sw" style="background:#333A45; color:#fff; border-color:transparent;">
+    <div><div class="name">Ink 700</div><div class="role">Body text</div></div>
+    <div class="hex">#333A45</div>
+  </div>
+  <div class="sw" style="background:#5A6472; color:#fff; border-color:transparent;">
+    <div><div class="name">Ink 500</div><div class="role">Meta, captions</div></div>
+    <div class="hex">#5A6472</div>
+  </div>
+  <div class="sw" style="background:#8A95A3; color:#fff; border-color:transparent;">
+    <div><div class="name">Ink 400</div><div class="role">Placeholders</div></div>
+    <div class="hex">#8A95A3</div>
+  </div>
+  <div class="sw" style="background:#B7BFC9; color:#0D1117; border-color:transparent;">
+    <div><div class="name">Ink 300</div><div class="role">Disabled</div></div>
+    <div class="hex">#B7BFC9</div>
+  </div>
+</div>
+</body></html>

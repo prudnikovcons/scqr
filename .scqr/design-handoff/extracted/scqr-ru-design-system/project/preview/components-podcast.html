@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Podcast card</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 20px; }
+  .card {
+    background: linear-gradient(135deg, #F1EDFF 0%, #EBF5FF 100%);
+    border: 1px solid var(--violet-100);
+    border-radius: 16px;
+    overflow: hidden;
+    max-width: 460px;
+  }
+  .hdr { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 18px 6px; }
+  .hdr h4 { font-family: var(--font-display); font-weight: 700; font-size: 15px; margin: 0; color: var(--ink-900); }
+  .hdr a { font-family: var(--font-body); font-size: 12px; color: var(--violet-600); }
+  .body { padding: 14px 18px 18px; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: end; }
+  .pill { background: #fff; color: var(--violet-600); font-family: var(--font-display); font-weight: 700; font-size: 11px; padding: 4px 10px; border-radius: 999px; display: inline-block; margin-bottom: 8px; }
+  .title { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--ink-900); line-height: 1.25; max-width: 280px; }
+  .desc { font-family: var(--font-body); font-size: 12px; color: var(--ink-700); margin-top: 6px; max-width: 280px; line-height: 1.5; }
+  .dur { font-family: var(--font-mono); font-size: 12px; color: var(--ink-500); margin-top: 8px; }
+  .play {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--violet-500); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    border: 0; cursor: pointer;
+  }
+</style></head>
+<body>
+<div class="card">
+  <div class="hdr"><h4>Подкаст SCQR Talk</h4><a>Все выпуски →</a></div>
+  <div class="body">
+    <div>
+      <span class="pill">Новый выпуск</span>
+      <div class="title">Будущее рядом: стоит ли бояться сильного ИИ?</div>
+      <div class="desc">Говорим про развитие, риски и границы технологий.</div>
+      <div class="dur">48:21</div>
+    </div>
+    <button class="play"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+  </div>
+</div>
+</body></html>

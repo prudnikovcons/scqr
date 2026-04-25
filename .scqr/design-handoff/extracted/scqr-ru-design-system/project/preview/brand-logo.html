@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Logo</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 24px; }
+  .row { display: flex; flex-direction: column; gap: 16px; }
+  .item { display: flex; align-items: center; gap: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+  .item:last-child { border: 0; }
+  .logo { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.025em; line-height: 1; }
+  .logo .ru { color: var(--violet-500); }
+  .lg-1 { font-size: 36px; color: var(--ink-900); }
+  .lg-2 { font-size: 24px; color: var(--ink-900); }
+  .lg-3 { font-size: 16px; color: var(--ink-900); }
+  .lg-inv { font-size: 24px; color: #fff; }
+  .inv { background: var(--ink-900); padding: 8px 12px; border-radius: 6px; }
+  .meta { font-family: var(--font-mono); font-size: 11px; color: var(--ink-500); margin-left: auto; }
+</style></head>
+<body>
+<div class="row">
+  <div class="item"><span class="logo lg-1">SCQ<span class="ru">R.RU</span></span><span class="meta">Manrope 800 · 36px</span></div>
+  <div class="item"><span class="logo lg-2">SCQ<span class="ru">R.RU</span></span><span class="meta">Manrope 800 · 24px (nav)</span></div>
+  <div class="item"><span class="logo lg-3">SCQ<span class="ru">R.RU</span></span><span class="meta">Manrope 800 · 16px (footer)</span></div>
+  <div class="item"><span class="inv"><span class="logo lg-inv">SCQ<span class="ru">R.RU</span></span></span><span class="meta">on dark surface</span></div>
+</div>
+</body></html>

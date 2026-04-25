@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Article card</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 20px; background: #FAFBFC; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .thumb { aspect-ratio: 16/9; background: linear-gradient(135deg, #2a1f6b 0%, #6C4DFF 100%); position:relative; }
+  .thumb.brain { background: radial-gradient(ellipse at center, #5733b8, #1a0f3d); }
+  .body { padding: 14px 16px 16px; }
+  .head {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--ink-900);
+    margin: 0 0 10px;
+  }
+  .meta { font-family: var(--font-body); font-size: 12px; color: var(--ink-500); display: flex; gap: 12px; align-items: center; }
+  .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-400); }
+  .play {
+    position: absolute; left: 14px; bottom: 14px;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,0.92);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-900);
+  }
+</style></head>
+<body>
+<div class="row">
+  <div class="card">
+    <div class="thumb brain"></div>
+    <div class="body">
+      <h3 class="head">Как ИИ-агенты изменят интернет в ближайшие 2 года</h3>
+      <div class="meta"><span>15 мая 2024</span><span class="dot"></span><span>8 932 просмотра</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="thumb" style="background: linear-gradient(135deg, #1d3557 0%, #457b9d 100%);">
+      <div class="play"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+    </div>
+    <div class="body">
+      <h3 class="head">Sora от OpenAI вышла для всех — создаём видео по тексту</h3>
+      <div class="meta"><span>15 мая 2024</span><span class="dot"></span><span>5 431 просмотр</span></div>
+    </div>
+  </div>
+</div>
+</body></html>

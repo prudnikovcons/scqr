@@ -1,0 +1,73 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getDeck, getPostHref } from '../lib/site';
+import FormattedDate from './FormattedDate.astro';
+
+type PostEntry = CollectionEntry<'posts'>;
+
+interface Props {
+	feature: PostEntry;
+	rows: PostEntry[];
+}
+
+const { feature, rows } = Astro.props;
+const featureHref = getPostHref(feature);
+const featureDeck = getDeck(feature);
+const thumbClasses = ['t1', 't2', 't3'];
+const rowItems = rows.slice(0, 3).map((post, index) => ({
+	href: getPostHref(post),
+	title: post.data.title,
+	thumbClass: thumbClasses[index] ?? 't1',
+	pubDate: post.data.pubDate,
+	readingTime: post.data.readingTime ?? 3,
+}));
+---
+
+<div class="popular-grid">
+	<a class="popular-feat" href={featureHref}>
+		<div class="thumb"></div>
+		<div class="body">
+			<h3>{feature.data.title}</h3>
+			<p>{featureDeck}</p>
+			<div class="meta">
+				<FormattedDate date={feature.data.pubDate} />
+				<span class="dot"></span>
+				<span>{feature.data.readingTime ?? 3} мин чтения</span>
+			</div>
+		</div>
+	</a>
+	<div class="popular-list">
+		{
+			rowItems.map((row) => (
+				<a class="pop-row" href={row.href}>
+					<div class={`thumb ${row.thumbClass}`}>
+						<span class="play">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+								<path d="M8 5v14l11-7z" />
+							</svg>
+						</span>
+					</div>
+					<div>
+						<div class="title">{row.title}</div>
+						<div class="meta">
+							<FormattedDate date={row.pubDate} />
+							<span>{row.readingTime} мин чтения</span>
+						</div>
+					</div>
+				</a>
+			))
+		}
+	</div>
+</div>
+
+<style>
+	.popular-feat,
+	.pop-row {
+		text-decoration: none;
+		color: inherit;
+		display: grid;
+	}
+	.popular-feat {
+		display: block;
+	}
+</style>
