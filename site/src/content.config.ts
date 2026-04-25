@@ -25,6 +25,7 @@ const posts = defineCollection({
 			editorialFlags: z.array(z.string()).default([]),
 			storyCluster: z.string().optional(),
 			sourceNote: z.string().optional(),
+			tgTeaser: z.string().optional(),
 			readingTime: z.number().optional(),
 			publicUrl: z.string().optional(),
 			heroAlt: z.string(),

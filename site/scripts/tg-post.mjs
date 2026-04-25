@@ -86,6 +86,9 @@ const tagFromString = (s) => {
 	return cleaned ? `#${cleaned}` : '';
 };
 
+// Per-article TG teaser. Optional, falls back to "Разбираемся в статье" when missing.
+// Lives in frontmatter as `tgTeaser:` — a paragraph with rhetorical questions that
+// hint at what the article answers, without spoiling the conclusion.
 function buildPostText(fm, body, slug) {
 	const siteUrl = process.env.SITE_URL || 'https://ai.scqr.ru';
 	// utm tag doubles as a TG-side OG cache buster: when og:image content changes
@@ -98,6 +101,7 @@ function buildPostText(fm, body, slug) {
 	const url = `${siteUrl}${path}${cacheBust ? `${sep}utm_source=tg&v=${cacheBust}` : '?utm_source=tg'}`;
 	const title = fm.title || slug;
 	const deck = fm.deck || fm.description || '';
+	const teaser = (fm.tgTeaser || '').trim();
 	const typeLabel = TYPE_LABELS[fm.articleType] || fm.articleType || '';
 
 	const rubricLabels = Array.isArray(fm.rubricLabels) && fm.rubricLabels.length > 0
@@ -131,9 +135,13 @@ function buildPostText(fm, body, slug) {
 		metaLine ? escapeHtml(metaLine) : null,
 		'',
 		escapeHtml(deck),
-		'',
-		`<a href="${url}">Читать на SCQR →</a>`,
 	];
+	if (teaser) {
+		lines.push('');
+		lines.push(escapeHtml(teaser));
+	}
+	lines.push('');
+	lines.push(`Разбираемся: <a href="${url}">читать на SCQR</a>`);
 	if (hashtags) {
 		lines.push('');
 		lines.push(hashtags);
