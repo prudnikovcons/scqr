@@ -1,8 +1,12 @@
 # SCQR Style Guide
 
-> Писательский гайд SCQR. Дополняет [editorial-rules.md](editorial-rules.md) и [russian-voice.md](russian-voice.md). Основан на корпусе из 65 статей, опубликованных за январь–апрель 2026, и на образцах в [.scqr/style-corpus/](../.scqr/style-corpus/).
+> Писательский гайд SCQR. Дополняет [editorial-rules.md](editorial-rules.md), [russian-voice.md](russian-voice.md) и [zhivoy-golos.md](zhivoy-golos.md). Основан на корпусе из 65 статей, опубликованных за январь–апрель 2026, и на образцах в [.scqr/style-corpus/](../.scqr/style-corpus/).
 >
-> **Базовый фильтр любого текста SCQR — [russian-voice.md](russian-voice.md).** Без него этот гайд не работает: тон, лид, структура — всё бесполезно, если текст всё равно звучит как ассистент-обзор. Перед сдачей материал проходит самопроверку из russian-voice.md.
+> **Базовый фильтр любого текста SCQR.** Перед сдачей материал проходит:
+> 1. [russian-voice.md](russian-voice.md) — устранение ИИ-маркеров (антитезы, канцелярит, формульные переходы).
+> 2. [zhivoy-golos.md](zhivoy-golos.md) — карта живых русскоязычных AI-голосов, анатомия поста, словарь замен, антипаттерны и финальная самопроверка.
+>
+> Если контракт style-guide противоречит фильтрам — приоритет у фильтров.
 
 ## 1. Тон
 
