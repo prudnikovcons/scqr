@@ -202,7 +202,8 @@ new
 | 2026-04-26 | e056ef7 | db backup команда, paths.backups |
 | 2026-04-26 | 1594d22 | sources list/add/deactivate — полная реализация |
 | 2026-04-26 | d6ff150 | Коллекторы (rss, html, github) + pipeline (normalize, dedupe, cluster) + collect + pack + signals archive |
-| 2026-04-26 | (текущий) | Расписание 7д/нед (scqr-morning-collect, scqr-evening-collect), automations.md, runbook §7 |
+| 2026-04-26 | f75c38b | Расписание 7д/нед (scqr-morning-collect, scqr-evening-collect), automations.md, runbook §7 |
+| 2026-04-26 | 324bf79 | source-scout: 9 кандидатов pending_review в docs/SOURCES_RESEARCH.md |
 
 **Состояние на 2026-04-26**: все ключевые команды реализованы. Collect: 918 сигналов с OpenAI Blog за первый прогон. Pack: 25 сигналов в первом пакете. Scheduled tasks активны 08:00 + 19:00 ежедневно. Источников: 3 тестовых (test_only), ожидает source-scout для наполнения реестра до 70-90.
 
