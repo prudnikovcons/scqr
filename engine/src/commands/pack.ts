@@ -1,4 +1,4 @@
-import { eq, and, gte, lte, inArray, desc, sql } from 'drizzle-orm';
+import { eq, and, gte, lte, inArray, desc, sql, isNull, or } from 'drizzle-orm';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { format } from 'date-fns';
 import { getDb, closeDb, schema } from '../db/client.ts';
@@ -11,6 +11,8 @@ interface PackOptions {
 }
 
 const MAX_PER_CLUSTER = 5;
+const MAX_PER_SOURCE = 3;
+const MAX_PUBLISHED_AGE_DAYS = 14;
 
 function recencyFactor(publishedAt: Date | null): number {
   if (!publishedAt) return 0.5;
@@ -18,7 +20,18 @@ function recencyFactor(publishedAt: Date | null): number {
   if (ageHours < 6) return 1.0;
   if (ageHours < 24) return 0.85;
   if (ageHours < 48) return 0.7;
-  return 0.5;
+  if (ageHours < 168) return 0.4;   // < 7 days
+  if (ageHours < 336) return 0.2;   // 7-14 days
+  return 0.05;                       // >14 days — почти не попадает в пакет
+}
+
+function whyNow(signal: any, source: any): string {
+  const ageH = signal.publishedAt
+    ? Math.round((Date.now() - new Date(signal.publishedAt).getTime()) / 3_600_000)
+    : null;
+  const age = ageH == null ? 'дата неизвестна' : ageH < 1 ? 'только что' : `${ageH}ч назад`;
+  const cluster = signal.clusterId != null ? `; кластер #${signal.clusterId}` : '';
+  return `${age}; authority ${source.authorityScore}/10${cluster}`;
 }
 
 function isWeekend(d: Date): boolean {
@@ -87,6 +100,8 @@ export async function runPack(opts: PackOptions): Promise<void> {
   const isWeeklyDigest = opts.slot === 'evening' && now.getDay() === 0;
 
   try {
+    const publishedCutoff = new Date(now.getTime() - MAX_PUBLISHED_AGE_DAYS * 24 * 3_600_000);
+
     const newSignals = await db
       .select({
         signal: schema.signals,
@@ -98,6 +113,9 @@ export async function runPack(opts: PackOptions): Promise<void> {
         and(
           eq(schema.signals.status, 'new'),
           gte(schema.signals.fetchedAt, cutoff),
+          // exclude articles published more than MAX_PUBLISHED_AGE_DAYS ago
+          // allow null publishedAt through (handled by recencyFactor → 0.5)
+          or(isNull(schema.signals.publishedAt), gte(schema.signals.publishedAt, publishedCutoff)),
         ),
       )
       .orderBy(desc(schema.signals.fetchedAt));
@@ -122,23 +140,24 @@ export async function runPack(opts: PackOptions): Promise<void> {
 
     const selected: typeof scored = [];
     const clusterCounts = new Map<number, number>();
+    const sourceCounts = new Map<number, number>();
 
     for (const item of scored) {
       if (selected.length >= opts.limit) break;
       const cid = item.signal.clusterId ?? -item.signal.id;
-      const count = clusterCounts.get(cid) ?? 0;
-      if (count >= MAX_PER_CLUSTER) continue;
+      const sid = item.source.id;
+      if ((clusterCounts.get(cid) ?? 0) >= MAX_PER_CLUSTER) continue;
+      if ((sourceCounts.get(sid) ?? 0) >= MAX_PER_SOURCE) continue;
       selected.push(item);
-      clusterCounts.set(cid, count + 1);
+      clusterCounts.set(cid, (clusterCounts.get(cid) ?? 0) + 1);
+      sourceCounts.set(sid, (sourceCounts.get(sid) ?? 0) + 1);
     }
 
     const packItems = selected.map(({ signal, source, score }, i) => ({
       signal,
       source,
       displayId: `SIG-${i + 1}`,
-      whyNow: signal.clusterId != null
-        ? `кластер сигналов по теме; authority ${source.authorityScore}/10`
-        : `новый сигнал; authority ${source.authorityScore}/10`,
+      whyNow: whyNow(signal, source),
     }));
 
     let weekendSummary: string | undefined;
