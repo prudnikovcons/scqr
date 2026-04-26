@@ -112,6 +112,7 @@ sources
   .option('--category <cat>', 'category slug', 'misc')
   .option('--score <n>', 'authority score 1-10', '5')
   .option('--notes <text>', 'free-text notes (e.g. pending_review, test_only)')
+  .option('--inactive', 'Add source as inactive (pending_review); does not collect until activated')
   .action(async (name, url, type, opts) => {
     const { addSource } = await import('./commands/sources.ts');
     await addSource({ name, url, type, ...opts });

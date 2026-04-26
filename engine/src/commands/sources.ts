@@ -67,6 +67,7 @@ export async function addSource(opts: {
   category?: string;
   score?: string;
   notes?: string;
+  inactive?: boolean;
 }): Promise<void> {
   if (!SOURCE_TYPES.includes(opts.type as any)) {
     logger.error({ type: opts.type }, `Invalid type. Must be one of: ${SOURCE_TYPES.join(', ')}`);
@@ -100,11 +101,15 @@ export async function addSource(opts: {
         language: lang,
         category: opts.category ?? 'misc',
         authorityScore: score,
+        active: !opts.inactive,
         notes: opts.notes,
       })
       .returning({ id: schema.sources.id });
 
-    logger.info({ id: inserted.id, name: opts.name, type: opts.type }, 'source added');
+    logger.info(
+      { id: inserted.id, name: opts.name, type: opts.type, active: !opts.inactive },
+      'source added',
+    );
 
     await db.insert(schema.decisionLog).values({
       entityType: 'source',
