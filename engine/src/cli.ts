@@ -118,6 +118,12 @@ sources
     await addSource({ name, url, type, ...opts });
   });
 sources
+  .command('activate <id>')
+  .action(async (id) => {
+    const { activateSource } = await import('./commands/sources.ts');
+    await activateSource({ id: Number(id) });
+  });
+sources
   .command('deactivate <id>')
   .action(async (id) => {
     const { deactivateSource } = await import('./commands/sources.ts');

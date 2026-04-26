@@ -123,6 +123,39 @@ export async function addSource(opts: {
   }
 }
 
+export async function activateSource(opts: { id: number }): Promise<void> {
+  const db = getDb();
+  try {
+    const [existing] = await db
+      .select({ id: schema.sources.id, name: schema.sources.name })
+      .from(schema.sources)
+      .where(eq(schema.sources.id, opts.id));
+
+    if (!existing) {
+      logger.error({ id: opts.id }, 'source not found');
+      process.exitCode = 1;
+      return;
+    }
+
+    await db
+      .update(schema.sources)
+      .set({ active: true })
+      .where(eq(schema.sources.id, opts.id));
+
+    await db.insert(schema.decisionLog).values({
+      entityType: 'source',
+      entityId: String(opts.id),
+      decision: 'activated',
+      reason: 'manual activation via CLI',
+      decidedBy: 'cli',
+    });
+
+    logger.info({ id: opts.id, name: existing.name }, 'source activated');
+  } finally {
+    closeDb();
+  }
+}
+
 export async function deactivateSource(opts: { id: number }): Promise<void> {
   const db = getDb();
   try {
