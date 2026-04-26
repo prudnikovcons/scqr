@@ -20,6 +20,7 @@ export const paths = {
   styleCorpus: resolve(workspaceRoot, '.scqr', 'style-corpus'),
   logs: resolve(workspaceRoot, '.scqr', 'logs'),
   reviews: resolve(workspaceRoot, '.scqr', 'reviews'),
+  backups: resolve(workspaceRoot, '.scqr', 'backups'),
 } as const;
 
 export type Paths = typeof paths;

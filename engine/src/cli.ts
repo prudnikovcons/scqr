@@ -119,6 +119,24 @@ sources
     await deactivateSource({ id: Number(id) });
   });
 
+const db = program.command('db').description('Database utilities');
+db
+  .command('backup')
+  .description('Copy .scqr/data.db to .scqr/backups/data-YYYYMMDD-HHmm.db')
+  .action(async () => {
+    const { runDbBackup } = await import('./commands/db.ts');
+    await runDbBackup();
+  });
+
+const signals = program.command('signals').description('Signal management');
+signals
+  .command('archive')
+  .description('Archive signals older than 90 days with status new or in_pack')
+  .action(async () => {
+    const { runSignalsArchive } = await import('./commands/signals.ts');
+    await runSignalsArchive();
+  });
+
 program
   .command('retro <weekISO>')
   .description('Export decision_log + signals dynamics for retro-reviewer')
