@@ -194,6 +194,20 @@ new
 - [ ] Изображения для wave-2 (расширение `editorial-image-styles.js`): остаётся за дизайнерским контуром.
 - [ ] Memory-формат: SQLite-таблица + markdown в `docs/memory/`. Решено: оба, синхронизирует retro-reviewer.
 
+## Signal pipeline v2 / лог
+
+| Дата | SHA | Что сделано |
+|---|---|---|
+| 2026-04-26 | ef737a0 | Schema v2: weekly_digest, consecutive_errors, signals_source_url_idx |
+| 2026-04-26 | e056ef7 | db backup команда, paths.backups |
+| 2026-04-26 | 1594d22 | sources list/add/deactivate — полная реализация |
+| 2026-04-26 | d6ff150 | Коллекторы (rss, html, github) + pipeline (normalize, dedupe, cluster) + collect + pack + signals archive |
+| 2026-04-26 | (текущий) | Расписание 7д/нед (scqr-morning-collect, scqr-evening-collect), automations.md, runbook §7 |
+
+**Состояние на 2026-04-26**: все ключевые команды реализованы. Collect: 918 сигналов с OpenAI Blog за первый прогон. Pack: 25 сигналов в первом пакете. Scheduled tasks активны 08:00 + 19:00 ежедневно. Источников: 3 тестовых (test_only), ожидает source-scout для наполнения реестра до 70-90.
+
+---
+
 ## 13. Связанные документы
 
 - [AGENTS.md](../AGENTS.md), [CLAUDE.md](../CLAUDE.md), [README.md](../README.md)

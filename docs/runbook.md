@@ -116,7 +116,63 @@
 
 ---
 
-## 7. Чего избегать
+## 7. Сборщик сигналов — backup и restore
+
+### Создать резервную копию БД
+
+```bash
+pnpm scqr db backup
+# → .scqr/backups/data-YYYYMMDD-HHmm.db
+```
+
+Делать **перед каждой миграцией** (`pnpm --filter @scqr/engine run db:migrate`) и при любых подозрениях на порчу данных.
+
+Если `pnpm scqr db backup` недоступен (авария) — вручную:
+```bash
+cp .scqr/data.db .scqr/backups/data-manual-$(date +%Y%m%d-%H%M).db
+```
+
+### Восстановить БД из бэкапа
+
+```bash
+# Остановить все запущенные процессы collect/pack
+cp .scqr/backups/data-YYYYMMDD-HHmm.db .scqr/data.db
+pnpm scqr doctor   # убедиться, что всё OK
+```
+
+### Что делать если `pnpm scqr collect` упал
+
+1. Проверить лог: `.scqr/logs/collect-<slot>-<YYYYMMDD>.jsonl` — найти строки с `"error": "..."`.
+2. Если упал конкретный источник — проверить `pnpm scqr sources list`. Если `active=no` — источник был автоматически деактивирован после 3 ошибок.
+3. Чтобы повторно активировать источник вручную — через SQLite или добавить снова:
+   ```bash
+   # Вариант — деактивировать и добавить заново с теми же данными
+   pnpm scqr sources add "<name>" "<url>" "<type>" --rss "<rss_url>" ...
+   ```
+4. Если упал весь collect — смотреть stderr задачи в Claude Code Scheduled Tasks.
+
+### Как запустить collect/pack вручную (ad-hoc)
+
+```bash
+pnpm scqr collect ad-hoc          # все источники
+pnpm scqr collect ad-hoc --source 5   # только source id=5
+pnpm scqr collect ad-hoc --dry-run    # без записи в БД
+
+pnpm scqr pack morning            # пакет из накопленных new-сигналов
+pnpm scqr pack ad-hoc --limit 15  # короткий пакет вручную
+```
+
+### Архивирование старых сигналов (ретенция 90 дней)
+
+```bash
+pnpm scqr signals archive
+# → помечает сигналы старше 90 дней (status new/in_pack) как archived
+# → записывает в decision_log
+```
+
+---
+
+## 8. Чего избегать
 
 - **Не писать в `site/src/content/posts/` без валидации.** Astro content collection схема жёсткая.
 - **Не `git push --force` ни на одну ветку.**
