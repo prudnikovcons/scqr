@@ -3,12 +3,10 @@
 Документ сформирован source-scout 2026-04-26. Все источники добавлены в БД как `active=false` с `notes='pending_review'`. **Активировать может только владелец** командой:
 
 ```bash
-# Пример активации источника id=4 (Google DeepMind)
-# Пока нет команды activate — делаем через deactivate+add или прямой SQL
-# TODO: добавить pnpm scqr sources activate <id> в следующем цикле
+pnpm scqr sources activate <id>   # например: pnpm scqr sources activate 4
 ```
 
-Для активации сейчас: найти строку в таблице `sources` через `.scqr/data.db` (SQLite) и обновить `active=1`. Или проверить, нужен ли новый CLI-хелпер.
+Команда добавлена в `engine/src/commands/sources.ts`. Подробнее — в `docs/runbook.md` (раздел «Управление источниками»).
 
 ---
 

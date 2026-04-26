@@ -144,9 +144,12 @@ pnpm scqr doctor   # убедиться, что всё OK
 
 1. Проверить лог: `.scqr/logs/collect-<slot>-<YYYYMMDD>.jsonl` — найти строки с `"error": "..."`.
 2. Если упал конкретный источник — проверить `pnpm scqr sources list`. Если `active=no` — источник был автоматически деактивирован после 3 ошибок.
-3. Чтобы повторно активировать источник вручную — через SQLite или добавить снова:
+3. Чтобы повторно активировать источник вручную:
    ```bash
-   # Вариант — деактивировать и добавить заново с теми же данными
+   pnpm scqr sources activate <id>   # например: pnpm scqr sources activate 5
+   ```
+   Если источника нет в БД — добавить заново:
+   ```bash
    pnpm scqr sources add "<name>" "<url>" "<type>" --rss "<rss_url>" ...
    ```
 4. Если упал весь collect — смотреть stderr задачи в Claude Code Scheduled Tasks.
@@ -168,6 +171,23 @@ pnpm scqr pack ad-hoc --limit 15  # короткий пакет вручную
 pnpm scqr signals archive
 # → помечает сигналы старше 90 дней (status new/in_pack) как archived
 # → записывает в decision_log
+```
+
+### Управление источниками
+
+Посмотреть текущий список:
+```bash
+pnpm scqr sources list
+```
+
+Активировать `pending_review` источник после апрува владельцем:
+```bash
+pnpm scqr sources activate <id>   # например: pnpm scqr sources activate 4
+```
+
+Команда переводит источник из `active=false` в `active=true` без необходимости пересоздавать запись через SQL или `sources add`. Деактивировать обратно (если нужно):
+```bash
+pnpm scqr sources deactivate <id>
 ```
 
 ---
