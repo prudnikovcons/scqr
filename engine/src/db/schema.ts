@@ -29,6 +29,7 @@ export const sources = sqliteTable(
       .default('weekly'),
     lastFetchedAt: integer('last_fetched_at', { mode: 'timestamp' }),
     lastError: text('last_error'),
+    consecutiveErrors: integer('consecutive_errors').notNull().default(0),
     notes: text('notes'),
     addedAt: integer('added_at', { mode: 'timestamp' })
       .notNull()
@@ -86,6 +87,7 @@ export const signals = sqliteTable(
     sourceIdx: index('signals_source_idx').on(table.sourceId),
     publishedIdx: index('signals_published_idx').on(table.publishedAt),
     hashIdx: index('signals_hash_idx').on(table.contentHash),
+    sourceUrlIdx: index('signals_source_url_idx').on(table.sourceId, table.url),
   }),
 );
 
@@ -119,6 +121,7 @@ export const packs = sqliteTable(
       .default(sql`(unixepoch())`),
     pathToMd: text('path_to_md').notNull(),
     signalCount: integer('signal_count').notNull().default(0),
+    weeklyDigest: integer('weekly_digest', { mode: 'boolean' }).notNull().default(false),
     status: text('status', {
       enum: ['pending_review', 'reviewed', 'archived'],
     })
