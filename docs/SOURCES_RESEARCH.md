@@ -96,13 +96,62 @@
 
 ---
 
+---
+
+## Round 2 — Аналитики и инфлюэнсеры (2026-04-26)
+
+Source-scout запущен повторно по запросу владельца: нужны авторитетные аналитики и инфлюэнсеры для цитат, прогнозов, подтверждения тезисов. Все добавлены как `active=false` (pending_review), ID 13–37.
+
+### analysts-en (ID 13–28)
+
+| ID | Название | Категория | Тип | Score | Обоснование |
+|---|---|---|---|---|---|
+| 13 | Import AI (Jack Clark) | analysts-en | rss | 9 | Сооснователь Anthropic. Еженедельный дайджест — первоисточник по AI safety/policy |
+| 14 | Ahead of AI (Sebastian Raschka) | analysts-en | rss | 8 | Глубокий технический разбор LLM-архитектур |
+| 15 | Interconnects (Nathan Lambert) | analysts-en | rss | 8 | Директор AI2 по alignment. Insider-взгляд на RLHF, preference learning |
+| 16 | One Useful Thing (Ethan Mollick) | analysts-en | rss | 8 | Wharton профессор, практическое применение AI в работе |
+| 17 | AI Snake Oil (Narayanan & Kapoor) | analysts-en | rss | 9 | Princeton CS. Критический взгляд на AI-хайп, fact-checking |
+| 18 | Understanding AI (Timothy Lee) | analysts-en | rss | 7 | Бывший Ars Technica. Технические объяснения для широкой аудитории |
+| 19 | SemiAnalysis (Dylan Patel) | analysts-en | rss | 10 | Лучший аналитик AI-инфраструктуры: чипы, датацентры, supply chain. **Обязательный** |
+| 20 | Don't Worry About the Vase (Zvi Mowshowitz) | analysts-en | rss | 8 | Еженедельный AI-дайджест с оценками рисков. EA/rationalist угол |
+| 21 | Simon Willison's Weblog | analysts-en | rss | 8 | Создатель Datasette. Тест новых моделей одним из первых |
+| 22 | Benedict Evans | analysts-en | rss | 8 | Бывший a16z. Стратегический взгляд на AI как tech-тренд |
+| 23 | The Gradient | analysts-en | rss | 7 | Академический AI-журнал от практиков |
+| 24 | Stratechery (Ben Thompson) | analysts-en | rss | 9 | Топ-бизнес/стратегический взгляд на tech и AI. Aggregation Theory |
+| 25 | Andrej Karpathy Blog | analysts-en | rss | 9 | Бывший директор AI Tesla, сооснователь OpenAI. Редкие, весомые посты |
+| 26 | Lil'Log (Lilian Weng) | analysts-en | rss | 9 | Head of Safety OpenAI. Эталонные техобзоры (attention, agents, RLHF) |
+| 27 | Marcus on AI (Gary Marcus) | analysts-en | rss | 8 | Критик LLM-хайпа. Когнитивная наука, contra-позиции |
+| 28 | The Generalist (Mario Gabriele) | analysts-en | rss | 7 | Венчурный/бизнес-анализ AI-компаний. Глубокие профили стартапов |
+
+### forecasters (ID 29–34)
+
+| ID | Название | Категория | Тип | Score | Обоснование |
+|---|---|---|---|---|---|
+| 29 | Astral Codex Ten (Scott Alexander) | forecasters | rss | 8 | Rationalist-прогнозист. Prediction markets, AI futures. Культовый автор |
+| 30 | Francois Chollet Substack | forecasters | rss | 8 | Создатель Keras. ARC-AGI benchmark. Измеримые прогнозы по AGI |
+| 31 | Yoshua Bengio Blog | forecasters | html | 9 | Нобелевский лауреат. AI safety, регулирование, экзистенциальные риски |
+| 32 | Epoch AI Research | forecasters | rss | 9 | Empirical AI: compute trends, scaling laws, AI timelines. **Лучший источник количественных прогнозов** |
+| 33 | Dwarkesh Podcast | forecasters | rss | 8 | Длинные интервью с топ-исследователями. Инсайты, которых нет нигде |
+| 34 | CSET Georgetown | forecasters | rss | 8 | AI policy, geopolitics, chip controls. Center for Security and Emerging Technology |
+
+### analysts-zh / analysts-ja (ID 35–37)
+
+| ID | Название | Категория | Тип | Lang | Score | Обоснование |
+|---|---|---|---|---|---|---|
+| 35 | Synced Review (机器之心 EN) | analysts-zh | rss | en | 7 | EN-мост к китайской AI-сцене: ByteDance, Baidu, Alibaba |
+| 36 | Qbitai (量子位) | analysts-zh | html | zh | 8 | Ведущее ZH-медиа. Эксклюзивы из китайских лабораторий |
+| 37 | Preferred Networks Tech Blog | analysts-ja | rss | en | 7 | Ведущая японская AI-компания (Chainer). EN-блог |
+
+---
+
 ## Ещё не исследованы (следующий source-scout)
 
-По итогам первого прогона охвачены только research-blogs, infra, regulators (частично), ru-market (частично). На следующем source-scout нужно добавить:
+На третьем прогоне нужно добавить:
 
-- **asia-ai**: ByteDance Research, Zhipu AI, PFN (Japan)
+- **asia-ai deeper**: ByteDance Research отдельно, Zhipu AI (智谱AI), Samsung AI Research
 - **chip-vendors**: AMD AI Blog, Intel AI Blog, Qualcomm AI
-- **industry**: Salesforce AI Research, IBM Research AI, Databricks Blog
-- **ru-market**: Яндекс Research отдельно (если появится отдельный RSS), AI Journal Russia
+- **industry**: Salesforce AI Research, IBM Research AI, Databricks Blog, Hugging Face Blog
+- **ru-market**: Яндекс Research (если появится отдельный RSS), AI Journal Russia, Skoltech AI
+- **safety-orgs**: ARC Evals, Apollo Research, Redwood Research
 
-Цель: 70-90 активных источников (сейчас после апрува будет ~12, нужно ещё ~60).
+Цель: 70-90 активных источников (после апрува round 1+2 будет ~34, нужно ещё ~40).
