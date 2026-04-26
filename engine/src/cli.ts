@@ -98,16 +98,20 @@ publish
   });
 
 const sources = program.command('sources').description('Sources registry');
-sources.command('list').action(async () => {
-  const { listSources } = await import('./commands/sources.ts');
-  await listSources();
-});
+sources
+  .command('list')
+  .option('--inactive', 'Include deactivated sources')
+  .action(async (opts) => {
+    const { listSources } = await import('./commands/sources.ts');
+    await listSources({ inactive: opts.inactive });
+  });
 sources
   .command('add <name> <url> <type>')
   .option('--rss <url>', 'RSS URL if different from main URL')
   .option('--lang <lang>', 'ru|en|zh|other', 'en')
   .option('--category <cat>', 'category slug', 'misc')
   .option('--score <n>', 'authority score 1-10', '5')
+  .option('--notes <text>', 'free-text notes (e.g. pending_review, test_only)')
   .action(async (name, url, type, opts) => {
     const { addSource } = await import('./commands/sources.ts');
     await addSource({ name, url, type, ...opts });
