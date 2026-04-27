@@ -533,13 +533,28 @@ async function publishArticle(slug) {
 	const message = `post: ${title}`;
 
 	await gitRun(['add', ...filesToAdd]);
-	await gitRun(['commit', '-m', message]);
+
+	// Если статья уже была закоммичена ранее (status флипался,
+	// но push не прошёл) — git commit вернёт «nothing to commit»,
+	// и это не ошибка: просто переходим к push.
+	let committed = false;
+	try {
+		await gitRun(['commit', '-m', message]);
+		committed = true;
+	} catch (err) {
+		if (/nothing to commit|no changes added|nothing added to commit/i.test(err.message)) {
+			console.log(`[publish] no new changes for ${safe}, will just push`);
+		} else {
+			throw err;
+		}
+	}
+
 	await gitRun(['push']);
 
 	// Status → approved ТОЛЬКО после успешного push
 	await saveArticle(safe, { fields: { status: 'approved' } });
 
-	return { ok: true, slug: safe, message };
+	return { ok: true, slug: safe, message, committed };
 }
 
 async function pathExists(p) {
@@ -693,6 +708,14 @@ const server = createServer(async (req, res) => {
 			return send(res, 200, html, MIME['.html']);
 		}
 
+		// API: настройки сервера (порт preview и т.п.)
+		if (method === 'GET' && pathname === '/api/config') {
+			return send(res, 200, {
+				previewPort: PREVIEW_PORT,
+				previewEnabled: process.env.SCQR_PREVIEW !== '0',
+			});
+		}
+
 		// API: список статей по статусу
 		if (method === 'GET' && pathname === '/api/articles') {
 			const status = url.searchParams.get('status') || '';
@@ -789,6 +812,48 @@ function loadEnvLocalIntoServer() {
 	} catch {}
 }
 
+// ─────────────────────────────────────────────────────────────────────────
+// Astro dev — служебный preview на порту 4322
+// ─────────────────────────────────────────────────────────────────────────
+
+const PREVIEW_PORT = Number(process.env.SCQR_PREVIEW_PORT || 4322);
+let previewChild = null;
+let previewShouldRun = true;
+
+function startAstroDev() {
+	if (!previewShouldRun) return;
+	const child = spawn('pnpm', ['--filter', 'site', 'dev', '--port', String(PREVIEW_PORT)], {
+		cwd: ROOT,
+		stdio: ['ignore', 'pipe', 'pipe'],
+		env: process.env,
+		shell: true,
+	});
+	previewChild = child;
+	child.stdout.on('data', (d) => {
+		const s = d.toString().trim();
+		if (s && /error|warn|ready in|http:\/\//i.test(s)) console.log('[preview]', s.slice(0, 200));
+	});
+	child.stderr.on('data', (d) => {
+		const s = d.toString().trim();
+		if (s) console.error('[preview]', s.slice(0, 200));
+	});
+	child.on('exit', (code) => {
+		previewChild = null;
+		if (!previewShouldRun) return;
+		console.log(`[preview] exited code=${code}, respawning in 8s`);
+		setTimeout(startAstroDev, 8000);
+	});
+	console.log(`  [preview] starting astro dev on http://localhost:${PREVIEW_PORT}/`);
+}
+
+function stopAstroDev() {
+	previewShouldRun = false;
+	if (previewChild) {
+		try { previewChild.kill(); } catch {}
+		previewChild = null;
+	}
+}
+
 let watcherChild = null;
 let watcherShouldRun = true;
 
@@ -831,8 +896,8 @@ function stopTgWatcher() {
 	}
 }
 
-process.on('SIGINT', () => { stopTgWatcher(); process.exit(0); });
-process.on('SIGTERM', () => { stopTgWatcher(); process.exit(0); });
+process.on('SIGINT', () => { stopTgWatcher(); stopAstroDev(); process.exit(0); });
+process.on('SIGTERM', () => { stopTgWatcher(); stopAstroDev(); process.exit(0); });
 
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
@@ -843,4 +908,7 @@ server.listen(PORT, () => {
 	console.log(`  packs:   ${PACKS_DIR}`);
 	console.log(`  reviews: ${REVIEWS_DIR}`);
 	startTgWatcher();
+	if (process.env.SCQR_PREVIEW !== '0') {
+		startAstroDev();
+	}
 });

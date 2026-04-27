@@ -227,6 +227,7 @@
 	<div class="left" id="dock-left">—</div>
 	<div class="right">
 		<button class="btn" id="save-now">Сохранить сейчас</button>
+		<a class="btn" id="preview-link" target="_blank" rel="noopener" style="text-decoration:none;display:none">👁 Превью</a>
 		<button class="btn primary" id="accept" disabled>Принять в очередь</button>
 	</div>
 </footer>
@@ -238,7 +239,16 @@ const state = {
 	articles: [],
 	current: null,        // {slug, fields, body, sidecar, fm}
 	saveTimer: null,
+	previewPort: 4322,
 };
+
+(async () => {
+	try {
+		const r = await fetch('/api/config');
+		const c = await r.json();
+		state.previewPort = c.previewPort || 4322;
+	} catch {}
+})();
 
 function showToast(kind, message, sub) {
 	const t = $('#toast');
@@ -316,6 +326,11 @@ async function loadArticle(slug) {
 	renderCover(data.fields.heroImage);
 	$('#dock-left').innerHTML = `статья <b>${slug}</b> · формат <b>${data.activeFormat}</b> · status <b>${data.fields.status}</b>`;
 	$('#accept').disabled = false;
+
+	// Превью на служебном Astro dev (порт 4322)
+	const previewLink = $('#preview-link');
+	previewLink.href = `http://localhost:${state.previewPort}/${slug}/`;
+	previewLink.style.display = 'inline-block';
 }
 
 async function switchFormat() {

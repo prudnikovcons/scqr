@@ -142,6 +142,8 @@ function showToast(kind, message, sub) {
 }
 
 const justSlug = new URL(location.href).searchParams.get('just');
+let previewPort = 4322;
+fetch('/api/config').then(r => r.json()).then(c => { previewPort = c.previewPort || 4322; load(); }).catch(() => load());
 
 async function load() {
 	const [readyRes, approvedRes] = await Promise.all([
@@ -185,10 +187,13 @@ function itemCard(a, kind) {
 	const date = (a.pubDate || '').slice(0, 16).replace('T', ' ');
 	const tgSent = a.tgSent || (a.tgSentAt ? true : false);
 
+	const previewHref = `http://localhost:${previewPort}/${a.slug}/`;
 	const actionsHtml = kind === 'ready'
-		? `<a class="btn">В редактор</a>
+		? `<a class="btn" href="${previewHref}" target="_blank" rel="noopener">👁 Превью</a>
+		   <a class="btn">В редактор</a>
 		   <button class="btn primary publish-btn">Опубликовать</button>`
-		: `<a class="btn" target="_blank" rel="noopener">Открыть</a>
+		: `<a class="btn" href="${previewHref}" target="_blank" rel="noopener">👁 Превью (служебный)</a>
+		   <a class="btn" target="_blank" rel="noopener">На сайте</a>
 		   <a class="btn">В редактор</a>
 		   <button class="btn primary tg-btn">${tgSent ? '↻ Переотправить в TG' : '📨 Отправить в TG бот'}</button>`;
 
@@ -213,10 +218,11 @@ function itemCard(a, kind) {
 	card.querySelector('.meta code').textContent = a.slug;
 	card.querySelector('.deck').textContent = (a.deck || '').slice(0, 280) + ((a.deck || '').length > 280 ? '…' : '');
 
-	const editBtn = card.querySelector('.actions a:not([target])');
-	if (editBtn) {
-		editBtn.href = `/editor?slug=${encodeURIComponent(a.slug)}`;
-		editBtn.addEventListener('click', async (e) => {
+	// «В редактор» — единственная ссылка БЕЗ target, идёт через unaccept
+	const editLink = Array.from(card.querySelectorAll('.actions a')).find((el) => !el.hasAttribute('target'));
+	if (editLink) {
+		editLink.href = `/editor?slug=${encodeURIComponent(a.slug)}`;
+		editLink.addEventListener('click', async (e) => {
 			e.preventDefault();
 			await fetch('/api/article-unaccept/' + encodeURIComponent(a.slug), { method: 'POST' });
 			location.href = `/editor?slug=${encodeURIComponent(a.slug)}`;
@@ -227,7 +233,8 @@ function itemCard(a, kind) {
 		const pubBtn = card.querySelector('.publish-btn');
 		pubBtn.addEventListener('click', () => publish(a, pubBtn));
 	} else {
-		const openBtn = card.querySelector('.actions a[target]');
+		// «На сайте» — вторая target-ссылка (превью на ai.scqr.ru)
+		const openBtn = Array.from(card.querySelectorAll('.actions a[target]')).find((el) => el.textContent.includes('На сайте'));
 		if (openBtn) openBtn.href = `https://ai.scqr.ru/${a.slug}/`;
 		const tgBtn = card.querySelector('.tg-btn');
 		tgBtn.addEventListener('click', () => sendTg(a, tgBtn));
@@ -273,8 +280,6 @@ async function sendTg(a, btn) {
 		showToast('err', 'Не удалось отправить', e.message);
 	}
 }
-
-load();
 </script>
 
 </body>
