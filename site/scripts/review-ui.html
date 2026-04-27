@@ -164,6 +164,50 @@
 	.field textarea { min-height: 70px; resize: vertical; }
 	.field .hint { font-size: 11px; color: var(--muted); margin-top: 3px; }
 
+	.toast {
+		position: fixed; left: 50%; top: 70px; transform: translateX(-50%);
+		min-width: 300px; max-width: 560px;
+		padding: 14px 20px; border-radius: 14px;
+		font-size: 14px; font-weight: 500;
+		box-shadow: 0 6px 24px rgba(23, 20, 46, 0.15);
+		z-index: 50; display: none;
+	}
+	.toast.show { display: block; animation: toast-in 0.3s ease-out; }
+	.toast.ok { background: #e9f9ec; color: #1f6b2f; border: 1px solid #a3d9b1; }
+	.toast.err { background: #fde7e7; color: #952626; border: 1px solid #f0a5a5; }
+	.toast small { display: block; font-weight: 400; opacity: 0.75; margin-top: 4px; }
+	@keyframes toast-in {
+		from { opacity: 0; transform: translate(-50%, -10px); }
+		to { opacity: 1; transform: translate(-50%, 0); }
+	}
+
+	.suggestion {
+		margin: 12px 0 14px;
+		padding: 12px 14px;
+		background: linear-gradient(180deg, #f7f3ff, #efeaff);
+		border: 1px solid #d3c5ff;
+		border-radius: 12px;
+		font-size: 13.5px;
+		color: #2a2549;
+	}
+	.suggestion .sug-label {
+		font-size: 11px; font-weight: 700;
+		letter-spacing: 0.06em; text-transform: uppercase;
+		color: var(--violet);
+		margin-bottom: 6px;
+	}
+	.suggestion .sug-summary { line-height: 1.55; margin-bottom: 8px; }
+	.suggestion .sug-pitch {
+		background: rgba(255, 255, 255, 0.7);
+		border-left: 3px solid var(--violet);
+		padding: 8px 10px;
+		border-radius: 0 8px 8px 0;
+		font-size: 13px;
+	}
+	.suggestion .sug-pitch b { color: var(--ink); }
+	.suggestion .sug-mi { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+	.suggestion .sug-mi b { color: var(--ink); font-weight: 600; }
+
 	footer.dock {
 		position: fixed; bottom: 0; left: 0; right: 0;
 		background: rgba(255, 255, 255, 0.95);
@@ -196,6 +240,8 @@
 	<div id="status" class="status"></div>
 </header>
 
+<div id="toast" class="toast"></div>
+
 <main>
 	<div id="summary" class="summary"></div>
 	<div id="signals"></div>
@@ -216,9 +262,18 @@ const state = {
 	selected: null,
 	pack: null,
 	actions: {},
+	suggestions: {},
 	saveTimer: null,
 	finalSavedAt: null,
 };
+
+function showToast(kind, message, sub) {
+	const t = document.getElementById('toast');
+	t.className = 'toast show ' + kind;
+	t.innerHTML = message + (sub ? `<small>${sub}</small>` : '');
+	clearTimeout(showToast._timer);
+	showToast._timer = setTimeout(() => { t.className = 'toast'; }, 5000);
+}
 
 function fmtTime(iso) {
 	if (!iso) return '';
@@ -259,6 +314,7 @@ async function loadPack(name) {
 	const data = await r.json();
 	state.pack = data.pack;
 	state.actions = (data.draft && data.draft.actions) || (data.final && data.final.actions) || {};
+	state.suggestions = data.suggestions || {};
 	state.finalSavedAt = data.final && data.final.savedAt;
 	render();
 }
@@ -299,6 +355,7 @@ function renderSummary() {
 
 function cardFor(sig) {
 	const action = state.actions[sig.id] || {};
+	const sug = state.suggestions[sig.id] || null;
 	const card = document.createElement('article');
 	card.className = 'card' + (action.kind ? ' is-' + action.kind : '');
 	card.dataset.id = sig.id;
@@ -315,6 +372,7 @@ function cardFor(sig) {
 			<div class="title"></div>
 		</div>
 		<div class="meta-row"></div>
+		<div class="suggestion-slot"></div>
 		<div class="body"></div>
 		<div class="url"><a target="_blank" rel="noopener noreferrer"></a></div>
 		<div class="actions">
@@ -350,6 +408,25 @@ function cardFor(sig) {
 		card.querySelector('.url').style.display = 'none';
 	}
 
+	// блок подсказки от издания
+	if (sug) {
+		const sugBox = document.createElement('div');
+		sugBox.className = 'suggestion';
+		const summary = sug.summary_ru || '';
+		const recommend = sug.suggested_action ? ` · рекомендация: <b>${sugLabel(sug.suggested_action)}</b>` : '';
+		const pitch = sug.thesis ? `<div class="sug-pitch"><b>Как подать:</b> ${escapeHtml(sug.thesis)}${sug.angle ? ` <span style="color:#5c5685">— ракурс: ${escapeHtml(sug.angle)}</span>` : ''}</div>` : '';
+		const mustInclude = sug.must_include
+			? `<div class="sug-mi"><b>В материале обязательно:</b> ${escapeHtml(sug.must_include)}</div>`
+			: '';
+		sugBox.innerHTML = `
+			<div class="sug-label">издание предлагает${recommend}</div>
+			<div class="sug-summary">${escapeHtml(summary)}</div>
+			${pitch}
+			${mustInclude}
+		`;
+		card.querySelector('.suggestion-slot').appendChild(sugBox);
+	}
+
 	// активная кнопка
 	for (const btn of card.querySelectorAll('.action-btn')) {
 		if (action.kind && btn.dataset.kind === action.kind) {
@@ -372,16 +449,32 @@ function cardFor(sig) {
 	return card;
 }
 
+function escapeHtml(s) {
+	return String(s || '')
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;');
+}
+
+function sugLabel(kind) {
+	if (kind === 'write') return 'в работу';
+	if (kind === 'interest') return 'в интерес';
+	if (kind === 'skip') return 'скип';
+	return kind;
+}
+
 function setAction(sigId, kind, card) {
 	const cur = state.actions[sigId] || {};
+	const sug = state.suggestions[sigId] || null;
 	if (cur.kind === kind) {
 		delete state.actions[sigId];
 	} else {
 		state.actions[sigId] = { kind };
 		if (kind === 'write') {
-			state.actions[sigId].thesis = '';
-			state.actions[sigId].angle = '';
-			state.actions[sigId].must_include = '';
+			state.actions[sigId].thesis = (sug && sug.thesis) || '';
+			state.actions[sigId].angle = (sug && sug.angle) || '';
+			state.actions[sigId].must_include = (sug && sug.must_include) || '';
 		}
 	}
 	card.classList.remove('is-skip', 'is-interest', 'is-write');
@@ -464,9 +557,16 @@ async function finalizeReview() {
 		if (!r.ok) throw new Error(data.error || 'finalize error');
 		state.finalSavedAt = data.savedAt;
 		$('#status').innerHTML = `<span class="ok">рецензия · ${fmtTime(data.savedAt)}</span>`;
+		const writesCount = writes.length;
+		showToast(
+			'ok',
+			`Рецензия зафиксирована · ${fmtTime(data.savedAt)}`,
+			`в работу: ${writesCount} · файл: .scqr/reviews/${state.selected}.review.json`,
+		);
 		updateDock();
 	} catch (e) {
 		$('#status').innerHTML = `<span class="err">${e.message}</span>`;
+		showToast('err', 'Ошибка при фиксации', e.message);
 	}
 }
 

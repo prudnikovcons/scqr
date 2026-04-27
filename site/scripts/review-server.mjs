@@ -152,6 +152,21 @@ async function getPack(name) {
 	return parsePack(md);
 }
 
+async function readSuggestions(name) {
+	const safe = name.replace(/[^a-z0-9._-]/gi, '');
+	if (safe !== name) return null;
+	const path = join(REVIEWS_DIR, `${safe}.suggestions.json`);
+	try {
+		const buf = await readFile(path, 'utf8');
+		const parsed = JSON.parse(buf);
+		// файл хранит { pack, author, suggestions: { SIG-N: {...} } }
+		// возвращаем плоскую мапу для UI
+		return parsed.suggestions || parsed;
+	} catch {
+		return null;
+	}
+}
+
 async function readReview(name, kind) {
 	const safe = name.replace(/[^a-z0-9._-]/gi, '');
 	if (safe !== name) throw new Error('invalid name');
@@ -236,7 +251,8 @@ const server = createServer(async (req, res) => {
 			const pack = await getPack(name);
 			const draft = await readReview(name, 'draft');
 			const final = await readReview(name, 'review');
-			return send(res, 200, { pack, draft, final });
+			const suggestions = await readSuggestions(name);
+			return send(res, 200, { pack, draft, final, suggestions });
 		}
 
 		// API: автосейв черновика
