@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SCQR · редактор статей</title>
+<style>
+	:root {
+		--bg: #f1ecff; --bg2: #e9e2ff; --surface: #ffffff;
+		--ink: #17142e; --muted: #5c5685; --line: #d7cdf5;
+		--violet: #7c5cff; --violet-soft: #ece6ff; --lime: #a3e635;
+		--red: #f23b3b; --green: #2f8f3a; --orange: #f0b35a;
+	}
+	* { box-sizing: border-box; }
+	html, body { margin: 0; padding: 0; }
+	body {
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, system-ui, sans-serif;
+		background: var(--bg); color: var(--ink); line-height: 1.5;
+	}
+	header.bar {
+		position: sticky; top: 0; z-index: 5;
+		background: rgba(241, 236, 255, 0.92);
+		backdrop-filter: saturate(140%) blur(8px);
+		border-bottom: 1px solid var(--line);
+		padding: 12px 20px;
+		display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+	}
+	.brand { font-weight: 700; font-size: 14px; }
+	.brand .ru { color: var(--violet); }
+	nav.tabs { display: flex; gap: 4px; }
+	nav.tabs a {
+		padding: 6px 14px; border-radius: 8px; text-decoration: none;
+		color: var(--muted); font-size: 13px; font-weight: 500;
+	}
+	nav.tabs a:hover { background: var(--bg2); color: var(--ink); }
+	nav.tabs a.active { background: var(--violet); color: #fff; }
+
+	select.picker {
+		padding: 7px 10px; border-radius: 8px;
+		border: 1px solid var(--line); background: var(--surface);
+		min-width: 320px; font: inherit; color: inherit;
+	}
+	.status { margin-left: auto; font-size: 13px; color: var(--muted); }
+	.status .ok { color: var(--green); }
+	.status .err { color: var(--red); }
+
+	main { max-width: 920px; margin: 0 auto; padding: 28px 20px 140px; }
+
+	.empty { padding: 80px 20px; text-align: center; color: var(--muted); }
+	.empty a { color: var(--violet); }
+
+	.card {
+		background: var(--surface); border: 1px solid var(--line);
+		border-radius: 16px; padding: 22px 24px; margin-bottom: 16px;
+	}
+	.card h2 {
+		margin: 0 0 14px; font-size: 13px; font-weight: 700;
+		text-transform: uppercase; letter-spacing: 0.06em; color: var(--violet);
+	}
+	.card .row { display: flex; gap: 12px; flex-wrap: wrap; }
+	.field { margin-bottom: 12px; }
+	.field label {
+		display: block; font-size: 12px; font-weight: 600; color: var(--muted);
+		text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px;
+	}
+	.field input, .field textarea {
+		width: 100%; padding: 9px 11px; border: 1px solid var(--line);
+		border-radius: 8px; background: #fafaff; color: var(--ink);
+		font: inherit; font-size: 14px;
+	}
+	.field input:focus, .field textarea:focus {
+		outline: none; border-color: var(--violet); background: #fff;
+	}
+	.field textarea { min-height: 60px; resize: vertical; line-height: 1.5; }
+	.field textarea.body { min-height: 480px; font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 13.5px; }
+	.field .hint { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+	.btn {
+		padding: 8px 14px; font-size: 13px; font-weight: 500;
+		border: 1px solid var(--line); background: var(--bg);
+		border-radius: 8px; cursor: pointer; color: var(--ink);
+	}
+	.btn:hover { background: var(--surface); }
+	.btn.primary { background: var(--violet); color: #fff; border-color: var(--violet); font-weight: 600; }
+	.btn.primary:hover { background: #6a48ee; }
+	.btn.primary[disabled] { opacity: 0.5; cursor: default; }
+	.btn.copy { font-size: 12px; padding: 5px 10px; }
+
+	.prompt-box {
+		background: #f8f5ff; border: 1px solid var(--line); border-radius: 10px;
+		padding: 12px; max-height: 360px; overflow: auto;
+		font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 12.5px;
+		white-space: pre-wrap; line-height: 1.45; color: #2a2549;
+	}
+	.cover-preview {
+		display: block; max-width: 100%; max-height: 280px;
+		border-radius: 10px; border: 1px solid var(--line); margin-top: 10px;
+	}
+	.cover-info { font-size: 12px; color: var(--muted); margin-top: 6px; }
+	.upload-zone {
+		display: flex; gap: 10px; align-items: center; margin-top: 8px;
+	}
+	.upload-zone input[type="file"] { font-size: 13px; }
+
+	.toast {
+		position: fixed; left: 50%; top: 70px; transform: translateX(-50%);
+		min-width: 300px; max-width: 560px;
+		padding: 14px 20px; border-radius: 14px;
+		font-size: 14px; font-weight: 500;
+		box-shadow: 0 6px 24px rgba(23, 20, 46, 0.15);
+		z-index: 50; display: none;
+	}
+	.toast.show { display: block; animation: toast-in 0.3s ease-out; }
+	.toast.ok { background: #e9f9ec; color: #1f6b2f; border: 1px solid #a3d9b1; }
+	.toast.err { background: #fde7e7; color: #952626; border: 1px solid #f0a5a5; }
+	.toast small { display: block; font-weight: 400; opacity: 0.75; margin-top: 4px; }
+	@keyframes toast-in {
+		from { opacity: 0; transform: translate(-50%, -10px); }
+		to { opacity: 1; transform: translate(-50%, 0); }
+	}
+
+	footer.dock {
+		position: fixed; bottom: 0; left: 0; right: 0;
+		background: rgba(255, 255, 255, 0.95);
+		backdrop-filter: saturate(140%) blur(8px);
+		border-top: 1px solid var(--line);
+		padding: 12px 20px;
+		display: flex; gap: 12px; align-items: center; justify-content: space-between;
+	}
+	footer.dock .left { font-size: 13px; color: var(--muted); }
+	footer.dock .right { display: flex; gap: 10px; }
+</style>
+</head>
+<body>
+
+<header class="bar">
+	<div class="brand">SCQR</div>
+	<nav class="tabs">
+		<a href="/">Ревью</a>
+		<a href="/editor" class="active">Редактор</a>
+		<a href="/queue">Очередь</a>
+	</nav>
+	<select id="picker" class="picker"></select>
+	<div id="status" class="status"></div>
+</header>
+
+<div id="toast" class="toast"></div>
+
+<main id="main">
+	<div id="empty" class="empty">Нет черновиков. Когда я напишу новую статью со <code>status: "draft"</code>, она появится здесь.</div>
+
+	<div id="form" style="display:none">
+		<section class="card">
+			<h2>Метаданные</h2>
+			<div class="field">
+				<label>Заголовок</label>
+				<input type="text" name="title" />
+			</div>
+			<div class="field">
+				<label>Description (для SEO)</label>
+				<textarea name="description"></textarea>
+			</div>
+			<div class="field">
+				<label>Deck (вступление под заголовком)</label>
+				<textarea name="deck"></textarea>
+			</div>
+			<div class="field">
+				<label>Вердикт SCQR (одна строка)</label>
+				<input type="text" name="scqrVerdict" />
+			</div>
+			<div class="field">
+				<label>TG-тизер (вопрос-крючок для соц-карточки)</label>
+				<textarea name="tgTeaser"></textarea>
+			</div>
+			<div class="field">
+				<label>Hero alt (описание обложки для слабовидящих)</label>
+				<input type="text" name="heroAlt" />
+			</div>
+		</section>
+
+		<section class="card">
+			<h2>Тело статьи (Markdown)</h2>
+			<div class="field">
+				<textarea name="body" class="body"></textarea>
+				<div class="hint">Сохраняется на каждый ввод с задержкой 600 мс.</div>
+			</div>
+		</section>
+
+		<section class="card">
+			<h2>
+				Промт для генерации обложки
+				<button class="btn copy" id="copy-prompt">Копировать в буфер</button>
+			</h2>
+			<div id="prompt-box" class="prompt-box"></div>
+			<div class="hint" style="margin-top:8px">Скопируй промт, отдай ChatGPT/Midjourney, сгенерированный файл загрузи ниже.</div>
+		</section>
+
+		<section class="card">
+			<h2>Обложка статьи</h2>
+			<div id="cover-current"></div>
+			<div class="upload-zone">
+				<input type="file" id="cover-file" accept="image/png,image/jpeg,image/webp" />
+				<button class="btn" id="cover-upload">Загрузить</button>
+			</div>
+			<div class="hint">PNG / JPG / WebP до 10 МБ. После загрузки <code>heroImage</code> в frontmatter обновится автоматически.</div>
+		</section>
+
+		<section class="card">
+			<h2>
+				TG-пост
+				<button class="btn copy" id="copy-tg">Копировать в буфер</button>
+			</h2>
+			<div class="field">
+				<textarea name="tgPost" class="body" style="min-height:260px"></textarea>
+				<div class="hint">Этот текст пойдёт в @scqr_ai через tg-review.mjs после публикации.</div>
+			</div>
+		</section>
+	</div>
+</main>
+
+<footer class="dock">
+	<div class="left" id="dock-left">—</div>
+	<div class="right">
+		<button class="btn" id="save-now">Сохранить сейчас</button>
+		<button class="btn primary" id="accept" disabled>Принять в очередь</button>
+	</div>
+</footer>
+
+<script>
+const $ = (s) => document.querySelector(s);
+
+const state = {
+	articles: [],
+	current: null,        // {slug, fields, body, sidecar, fm}
+	saveTimer: null,
+};
+
+function showToast(kind, message, sub) {
+	const t = $('#toast');
+	t.className = 'toast show ' + kind;
+	t.innerHTML = message + (sub ? `<small>${sub}</small>` : '');
+	clearTimeout(showToast._timer);
+	showToast._timer = setTimeout(() => { t.className = 'toast'; }, 4000);
+}
+
+function fmtTime(iso) {
+	if (!iso) return '';
+	const d = new Date(iso); const pad = (n) => String(n).padStart(2, '0');
+	return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+
+async function loadList() {
+	const r = await fetch('/api/articles?status=draft');
+	const data = await r.json();
+	state.articles = data.articles || [];
+	const sel = $('#picker');
+	sel.innerHTML = '';
+	for (const a of state.articles) {
+		const opt = document.createElement('option');
+		opt.value = a.slug;
+		opt.textContent = `${a.pubDate ? a.pubDate.slice(0,10) + ' · ' : ''}${a.title}`;
+		sel.appendChild(opt);
+	}
+	if (state.articles.length === 0) {
+		$('#empty').style.display = 'block';
+		$('#form').style.display = 'none';
+		return;
+	}
+	$('#empty').style.display = 'none';
+	$('#form').style.display = 'block';
+
+	// автоматически выбрать тот, что в URL ?slug=... или первый
+	const q = new URL(location.href).searchParams.get('slug');
+	const initial = q && state.articles.find((a) => a.slug === q) ? q : state.articles[0].slug;
+	sel.value = initial;
+	await loadArticle(initial);
+}
+
+async function loadArticle(slug) {
+	const r = await fetch('/api/article/' + encodeURIComponent(slug));
+	if (!r.ok) {
+		showToast('err', 'Не удалось загрузить статью', slug);
+		return;
+	}
+	const data = await r.json();
+	state.current = data;
+
+	for (const k of ['title', 'description', 'deck', 'scqrVerdict', 'tgTeaser', 'heroAlt']) {
+		const el = document.querySelector(`[name="${k}"]`);
+		if (el) el.value = data.fields[k] || '';
+	}
+	document.querySelector('[name="body"]').value = data.body || '';
+	document.querySelector('[name="tgPost"]').value = (data.sidecar && data.sidecar.tgPost) || '';
+	$('#prompt-box').textContent = (data.sidecar && data.sidecar.coverPrompt) || '— промт не подготовлен —';
+
+	renderCover(data.fields.heroImage);
+	$('#dock-left').innerHTML = `статья <b>${slug}</b> · status <b>${data.fields.status}</b>`;
+	$('#accept').disabled = false;
+}
+
+function renderCover(heroImage) {
+	const box = $('#cover-current');
+	if (!heroImage) {
+		box.innerHTML = '<div class="cover-info">Обложка не загружена.</div>';
+		return;
+	}
+	// heroImage относительный из поста: ../../assets/...
+	// преобразуем в /-абсолютный для preview через site dev
+	const display = heroImage.replace(/^.*assets\//, '/src/assets/');
+	box.innerHTML = `<div class="cover-info">heroImage в frontmatter: <code>${heroImage}</code></div>`;
+	// preview только если можем построить URL — здесь просто показываем путь
+}
+
+async function saveDraft() {
+	if (!state.current) return;
+	const fields = {};
+	for (const k of ['title', 'description', 'deck', 'scqrVerdict', 'tgTeaser', 'heroAlt']) {
+		fields[k] = document.querySelector(`[name="${k}"]`).value;
+	}
+	const body = document.querySelector('[name="body"]').value;
+	const tgPost = document.querySelector('[name="tgPost"]').value;
+
+	$('#status').innerHTML = 'сохраняю…';
+	try {
+		const r = await fetch('/api/article-save/' + encodeURIComponent(state.current.slug), {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ fields, body, sidecar: { tgPost } }),
+		});
+		const data = await r.json();
+		if (!r.ok) throw new Error(data.error || 'save error');
+		$('#status').innerHTML = `<span class="ok">сохранено · ${fmtTime(data.savedAt)}</span>`;
+	} catch (e) {
+		$('#status').innerHTML = `<span class="err">${e.message}</span>`;
+		showToast('err', 'Не удалось сохранить', e.message);
+	}
+}
+
+function scheduleSave() {
+	if (state.saveTimer) clearTimeout(state.saveTimer);
+	state.saveTimer = setTimeout(saveDraft, 600);
+}
+
+async function uploadCover() {
+	const file = $('#cover-file').files[0];
+	if (!file) { showToast('err', 'Выбери файл'); return; }
+	if (file.size > 10 * 1024 * 1024) { showToast('err', 'Файл больше 10 МБ'); return; }
+	const reader = new FileReader();
+	reader.onload = async () => {
+		try {
+			const r = await fetch('/api/article-cover/' + encodeURIComponent(state.current.slug), {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ dataUrl: reader.result }),
+			});
+			const data = await r.json();
+			if (!r.ok) throw new Error(data.error || 'upload error');
+			showToast('ok', 'Обложка загружена', data.heroImage);
+			await loadArticle(state.current.slug);
+		} catch (e) {
+			showToast('err', 'Ошибка загрузки', e.message);
+		}
+	};
+	reader.readAsDataURL(file);
+}
+
+async function acceptToQueue() {
+	if (!state.current) return;
+	await saveDraft();
+	try {
+		const r = await fetch('/api/article-accept/' + encodeURIComponent(state.current.slug), { method: 'POST' });
+		const data = await r.json();
+		if (!r.ok) throw new Error(data.error || 'accept error');
+		showToast('ok', 'Статья в очереди на публикацию', `slug: ${state.current.slug}`);
+		// удалить из списка черновиков
+		await loadList();
+	} catch (e) {
+		showToast('err', 'Не удалось принять', e.message);
+	}
+}
+
+async function copyPrompt() {
+	const text = $('#prompt-box').textContent;
+	if (!text || text.startsWith('—')) { showToast('err', 'Промт пустой'); return; }
+	try {
+		await navigator.clipboard.writeText(text);
+		showToast('ok', 'Промт скопирован', `${text.length} символов`);
+	} catch (e) {
+		showToast('err', 'Не удалось скопировать', e.message);
+	}
+}
+
+async function copyTg() {
+	const text = document.querySelector('[name="tgPost"]').value;
+	if (!text.trim()) { showToast('err', 'TG-пост пустой'); return; }
+	try {
+		await navigator.clipboard.writeText(text);
+		showToast('ok', 'TG-пост скопирован', `${text.length} символов`);
+	} catch (e) {
+		showToast('err', 'Не удалось скопировать', e.message);
+	}
+}
+
+// автосейв
+for (const sel of ['[name="title"]','[name="description"]','[name="deck"]','[name="scqrVerdict"]','[name="tgTeaser"]','[name="heroAlt"]','[name="body"]','[name="tgPost"]']) {
+	document.addEventListener('input', (e) => {
+		if (e.target.matches(sel)) scheduleSave();
+	});
+}
+
+$('#picker').addEventListener('change', (e) => loadArticle(e.target.value));
+$('#save-now').addEventListener('click', saveDraft);
+$('#accept').addEventListener('click', acceptToQueue);
+$('#cover-upload').addEventListener('click', uploadCover);
+$('#copy-prompt').addEventListener('click', copyPrompt);
+$('#copy-tg').addEventListener('click', copyTg);
+
+loadList();
+</script>
+
+</body>
+</html>

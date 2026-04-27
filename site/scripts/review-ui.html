@@ -234,7 +234,12 @@
 <body>
 
 <header class="bar">
-	<div class="brand">SCQR · ревью</div>
+	<div class="brand">SCQR</div>
+	<nav style="display:flex;gap:4px">
+		<a href="/" style="padding:6px 14px;border-radius:8px;text-decoration:none;background:var(--violet);color:#fff;font-size:13px;font-weight:500">Ревью</a>
+		<a href="/editor" style="padding:6px 14px;border-radius:8px;text-decoration:none;color:var(--muted);font-size:13px;font-weight:500">Редактор</a>
+		<a href="/queue" style="padding:6px 14px;border-radius:8px;text-decoration:none;color:var(--muted);font-size:13px;font-weight:500">Очередь</a>
+	</nav>
 	<select id="pack-picker" class="pack-picker"></select>
 	<div id="meta" class="meta"></div>
 	<div id="status" class="status"></div>

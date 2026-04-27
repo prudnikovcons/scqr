@@ -7,7 +7,7 @@ tgTeaser: "Что меняет M2M-коммерция в логике рынка
 pubDate: "2026-04-27T11:00:00"
 articleType: "analysis"
 stage: "morning-2026-04-27"
-status: "ready"
+status: "draft"
 rubrics: ["automations", "tendencies"]
 rubricLabels: ["Автоматизации", "Тенденции"]
 topics: ["Anthropic", "агенты", "маркетплейс агентов", "M2M-коммерция", "стандарты", "протоколы", "Amazon", "Alibaba", "SWIFT"]

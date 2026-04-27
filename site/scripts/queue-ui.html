@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SCQR · очередь публикации</title>
+<style>
+	:root {
+		--bg: #f1ecff; --bg2: #e9e2ff; --surface: #ffffff;
+		--ink: #17142e; --muted: #5c5685; --line: #d7cdf5;
+		--violet: #7c5cff; --violet-soft: #ece6ff; --lime: #a3e635;
+		--red: #f23b3b; --green: #2f8f3a; --orange: #f0b35a;
+	}
+	* { box-sizing: border-box; }
+	html, body { margin: 0; padding: 0; }
+	body {
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, system-ui, sans-serif;
+		background: var(--bg); color: var(--ink); line-height: 1.5;
+	}
+	header.bar {
+		position: sticky; top: 0; z-index: 5;
+		background: rgba(241, 236, 255, 0.92);
+		backdrop-filter: saturate(140%) blur(8px);
+		border-bottom: 1px solid var(--line);
+		padding: 12px 20px;
+		display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+	}
+	.brand { font-weight: 700; font-size: 14px; }
+	nav.tabs { display: flex; gap: 4px; }
+	nav.tabs a {
+		padding: 6px 14px; border-radius: 8px; text-decoration: none;
+		color: var(--muted); font-size: 13px; font-weight: 500;
+	}
+	nav.tabs a:hover { background: var(--bg2); color: var(--ink); }
+	nav.tabs a.active { background: var(--violet); color: #fff; }
+
+	.status { margin-left: auto; font-size: 13px; color: var(--muted); }
+	.status .ok { color: var(--green); }
+	.status .err { color: var(--red); }
+
+	main { max-width: 920px; margin: 0 auto; padding: 28px 20px 60px; }
+
+	.card {
+		background: var(--surface); border: 1px solid var(--line);
+		border-radius: 16px; padding: 18px 22px; margin-bottom: 12px;
+		display: flex; gap: 16px; align-items: flex-start;
+	}
+	.card .body { flex: 1; min-width: 0; }
+	.card .title {
+		font-size: 16px; font-weight: 600; margin-bottom: 4px;
+	}
+	.card .meta {
+		font-size: 12px; color: var(--muted); margin-bottom: 8px;
+		display: flex; gap: 10px; flex-wrap: wrap;
+	}
+	.card .deck { font-size: 13.5px; color: #2a2549; }
+	.badges { display: flex; gap: 4px; margin-top: 10px; flex-wrap: wrap; }
+	.badge {
+		display: inline-block; padding: 2px 8px; border-radius: 999px;
+		font-size: 11px; font-weight: 600;
+	}
+	.badge.ok { background: #e9f9ec; color: #1f6b2f; }
+	.badge.no { background: #fde7e7; color: #952626; }
+	.actions { display: flex; flex-direction: column; gap: 6px; min-width: 130px; }
+	.btn {
+		padding: 8px 14px; font-size: 13px; font-weight: 500;
+		border: 1px solid var(--line); background: var(--bg);
+		border-radius: 8px; cursor: pointer; color: var(--ink);
+		text-align: center; text-decoration: none; display: inline-block;
+	}
+	.btn:hover { background: var(--surface); }
+	.btn.primary { background: var(--violet); color: #fff; border-color: var(--violet); font-weight: 600; }
+	.btn.primary:hover { background: #6a48ee; }
+	.btn[disabled] { opacity: 0.5; cursor: default; }
+
+	.toast {
+		position: fixed; left: 50%; top: 70px; transform: translateX(-50%);
+		min-width: 300px; max-width: 560px;
+		padding: 14px 20px; border-radius: 14px;
+		font-size: 14px; font-weight: 500;
+		box-shadow: 0 6px 24px rgba(23, 20, 46, 0.15);
+		z-index: 50; display: none;
+	}
+	.toast.show { display: block; animation: toast-in 0.3s ease-out; }
+	.toast.ok { background: #e9f9ec; color: #1f6b2f; border: 1px solid #a3d9b1; }
+	.toast.err { background: #fde7e7; color: #952626; border: 1px solid #f0a5a5; }
+	.toast small { display: block; font-weight: 400; opacity: 0.75; margin-top: 4px; }
+	@keyframes toast-in {
+		from { opacity: 0; transform: translate(-50%, -10px); }
+		to { opacity: 1; transform: translate(-50%, 0); }
+	}
+
+	.empty { padding: 80px 20px; text-align: center; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header class="bar">
+	<div class="brand">SCQR</div>
+	<nav class="tabs">
+		<a href="/">Ревью</a>
+		<a href="/editor">Редактор</a>
+		<a href="/queue" class="active">Очередь</a>
+	</nav>
+	<div id="status" class="status"></div>
+</header>
+
+<div id="toast" class="toast"></div>
+
+<main>
+	<div id="empty" class="empty" style="display:none">Очередь пустая. Чтобы статья сюда попала, прими её в редакторе.</div>
+	<div id="list"></div>
+</main>
+
+<script>
+const $ = (s) => document.querySelector(s);
+
+function showToast(kind, message, sub) {
+	const t = $('#toast');
+	t.className = 'toast show ' + kind;
+	t.innerHTML = message + (sub ? `<small>${sub}</small>` : '');
+	clearTimeout(showToast._timer);
+	showToast._timer = setTimeout(() => { t.className = 'toast'; }, 5000);
+}
+
+async function load() {
+	const r = await fetch('/api/articles?status=ready');
+	const data = await r.json();
+	const list = data.articles || [];
+	const wrap = $('#list');
+	wrap.innerHTML = '';
+	if (list.length === 0) {
+		$('#empty').style.display = 'block';
+		return;
+	}
+	$('#empty').style.display = 'none';
+	for (const a of list) {
+		wrap.appendChild(itemCard(a));
+	}
+}
+
+function itemCard(a) {
+	const card = document.createElement('article');
+	card.className = 'card';
+	card.dataset.slug = a.slug;
+	const date = (a.pubDate || '').slice(0, 16).replace('T', ' ');
+
+	card.innerHTML = `
+		<div class="body">
+			<div class="title"></div>
+			<div class="meta">
+				<span>${date || '—'}</span>
+				<span>slug: <code></code></span>
+			</div>
+			<div class="deck"></div>
+			<div class="badges">
+				<span class="badge ${a.heroImage ? 'ok' : 'no'}">${a.heroImage ? 'обложка ✓' : 'без обложки'}</span>
+				<span class="badge ${a.hasTgPost ? 'ok' : 'no'}">${a.hasTgPost ? 'TG-пост ✓' : 'без TG-поста'}</span>
+				<span class="badge ${a.hasCoverPrompt ? 'ok' : 'no'}">${a.hasCoverPrompt ? 'промт ✓' : 'без промта'}</span>
+			</div>
+		</div>
+		<div class="actions">
+			<a class="btn" target="_blank" rel="noopener">Превью</a>
+			<a class="btn">В редактор</a>
+			<button class="btn primary publish-btn">Опубликовать</button>
+		</div>
+	`;
+	card.querySelector('.title').textContent = a.title;
+	card.querySelector('.meta code').textContent = a.slug;
+	card.querySelector('.deck').textContent = (a.deck || '').slice(0, 280) + ((a.deck || '').length > 280 ? '…' : '');
+	const previewBtn = card.querySelector('.actions a:nth-child(1)');
+	previewBtn.href = `https://ai.scqr.ru/${a.slug}/`;
+	const editBtn = card.querySelector('.actions a:nth-child(2)');
+	editBtn.href = `/editor?slug=${encodeURIComponent(a.slug)}`;
+	editBtn.addEventListener('click', async (e) => {
+		e.preventDefault();
+		await fetch('/api/article-unaccept/' + encodeURIComponent(a.slug), { method: 'POST' });
+		location.href = `/editor?slug=${encodeURIComponent(a.slug)}`;
+	});
+	const pubBtn = card.querySelector('.publish-btn');
+	pubBtn.addEventListener('click', () => publish(a, pubBtn));
+	return card;
+}
+
+async function publish(a, btn) {
+	const ok = confirm(`Опубликовать «${a.title}»? Это сделает git commit + push, Vercel задеплоит автоматически.`);
+	if (!ok) return;
+	btn.disabled = true;
+	btn.textContent = 'публикую…';
+	try {
+		const r = await fetch('/api/article-publish/' + encodeURIComponent(a.slug), { method: 'POST' });
+		const data = await r.json();
+		if (!r.ok) throw new Error(data.error || 'publish error');
+		showToast('ok', 'Опубликовано', `${a.slug} · git push прошёл, ждём Vercel`);
+		await load();
+	} catch (e) {
+		btn.disabled = false;
+		btn.textContent = 'Опубликовать';
+		showToast('err', 'Ошибка публикации', e.message);
+	}
+}
+
+load();
+</script>
+
+</body>
+</html>
