@@ -450,6 +450,152 @@ async function readJsonSafe(path) {
 	}
 }
 
+// ─────────────────────────────────────────────────────────────────────────
+// Codex bridge: пишем задание в файл, опционально вызываем codex CLI,
+// после генерации картинки автоматом подвязываем её к статье
+// ─────────────────────────────────────────────────────────────────────────
+
+function codexTargetPath(safe) {
+	const dateMatch = safe.match(/^(\d{4}-\d{2}-\d{2})/);
+	const dateDir = dateMatch ? dateMatch[1] : 'misc';
+	const assetDir = join(ASSETS_DIR, dateDir);
+	return { dateDir, assetDir, targetPath: join(assetDir, `${safe}.png`) };
+}
+
+async function prepareCodexJob(slug) {
+	const safe = safeSlug(slug);
+	const sidecarPath = join(ARTICLES_DIR, safe, 'sidecar.json');
+	const sidecar = (await readJsonSafe(sidecarPath)) || {};
+	const prompt = (sidecar.coverPrompt || '').trim();
+	if (!prompt) throw new Error('coverPrompt в sidecar пустой');
+
+	const { dateDir, assetDir, targetPath } = codexTargetPath(safe);
+	await mkdir(assetDir, { recursive: true });
+
+	const jobsDir = join(ROOT, '.scqr', 'codex-jobs');
+	await mkdir(jobsDir, { recursive: true });
+	const jobPath = join(jobsDir, `${safe}.md`);
+
+	const task = `# Сгенерируй обложку для статьи SCQR
+
+Размер: **1536×1024** PNG (горизонтальное 16:9 с запасом).
+Модель: \`gpt-image-1\` или \`gpt-image-1.5\` — что доступнее.
+
+## Промт обложки
+
+${prompt}
+
+## Куда сохранить результат
+
+Файл нужно сохранить **строго** по абсолютному пути:
+
+\`\`\`
+${targetPath}
+\`\`\`
+
+После сохранения убедись, что файл существует и весит больше 50 КБ.
+Если получилось — заверши задачу. Если нет — попробуй ещё раз с тем же промтом, но другим seed.
+`;
+	await writeFile(jobPath, task, 'utf8');
+
+	// Если в окружении задано SCQR_CODEX_CMD — пытаемся вызвать его сразу.
+	// Например: SCQR_CODEX_CMD="codex exec --full-auto"
+	let spawnAttempted = false;
+	let spawnResult = null;
+	const codexCmd = (process.env.SCQR_CODEX_CMD || '').trim();
+	if (codexCmd) {
+		spawnAttempted = true;
+		try {
+			spawnResult = await spawnCodex(codexCmd, task);
+		} catch (err) {
+			spawnResult = { ok: false, error: err.message };
+		}
+	}
+
+	return {
+		ok: true,
+		slug: safe,
+		jobPath,
+		targetPath,
+		jobUrl: `/codex-jobs/${safe}.md`,
+		spawnAttempted,
+		spawnResult,
+		instructions:
+			'Открой файл задания, скопируй его содержимое в Codex Desktop / Codex CLI / ChatGPT с image-tool. Когда Codex сохранит файл по указанному пути — нажми «Проверить готовность» в редакторе, и обложка подвяжется к статье автоматически.',
+	};
+}
+
+function spawnCodex(commandLine, taskText) {
+	return new Promise((resolve, reject) => {
+		const child = spawn(commandLine + ' ' + JSON.stringify(taskText), {
+			cwd: ROOT,
+			stdio: ['ignore', 'pipe', 'pipe'],
+			shell: true,
+			env: process.env,
+		});
+		let out = '', err = '';
+		const timer = setTimeout(() => {
+			child.kill();
+			reject(new Error('codex таймаут (5 минут)'));
+		}, 300000);
+		child.stdout.on('data', (d) => (out += d));
+		child.stderr.on('data', (d) => (err += d));
+		child.on('close', (code) => {
+			clearTimeout(timer);
+			if (code === 0) resolve({ ok: true, stdout: out.slice(-500), stderr: err.slice(-500) });
+			else reject(new Error(`codex exit ${code}: ${(err || out).slice(-500)}`));
+		});
+		child.on('error', (err2) => {
+			clearTimeout(timer);
+			if (err2.code === 'ENOENT') {
+				reject(new Error(`команда codex не найдена. Установи @openai/codex или поправь SCQR_CODEX_CMD`));
+			} else {
+				reject(err2);
+			}
+		});
+	});
+}
+
+async function importCodexCover(slug) {
+	const safe = safeSlug(slug);
+	const { dateDir, targetPath } = codexTargetPath(safe);
+
+	if (!(await pathExists(targetPath))) {
+		return { ready: false, targetPath };
+	}
+	const st = await stat(targetPath);
+	if (st.size < 5000) {
+		return { ready: false, targetPath, note: 'файл существует, но весит меньше 5 КБ — кажется, ещё не дописан' };
+	}
+
+	// Копируем в /public/editorial/og/ и обновляем frontmatter + sidecar
+	const ogDir = join(ROOT, 'site', 'public', 'editorial', 'og', dateDir);
+	await mkdir(ogDir, { recursive: true });
+	const ogPath = join(ogDir, `${safe}.png`);
+	const buf = await readFile(targetPath);
+	await writeFile(ogPath, buf);
+	const ogUrl = `/editorial/og/${dateDir}/${safe}.png`;
+	const relPath = `../../assets/editorial/contributed/${dateDir}/${safe}.png`;
+
+	const postPath = await articleMdPath(safe);
+	const md = await readFile(postPath, 'utf8');
+	let { fm, body } = splitFrontmatter(md);
+	fm = setFmRaw(fm, 'heroImage', relPath);
+	if (!getFmField(fm, 'heroSource')) fm = setFmField(fm, 'heroSource', 'codex');
+	await writeFile(postPath, joinFrontmatter(fm, body), 'utf8');
+
+	const sidecarPath = join(ARTICLES_DIR, safe, 'sidecar.json');
+	const sidecar = (await readJsonSafe(sidecarPath)) || {};
+	sidecar.slug = safe;
+	sidecar.ogUrl = ogUrl;
+	sidecar.updatedAt = new Date().toISOString();
+	if (!sidecar.createdAt) sidecar.createdAt = sidecar.updatedAt;
+	await mkdir(dirname(sidecarPath), { recursive: true });
+	await writeFile(sidecarPath, JSON.stringify(sidecar, null, 2), 'utf8');
+
+	return { ready: true, ogUrl, heroImage: relPath, bytes: buf.length };
+}
+
 async function generateCover(slug) {
 	const safe = safeSlug(slug);
 	const sidecarDir = join(ARTICLES_DIR, safe);
@@ -814,6 +960,33 @@ const server = createServer(async (req, res) => {
 			const slug = decodeURIComponent(pathname.slice('/api/article-generate-cover/'.length));
 			const result = await generateCover(slug);
 			return send(res, 200, result);
+		}
+
+		// API: подготовить задание для Codex (file-drop bridge)
+		if (method === 'POST' && pathname.startsWith('/api/article-codex-prepare/')) {
+			const slug = decodeURIComponent(pathname.slice('/api/article-codex-prepare/'.length));
+			const result = await prepareCodexJob(slug);
+			return send(res, 200, result);
+		}
+
+		// API: проверить готовность файла обложки от Codex и подвязать
+		if (method === 'POST' && pathname.startsWith('/api/article-codex-import/')) {
+			const slug = decodeURIComponent(pathname.slice('/api/article-codex-import/'.length));
+			const result = await importCodexCover(slug);
+			return send(res, 200, result);
+		}
+
+		// Открыть файл задания напрямую (read-only)
+		if (method === 'GET' && pathname.startsWith('/codex-jobs/')) {
+			const file = decodeURIComponent(pathname.slice('/codex-jobs/'.length));
+			const safe = file.replace(/[^a-z0-9._-]/gi, '');
+			const filePath = join(ROOT, '.scqr', 'codex-jobs', safe);
+			try {
+				const text = await readFile(filePath, 'utf8');
+				return send(res, 200, text, 'text/markdown; charset=utf-8');
+			} catch {
+				return send(res, 404, { error: 'job file not found' });
+			}
 		}
 
 		// API: принять в очередь (status → ready)

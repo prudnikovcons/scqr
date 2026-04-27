@@ -206,12 +206,18 @@
 		<section class="card">
 			<h2>Обложка статьи</h2>
 			<div id="cover-current"></div>
-			<div class="upload-zone">
+			<div class="upload-zone" style="flex-wrap:wrap;gap:8px">
 				<input type="file" id="cover-file" accept="image/png,image/jpeg,image/webp" />
 				<button class="btn" id="cover-upload">Загрузить вручную</button>
-				<button class="btn" id="cover-generate" style="margin-left:auto;background:var(--violet-soft);border-color:var(--violet);">🎨 Сгенерировать (бесплатно)</button>
+				<button class="btn" id="cover-codex" style="background:var(--violet-soft);border-color:var(--violet);">🤝 Через Codex</button>
+				<button class="btn" id="cover-generate" style="margin-left:auto">🎨 FLUX (бесплатно)</button>
 			</div>
-			<div class="hint">«Загрузить» — взять файл с диска (например, экспорт из Codex Desktop). «Сгенерировать» — отдать промт обложки в pollinations.ai (FLUX, бесплатно, ~30–90 сек), результат подвяжется автоматически. Качество ниже, чем у платных моделей, но для проверки идеи или быстрого черновика подойдёт.</div>
+			<div id="codex-status" style="display:none;margin-top:10px;padding:10px;border:1px solid var(--line);border-radius:8px;background:#f8f5ff;font-size:13px;line-height:1.5"></div>
+			<div class="hint">
+				<b>Загрузить вручную</b> — выбрать готовый файл с диска.
+				<b>Через Codex</b> — пишет файл задания в <code>.scqr/codex-jobs/&lt;slug&gt;.md</code> и проверяет каждые 5 секунд, не появилась ли там картинка по нужному пути; используется твоя подписка Codex, без оплаты API. Если в env стоит <code>SCQR_CODEX_CMD</code> — попробует вызвать Codex CLI автоматически.
+				<b>FLUX</b> — отдаёт промт в pollinations.ai (бесплатно, без подписки, качество ниже).
+			</div>
 		</section>
 
 		<section class="card">
@@ -416,7 +422,74 @@ async function generateCover() {
 		showToast('err', 'Не получилось сгенерировать', e.message);
 	} finally {
 		btn.disabled = false;
-		btn.textContent = '🎨 Сгенерировать (бесплатно)';
+		btn.textContent = '🎨 FLUX (бесплатно)';
+	}
+}
+
+let codexPollTimer = null;
+async function dispatchToCodex() {
+	if (!state.current) return;
+	const slug = state.current.slug;
+	const btn = $('#cover-codex');
+	const box = $('#codex-status');
+	btn.disabled = true;
+	btn.textContent = 'готовлю задание…';
+
+	try {
+		const r = await fetch('/api/article-codex-prepare/' + encodeURIComponent(slug), {
+			method: 'POST',
+		});
+		const data = await r.json();
+		if (!r.ok) throw new Error(data.error || 'prepare error');
+
+		box.style.display = 'block';
+		const spawnNote = data.spawnAttempted
+			? (data.spawnResult && data.spawnResult.ok
+				? '<b>Codex CLI запущен автоматически</b> через SCQR_CODEX_CMD. Жду файла.'
+				: `<b>Codex CLI пытался запуститься, но не смог:</b> ${(data.spawnResult && data.spawnResult.error || 'неизвестная ошибка')}. Возьми задание руками.`)
+			: '<b>SCQR_CODEX_CMD не задан.</b> Открой задание в Codex Desktop, ChatGPT или Codex CLI и выполни.';
+		box.innerHTML = `
+			${spawnNote}
+			<div style="margin-top:8px"><a href="${data.jobUrl}" target="_blank" style="color:var(--violet);">📄 Посмотреть файл задания</a> · <code style="font-size:11px">${data.jobPath}</code></div>
+			<div style="margin-top:4px">Файл должен появиться по пути:<br/><code style="font-size:11px;word-break:break-all">${data.targetPath}</code></div>
+			<div style="margin-top:8px;color:var(--muted)">Сервер проверяет каждые 5 секунд. Когда Codex сохранит картинку — обложка автоматически подвяжется.</div>
+		`;
+
+		// poll каждые 5 секунд
+		if (codexPollTimer) clearInterval(codexPollTimer);
+		let elapsed = 0;
+		codexPollTimer = setInterval(async () => {
+			elapsed += 5;
+			try {
+				const r2 = await fetch('/api/article-codex-import/' + encodeURIComponent(slug), {
+					method: 'POST',
+				});
+				const d2 = await r2.json();
+				if (d2.ready) {
+					clearInterval(codexPollTimer);
+					codexPollTimer = null;
+					showToast('ok', 'Codex отдал обложку', `${(d2.bytes / 1024).toFixed(0)} КБ · ${d2.heroImage}`);
+					box.innerHTML = `<b style="color:var(--green)">✓ Обложка подвязана</b> — ${(d2.bytes / 1024).toFixed(0)} КБ.`;
+					btn.disabled = false;
+					btn.textContent = '🤝 Через Codex';
+					await loadArticle(slug);
+					setTimeout(() => { box.style.display = 'none'; }, 6000);
+				} else if (elapsed > 600) {
+					// 10 минут таймаут
+					clearInterval(codexPollTimer);
+					codexPollTimer = null;
+					box.innerHTML += '<div style="color:var(--red);margin-top:8px">Прошло 10 минут — больше не проверяю. Если файл появится позже, нажми «Через Codex» снова.</div>';
+					btn.disabled = false;
+					btn.textContent = '🤝 Через Codex';
+				}
+			} catch (e) {
+				console.error('codex poll error', e);
+			}
+		}, 5000);
+	} catch (e) {
+		showToast('err', 'Не получилось подготовить задание', e.message);
+		btn.disabled = false;
+		btn.textContent = '🤝 Через Codex';
 	}
 }
 
@@ -511,6 +584,7 @@ $('#save-now').addEventListener('click', saveDraft);
 $('#accept').addEventListener('click', acceptToQueue);
 $('#cover-upload').addEventListener('click', uploadCover);
 $('#cover-generate').addEventListener('click', generateCover);
+$('#cover-codex').addEventListener('click', dispatchToCodex);
 $('#copy-prompt').addEventListener('click', copyPrompt);
 
 loadList();
