@@ -15,6 +15,7 @@
     "check": "pnpm --filter site astro check",
     "test": "pnpm --filter engine test",
     "scqr": "pnpm --filter engine exec tsx src/cli.ts",
+    "review": "node site/scripts/review-server.mjs",
     "lint": "pnpm -r lint"
   },
   "devDependencies": {

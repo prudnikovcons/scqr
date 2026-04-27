@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SCQR · ревью сигналов</title>
+<style>
+	:root {
+		--bg: #f1ecff;
+		--bg2: #e9e2ff;
+		--surface: #ffffff;
+		--ink: #17142e;
+		--muted: #5c5685;
+		--line: #d7cdf5;
+		--violet: #7c5cff;
+		--violet-soft: #ece6ff;
+		--lime: #a3e635;
+		--red: #f23b3b;
+		--orange: #f0b35a;
+	}
+	* { box-sizing: border-box; }
+	html, body { margin: 0; padding: 0; }
+	body {
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, system-ui, sans-serif;
+		background: var(--bg);
+		color: var(--ink);
+		line-height: 1.5;
+	}
+	header.bar {
+		position: sticky; top: 0; z-index: 5;
+		background: rgba(241, 236, 255, 0.92);
+		backdrop-filter: saturate(140%) blur(8px);
+		border-bottom: 1px solid var(--line);
+		padding: 12px 20px;
+		display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+	}
+	.brand { font-weight: 700; font-size: 14px; letter-spacing: 0.02em; }
+	.brand .ru { color: var(--violet); }
+	select, button, input, textarea {
+		font: inherit; color: inherit;
+	}
+	select.pack-picker {
+		padding: 7px 10px;
+		border-radius: 8px;
+		border: 1px solid var(--line);
+		background: var(--surface);
+		min-width: 280px;
+	}
+	.meta {
+		font-size: 13px; color: var(--muted);
+		display: flex; gap: 14px; flex-wrap: wrap; align-items: center;
+	}
+	.meta .pill {
+		padding: 3px 8px; border-radius: 999px;
+		background: var(--surface); border: 1px solid var(--line);
+	}
+	.status {
+		margin-left: auto;
+		font-size: 13px; color: var(--muted);
+	}
+	.status .ok { color: #2f8f3a; }
+	.status .err { color: var(--red); }
+
+	main { max-width: 920px; margin: 0 auto; padding: 28px 20px 120px; }
+	.summary {
+		display: flex; gap: 12px; flex-wrap: wrap;
+		font-size: 13px; color: var(--muted);
+		margin: 0 0 20px;
+	}
+	.summary .stat {
+		background: var(--surface); border: 1px solid var(--line);
+		padding: 6px 10px; border-radius: 8px;
+	}
+	.summary .stat b { color: var(--ink); margin-left: 4px; }
+
+	.card {
+		background: var(--surface);
+		border: 1px solid var(--line);
+		border-radius: 16px;
+		padding: 20px 22px;
+		margin-bottom: 14px;
+		transition: border-color 0.15s, box-shadow 0.15s;
+	}
+	.card.is-skip { opacity: 0.55; }
+	.card.is-write { border-color: var(--violet); box-shadow: 0 1px 0 var(--violet-soft); }
+	.card.is-interest { border-color: var(--orange); }
+
+	.head {
+		display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap;
+		margin-bottom: 6px;
+	}
+	.sig-id {
+		font-size: 11px; letter-spacing: 0.06em; color: var(--muted);
+		background: var(--bg2); padding: 2px 8px; border-radius: 6px;
+		font-weight: 600;
+	}
+	.title { font-size: 17px; font-weight: 600; line-height: 1.35; flex: 1; min-width: 0; }
+	.meta-row {
+		font-size: 13px; color: var(--muted);
+		margin-bottom: 10px;
+		display: flex; gap: 14px; flex-wrap: wrap;
+	}
+	.score {
+		font-weight: 600;
+		color: var(--violet);
+	}
+	.body {
+		font-size: 14px; color: #2a2549;
+		margin: 8px 0 16px;
+		white-space: pre-wrap;
+		word-break: break-word;
+	}
+	.body:empty::before {
+		content: '— тело пустое в md-пакете —';
+		color: var(--muted); font-style: italic;
+	}
+	.url a {
+		color: var(--violet);
+		text-decoration: none;
+		font-size: 13px;
+		word-break: break-all;
+	}
+	.url a:hover { text-decoration: underline; }
+
+	.actions {
+		display: flex; gap: 6px; margin-top: 14px;
+		flex-wrap: wrap;
+	}
+	.action-btn {
+		flex: 1 1 auto; min-width: 120px;
+		padding: 8px 12px; font-size: 14px;
+		border: 1px solid var(--line); background: var(--bg);
+		border-radius: 10px; cursor: pointer;
+		transition: background 0.1s, border-color 0.1s;
+	}
+	.action-btn:hover { background: var(--surface); }
+	.action-btn.is-active.skip { background: #e8e8ee; border-color: #b8b3cc; color: var(--muted); }
+	.action-btn.is-active.interest { background: #fff5e6; border-color: var(--orange); color: #8a5b1a; }
+	.action-btn.is-active.write { background: var(--violet); border-color: var(--violet); color: #fff; }
+
+	.write-fields {
+		margin-top: 14px;
+		padding-top: 14px;
+		border-top: 1px dashed var(--line);
+		display: none;
+	}
+	.card.is-write .write-fields { display: block; }
+	.field { margin-bottom: 10px; }
+	.field label {
+		display: block; font-size: 12px; font-weight: 600;
+		color: var(--muted); text-transform: uppercase;
+		letter-spacing: 0.04em; margin-bottom: 4px;
+	}
+	.field input, .field textarea {
+		width: 100%; padding: 8px 10px;
+		border: 1px solid var(--line); border-radius: 8px;
+		background: #fafaff; color: var(--ink);
+		font-size: 14px;
+		font-family: inherit;
+	}
+	.field input:focus, .field textarea:focus {
+		outline: none; border-color: var(--violet); background: #fff;
+	}
+	.field textarea { min-height: 70px; resize: vertical; }
+	.field .hint { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+	footer.dock {
+		position: fixed; bottom: 0; left: 0; right: 0;
+		background: rgba(255, 255, 255, 0.95);
+		backdrop-filter: saturate(140%) blur(8px);
+		border-top: 1px solid var(--line);
+		padding: 12px 20px;
+		display: flex; gap: 12px; align-items: center; justify-content: space-between;
+	}
+	footer.dock .left { font-size: 13px; color: var(--muted); }
+	.btn-primary {
+		padding: 10px 18px; font-weight: 600;
+		border: none; border-radius: 10px;
+		background: var(--violet); color: #fff;
+		cursor: pointer;
+	}
+	.btn-primary:hover { background: #6a48ee; }
+	.btn-primary[disabled] { opacity: 0.5; cursor: default; }
+
+	.empty {
+		padding: 60px 20px; text-align: center; color: var(--muted);
+	}
+</style>
+</head>
+<body>
+
+<header class="bar">
+	<div class="brand">SCQR · ревью</div>
+	<select id="pack-picker" class="pack-picker"></select>
+	<div id="meta" class="meta"></div>
+	<div id="status" class="status"></div>
+</header>
+
+<main>
+	<div id="summary" class="summary"></div>
+	<div id="signals"></div>
+	<div id="empty" class="empty" style="display:none">Пакет пустой или ещё не выбран.</div>
+</main>
+
+<footer class="dock">
+	<div class="left" id="dock-left">—</div>
+	<button id="finalize" class="btn-primary" disabled>Зафиксировать рецензию</button>
+</footer>
+
+<script>
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+const state = {
+	packs: [],
+	selected: null,
+	pack: null,
+	actions: {},
+	saveTimer: null,
+	finalSavedAt: null,
+};
+
+function fmtTime(iso) {
+	if (!iso) return '';
+	try {
+		const d = new Date(iso);
+		const pad = (n) => String(n).padStart(2, '0');
+		return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+	} catch { return ''; }
+}
+
+async function loadPacks() {
+	const r = await fetch('/api/packs');
+	const data = await r.json();
+	state.packs = data.packs || [];
+	const sel = $('#pack-picker');
+	sel.innerHTML = '';
+	for (const p of state.packs) {
+		const opt = document.createElement('option');
+		opt.value = p.name;
+		opt.textContent = p.name;
+		sel.appendChild(opt);
+	}
+	if (state.packs.length) {
+		sel.value = state.packs[0].name;
+		await loadPack(state.packs[0].name);
+	} else {
+		$('#empty').style.display = 'block';
+	}
+}
+
+async function loadPack(name) {
+	state.selected = name;
+	const r = await fetch('/api/pack/' + encodeURIComponent(name));
+	if (!r.ok) {
+		$('#status').innerHTML = '<span class="err">не удалось загрузить пакет</span>';
+		return;
+	}
+	const data = await r.json();
+	state.pack = data.pack;
+	state.actions = (data.draft && data.draft.actions) || (data.final && data.final.actions) || {};
+	state.finalSavedAt = data.final && data.final.savedAt;
+	render();
+}
+
+function render() {
+	const m = state.pack.meta;
+	$('#meta').innerHTML = `
+		<span class="pill">${m.title || '—'}</span>
+		<span>сигналов: <b>${m.signalsCount || state.pack.signals.length}</b></span>
+		${m.weeklyDigest ? '<span class="pill" style="background:#fff5e6">weekend digest</span>' : ''}
+	`;
+	renderSummary();
+
+	const c = $('#signals');
+	c.innerHTML = '';
+	for (const sig of state.pack.signals) {
+		c.appendChild(cardFor(sig));
+	}
+	$('#empty').style.display = state.pack.signals.length ? 'none' : 'block';
+	updateDock();
+}
+
+function renderSummary() {
+	const counts = { skip: 0, interest: 0, write: 0, none: 0 };
+	for (const sig of state.pack.signals) {
+		const a = state.actions[sig.id];
+		if (!a || !a.kind) counts.none += 1;
+		else counts[a.kind] = (counts[a.kind] || 0) + 1;
+	}
+	$('#summary').innerHTML = `
+		<span class="stat">всего <b>${state.pack.signals.length}</b></span>
+		<span class="stat">скип <b>${counts.skip}</b></span>
+		<span class="stat">в интерес <b>${counts.interest}</b></span>
+		<span class="stat">в работу <b>${counts.write}</b></span>
+		<span class="stat">не размечено <b>${counts.none}</b></span>
+	`;
+}
+
+function cardFor(sig) {
+	const action = state.actions[sig.id] || {};
+	const card = document.createElement('article');
+	card.className = 'card' + (action.kind ? ' is-' + action.kind : '');
+	card.dataset.id = sig.id;
+
+	const sourceLine = [
+		sig.source,
+		sig.authority != null ? `score ${sig.authority}/10` : '',
+		sig.published && sig.published !== 'unknown' ? sig.published : 'дата неизвестна',
+	].filter(Boolean).join(' · ');
+
+	card.innerHTML = `
+		<div class="head">
+			<span class="sig-id">${sig.id}</span>
+			<div class="title"></div>
+		</div>
+		<div class="meta-row"></div>
+		<div class="body"></div>
+		<div class="url"><a target="_blank" rel="noopener noreferrer"></a></div>
+		<div class="actions">
+			<button class="action-btn skip" data-kind="skip">Скип</button>
+			<button class="action-btn interest" data-kind="interest">В интерес</button>
+			<button class="action-btn write" data-kind="write">В работу</button>
+		</div>
+		<div class="write-fields">
+			<div class="field">
+				<label>Тезис</label>
+				<input type="text" name="thesis" placeholder="Одна строка: что именно мы говорим этим материалом" />
+			</div>
+			<div class="field">
+				<label>Угол / фрейм</label>
+				<input type="text" name="angle" placeholder="Например: цена ошибки · нижние этажи стека · режим допуска" />
+				<div class="hint">Необязательно. Поможет writer'у сразу взять нужный фрейм.</div>
+			</div>
+			<div class="field">
+				<label>Что обязательно включить</label>
+				<textarea name="must_include" placeholder="Цифры, цитаты, факты, исторические якоря, контекст — то, без чего материал слабее."></textarea>
+			</div>
+		</div>
+	`;
+
+	card.querySelector('.title').textContent = sig.title;
+	card.querySelector('.meta-row').textContent = sourceLine;
+	card.querySelector('.body').textContent = sig.body || '';
+	const a = card.querySelector('.url a');
+	if (sig.url) {
+		a.textContent = sig.url;
+		a.href = sig.url;
+	} else {
+		card.querySelector('.url').style.display = 'none';
+	}
+
+	// активная кнопка
+	for (const btn of card.querySelectorAll('.action-btn')) {
+		if (action.kind && btn.dataset.kind === action.kind) {
+			btn.classList.add('is-active');
+		}
+		btn.addEventListener('click', () => setAction(sig.id, btn.dataset.kind, card));
+	}
+
+	// предзаполнить write-поля
+	if (action.kind === 'write') {
+		card.querySelector('input[name="thesis"]').value = action.thesis || '';
+		card.querySelector('input[name="angle"]').value = action.angle || '';
+		card.querySelector('textarea[name="must_include"]').value = action.must_include || '';
+	}
+
+	for (const inp of card.querySelectorAll('.write-fields input, .write-fields textarea')) {
+		inp.addEventListener('input', () => onWriteFieldChange(sig.id, card));
+	}
+
+	return card;
+}
+
+function setAction(sigId, kind, card) {
+	const cur = state.actions[sigId] || {};
+	if (cur.kind === kind) {
+		delete state.actions[sigId];
+	} else {
+		state.actions[sigId] = { kind };
+		if (kind === 'write') {
+			state.actions[sigId].thesis = '';
+			state.actions[sigId].angle = '';
+			state.actions[sigId].must_include = '';
+		}
+	}
+	card.classList.remove('is-skip', 'is-interest', 'is-write');
+	card.querySelectorAll('.action-btn').forEach((b) => b.classList.remove('is-active'));
+	const a = state.actions[sigId];
+	if (a && a.kind) {
+		card.classList.add('is-' + a.kind);
+		card.querySelector(`.action-btn[data-kind="${a.kind}"]`).classList.add('is-active');
+	}
+	if (a && a.kind === 'write') {
+		card.querySelector('input[name="thesis"]').value = a.thesis || '';
+		card.querySelector('input[name="angle"]').value = a.angle || '';
+		card.querySelector('textarea[name="must_include"]').value = a.must_include || '';
+		setTimeout(() => card.querySelector('input[name="thesis"]').focus(), 30);
+	}
+	renderSummary();
+	updateDock();
+	scheduleSave();
+}
+
+function onWriteFieldChange(sigId, card) {
+	const a = state.actions[sigId];
+	if (!a || a.kind !== 'write') return;
+	a.thesis = card.querySelector('input[name="thesis"]').value;
+	a.angle = card.querySelector('input[name="angle"]').value;
+	a.must_include = card.querySelector('textarea[name="must_include"]').value;
+	scheduleSave();
+}
+
+function scheduleSave() {
+	if (state.saveTimer) clearTimeout(state.saveTimer);
+	state.saveTimer = setTimeout(saveDraft, 500);
+}
+
+async function saveDraft() {
+	if (!state.selected) return;
+	$('#status').innerHTML = 'сохраняю…';
+	try {
+		const r = await fetch('/api/draft/' + encodeURIComponent(state.selected), {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ actions: state.actions }),
+		});
+		const data = await r.json();
+		if (!r.ok) throw new Error(data.error || 'save error');
+		$('#status').innerHTML = `<span class="ok">черновик · ${fmtTime(data.savedAt)}</span>`;
+	} catch (e) {
+		$('#status').innerHTML = `<span class="err">${e.message}</span>`;
+	}
+}
+
+function updateDock() {
+	const writeCount = Object.values(state.actions).filter((a) => a && a.kind === 'write').length;
+	const decided = Object.values(state.actions).filter((a) => a && a.kind).length;
+	const total = state.pack ? state.pack.signals.length : 0;
+	$('#dock-left').innerHTML = `
+		размечено <b>${decided}</b> из <b>${total}</b> · в работу <b>${writeCount}</b>
+		${state.finalSavedAt ? `· зафиксировано в ${fmtTime(state.finalSavedAt)}` : ''}
+	`;
+	$('#finalize').disabled = decided === 0;
+}
+
+async function finalizeReview() {
+	if (!state.selected) return;
+	const writes = Object.entries(state.actions).filter(([, a]) => a && a.kind === 'write');
+	const incomplete = writes.filter(([, a]) => !a.thesis || !a.thesis.trim());
+	if (incomplete.length) {
+		const ok = confirm(`У ${incomplete.length} сигнала(ов) в работе нет тезиса. Всё равно зафиксировать?`);
+		if (!ok) return;
+	}
+	$('#finalize').disabled = true;
+	$('#status').innerHTML = 'фиксирую…';
+	try {
+		const r = await fetch('/api/finalize/' + encodeURIComponent(state.selected), {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ actions: state.actions }),
+		});
+		const data = await r.json();
+		if (!r.ok) throw new Error(data.error || 'finalize error');
+		state.finalSavedAt = data.savedAt;
+		$('#status').innerHTML = `<span class="ok">рецензия · ${fmtTime(data.savedAt)}</span>`;
+		updateDock();
+	} catch (e) {
+		$('#status').innerHTML = `<span class="err">${e.message}</span>`;
+	}
+}
+
+$('#pack-picker').addEventListener('change', (e) => loadPack(e.target.value));
+$('#finalize').addEventListener('click', finalizeReview);
+
+loadPacks();
+</script>
+
+</body>
+</html>
