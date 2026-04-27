@@ -283,6 +283,7 @@ async function getArticle(slug) {
 		const buf = await readFile(join(ARTICLES_DIR, safe, 'sidecar.json'), 'utf8');
 		sidecar = JSON.parse(buf);
 	} catch {}
+	const articleType = getFmField(fm, 'articleType') || 'analysis';
 	const fields = {
 		title: getFmField(fm, 'title') || '',
 		description: getFmField(fm, 'description') || '',
@@ -293,9 +294,29 @@ async function getArticle(slug) {
 		status: getFmField(fm, 'status') || 'draft',
 		pubDate: getFmField(fm, 'pubDate') || '',
 		heroImage: getFmField(fm, 'heroImage') || '',
+		articleType,
 	};
-	return { slug: safe, fields, body, fm, sidecar };
+	// форматы: либо явно из sidecar.formats, либо «фолбэк» — текущий тип = единственный формат
+	const formats = (sidecar && sidecar.formats) || {
+		[articleType]: {
+			label: FORMAT_LABELS[articleType] || articleType,
+			readingTime: Number(getFmField(fm, 'readingTime')) || null,
+			body,
+			tgPost: (sidecar && sidecar.tgPost) || '',
+		},
+	};
+	const activeFormat = (sidecar && sidecar.activeFormat) || articleType;
+	return { slug: safe, fields, body, fm, sidecar, formats, activeFormat };
 }
+
+const FORMAT_LABELS = {
+	news: 'Заметка',
+	column: 'Колонка',
+	analysis: 'Аналитика',
+	illustration: 'Иллюстрация',
+};
+
+const FORMAT_ORDER = ['news', 'column', 'analysis', 'illustration'];
 
 async function saveArticle(slug, payload) {
 	const safe = safeSlug(slug);
@@ -320,21 +341,89 @@ async function saveArticle(slug, payload) {
 	await writeFile(path, out, 'utf8');
 
 	// сайдкар
-	if (payload.sidecar) {
+	if (payload.sidecar || typeof payload.body === 'string') {
 		const sidecarDir = join(ARTICLES_DIR, safe);
 		await mkdir(sidecarDir, { recursive: true });
 		const existing = (await readJsonSafe(join(sidecarDir, 'sidecar.json'))) || {};
 		const merged = {
 			...existing,
-			...payload.sidecar,
+			...(payload.sidecar || {}),
 			slug: safe,
 			updatedAt: new Date().toISOString(),
 		};
 		if (!merged.createdAt) merged.createdAt = merged.updatedAt;
+
+		// синхронизируем активный формат: при автосейве правок в редакторе
+		// тело статьи + tgPost попадают в formats[activeFormat]
+		const articleType = getFmField(fm, 'articleType') || 'analysis';
+		const activeFormat = merged.activeFormat || articleType;
+		merged.activeFormat = activeFormat;
+		merged.formats = merged.formats || {};
+		const slot = merged.formats[activeFormat] || {
+			label: FORMAT_LABELS[activeFormat] || activeFormat,
+			readingTime: Number(getFmField(fm, 'readingTime')) || null,
+			body: '',
+			tgPost: '',
+		};
+		if (typeof payload.body === 'string') slot.body = payload.body;
+		if (payload.sidecar && typeof payload.sidecar.tgPost === 'string') {
+			slot.tgPost = payload.sidecar.tgPost;
+		}
+		slot.readingTime = Number(getFmField(fm, 'readingTime')) || slot.readingTime || null;
+		merged.formats[activeFormat] = slot;
+
+		// синхронизируем верхнеуровневый tgPost = active format
+		if (payload.sidecar && typeof payload.sidecar.tgPost === 'string') {
+			merged.tgPost = payload.sidecar.tgPost;
+		}
+
 		await writeFile(join(sidecarDir, 'sidecar.json'), JSON.stringify(merged, null, 2), 'utf8');
 	}
 
 	return { ok: true, slug: safe, savedAt: new Date().toISOString() };
+}
+
+async function switchFormat(slug, newFormat) {
+	const safe = safeSlug(slug);
+	const sidecarPath = join(ARTICLES_DIR, safe, 'sidecar.json');
+	const sidecar = (await readJsonSafe(sidecarPath)) || { formats: {} };
+	if (!sidecar.formats || !sidecar.formats[newFormat]) {
+		throw new Error(`format '${newFormat}' not defined for ${safe}`);
+	}
+	const postPath = join(POSTS_DIR, `${safe}.md`);
+	const md = await readFile(postPath, 'utf8');
+	let { fm, body } = splitFrontmatter(md);
+
+	// 1) сохраняем текущее в активный слот (на случай несохранённых правок)
+	const oldActive = sidecar.activeFormat || getFmField(fm, 'articleType') || 'analysis';
+	if (sidecar.formats[oldActive]) {
+		sidecar.formats[oldActive].body = body;
+		sidecar.formats[oldActive].tgPost = sidecar.tgPost || sidecar.formats[oldActive].tgPost || '';
+		sidecar.formats[oldActive].readingTime = Number(getFmField(fm, 'readingTime')) || sidecar.formats[oldActive].readingTime || null;
+	}
+
+	// 2) загружаем новый формат
+	const slot = sidecar.formats[newFormat];
+	const newBody = slot.body || '';
+	const newTg = slot.tgPost || '';
+	const newReadingTime = slot.readingTime || null;
+
+	// 3) обновляем frontmatter (articleType + readingTime)
+	fm = setFmField(fm, 'articleType', newFormat);
+	if (newReadingTime != null) {
+		fm = setFmRaw(fm, 'readingTime', String(newReadingTime));
+	}
+	await writeFile(postPath, joinFrontmatter(fm, newBody), 'utf8');
+
+	// 4) обновляем sidecar
+	sidecar.activeFormat = newFormat;
+	sidecar.tgPost = newTg;
+	sidecar.updatedAt = new Date().toISOString();
+	if (!sidecar.createdAt) sidecar.createdAt = sidecar.updatedAt;
+	sidecar.slug = safe;
+	await writeFile(sidecarPath, JSON.stringify(sidecar, null, 2), 'utf8');
+
+	return { ok: true, slug: safe, activeFormat: newFormat };
 }
 
 async function readJsonSafe(path) {
@@ -591,6 +680,14 @@ const server = createServer(async (req, res) => {
 		if (method === 'POST' && pathname.startsWith('/api/article-publish/')) {
 			const slug = decodeURIComponent(pathname.slice('/api/article-publish/'.length));
 			const result = await publishArticle(slug);
+			return send(res, 200, result);
+		}
+
+		// API: переключить формат публикации (news/column/analysis)
+		if (method === 'POST' && pathname.startsWith('/api/article-switch-format/')) {
+			const slug = decodeURIComponent(pathname.slice('/api/article-switch-format/'.length));
+			const body = await readBody(req);
+			const result = await switchFormat(slug, body.format);
 			return send(res, 200, result);
 		}
 

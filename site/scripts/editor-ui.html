@@ -150,6 +150,14 @@
 	<div id="empty" class="empty">Нет черновиков. Когда я напишу новую статью со <code>status: "draft"</code>, она появится здесь.</div>
 
 	<div id="form" style="display:none">
+		<section class="card" id="format-card">
+			<h2>Формат публикации</h2>
+			<div class="field" style="margin-bottom:0">
+				<select id="format-picker" class="picker" style="min-width:240px;font-size:14px"></select>
+				<div class="hint" style="margin-top:6px">При переключении тело статьи и TG-пост подменяются на вариант выбранного формата. Текущая правка сохраняется в свой слот автоматически.</div>
+			</div>
+		</section>
+
 		<section class="card">
 			<h2>Метаданные</h2>
 			<div class="field">
@@ -293,9 +301,45 @@ async function loadArticle(slug) {
 	document.querySelector('[name="tgPost"]').value = (data.sidecar && data.sidecar.tgPost) || '';
 	$('#prompt-box').textContent = (data.sidecar && data.sidecar.coverPrompt) || '— промт не подготовлен —';
 
+	// форматы публикации
+	const picker = $('#format-picker');
+	picker.innerHTML = '';
+	const formatKeys = Object.keys(data.formats || {});
+	for (const key of formatKeys) {
+		const slot = data.formats[key];
+		const opt = document.createElement('option');
+		opt.value = key;
+		const wc = slot.body ? slot.body.split(/\s+/).filter(Boolean).length : 0;
+		opt.textContent = `${slot.label || key}${slot.readingTime ? ` · ${slot.readingTime} мин` : ''}${wc ? ` · ~${wc} слов` : ''}`;
+		picker.appendChild(opt);
+	}
+	picker.value = data.activeFormat;
+	$('#format-card').style.display = formatKeys.length > 1 ? 'block' : 'none';
+
 	renderCover(data.fields.heroImage);
-	$('#dock-left').innerHTML = `статья <b>${slug}</b> · status <b>${data.fields.status}</b>`;
+	$('#dock-left').innerHTML = `статья <b>${slug}</b> · формат <b>${data.activeFormat}</b> · status <b>${data.fields.status}</b>`;
 	$('#accept').disabled = false;
+}
+
+async function switchFormat() {
+	if (!state.current) return;
+	const newFormat = $('#format-picker').value;
+	if (newFormat === state.current.activeFormat) return;
+	// сохранить текущие правки в активный слот, потом переключить
+	await saveDraft();
+	try {
+		const r = await fetch('/api/article-switch-format/' + encodeURIComponent(state.current.slug), {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ format: newFormat }),
+		});
+		const data = await r.json();
+		if (!r.ok) throw new Error(data.error || 'switch error');
+		showToast('ok', 'Формат переключён', `теперь ${newFormat}`);
+		await loadArticle(state.current.slug);
+	} catch (e) {
+		showToast('err', 'Не удалось переключить', e.message);
+	}
 }
 
 function renderCover(heroImage) {
@@ -424,6 +468,7 @@ for (const sel of ['[name="title"]','[name="description"]','[name="deck"]','[nam
 }
 
 $('#picker').addEventListener('change', (e) => loadArticle(e.target.value));
+$('#format-picker').addEventListener('change', switchFormat);
 $('#save-now').addEventListener('click', saveDraft);
 $('#accept').addEventListener('click', acceptToQueue);
 $('#cover-upload').addEventListener('click', uploadCover);
