@@ -401,6 +401,22 @@ async function publishArticle(slug) {
 	return { ok: true, slug: safe, message };
 }
 
+async function sendTgReview(slug) {
+	const safe = safeSlug(slug);
+	return new Promise((resolveCmd, rejectCmd) => {
+		const scriptPath = join(__dirname, 'tg-review.mjs');
+		const p = spawn(process.execPath, [scriptPath, safe], { cwd: ROOT });
+		let out = '', err = '';
+		p.stdout.on('data', (d) => (out += d));
+		p.stderr.on('data', (d) => (err += d));
+		p.on('close', (code) => {
+			if (code === 0) resolveCmd({ ok: true, slug: safe, log: out.trim() });
+			else rejectCmd(new Error(`tg-review.mjs ${safe} → ${code}: ${err.trim() || out.trim()}`));
+		});
+		p.on('error', rejectCmd);
+	});
+}
+
 function gitRun(args) {
 	return new Promise((resolveCmd, rejectCmd) => {
 		const p = spawn('git', args, { cwd: ROOT });
@@ -575,6 +591,19 @@ const server = createServer(async (req, res) => {
 		if (method === 'POST' && pathname.startsWith('/api/article-publish/')) {
 			const slug = decodeURIComponent(pathname.slice('/api/article-publish/'.length));
 			const result = await publishArticle(slug);
+			return send(res, 200, result);
+		}
+
+		// API: отправить TG-пост в бот на ревью владельцу
+		if (method === 'POST' && pathname.startsWith('/api/article-tg-send/')) {
+			const slug = decodeURIComponent(pathname.slice('/api/article-tg-send/'.length));
+			// сохранить текущий TG-пост из тела запроса в sidecar (на случай, если
+			// владелец отредактировал и не успел дождаться автосейва)
+			const body = await readBody(req);
+			if (body && typeof body.tgPost === 'string') {
+				await saveArticle(slug, { fields: {}, sidecar: { tgPost: body.tgPost } });
+			}
+			const result = await sendTgReview(slug);
 			return send(res, 200, result);
 		}
 

@@ -140,13 +140,40 @@ function appendPostsLog(entry) {
 	fs.appendFileSync(POSTS_LOG, JSON.stringify(entry) + '\n', 'utf8');
 }
 
+function buildChannelTextFromTgPost(tgPost, fm, slug) {
+	// Готовый tgPost из sidecar — берём как есть, только конвертируем в HTML-минимум
+	// (HTML-сущности экранируем, ничего не оборачиваем). Telegram parse_mode HTML
+	// требует экранирования &<> и допускает <b>, <i>, <a>.
+	// Мы экранируем всё, потом раскрываем ссылку (если в tgPost есть «https://…») —
+	// уже без обёртки, Telegram сам сделает превью если disable_web_page_preview=false.
+	return tgPost.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function readSidecarTgPost(slug) {
+	const sidecarPath = path.join(WORKSPACE_ROOT, '.scqr', 'articles', slug, 'sidecar.json');
+	if (!fs.existsSync(sidecarPath)) return null;
+	try {
+		const data = JSON.parse(fs.readFileSync(sidecarPath, 'utf8'));
+		return (data.tgPost || '').trim() || null;
+	} catch {
+		return null;
+	}
+}
+
 async function sendReview(slug) {
 	const ownerId = process.env.SCQR_OWNER_TG_ID;
 	if (!ownerId) throw new Error('SCQR_OWNER_TG_ID missing — owner has not started the bot yet.');
 	const file = path.join(POSTS_DIR, `${slug}.md`);
 	if (!fs.existsSync(file)) throw new Error(`Article not found: ${file}`);
 	const { frontmatter } = parseFrontmatter(fs.readFileSync(file, 'utf8'));
-	const channelText = buildChannelText(frontmatter, slug);
+
+	// Приоритет: sidecar.tgPost (свежий, уже отредактированный владельцем в /editor)
+	// Фолбэк: автосборка из frontmatter
+	const sidecarText = readSidecarTgPost(slug);
+	const channelText = sidecarText
+		? buildChannelTextFromTgPost(sidecarText, frontmatter, slug)
+		: buildChannelText(frontmatter, slug);
+
 	const review = `<b>На рецензию</b>\n\nНиже — драфт поста для @scqr_ai. Решения принимает только владелец.\n\n— — —\n\n${channelText}`;
 
 	const result = await tg('sendMessage', {
