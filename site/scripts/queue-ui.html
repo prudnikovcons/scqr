@@ -45,6 +45,15 @@
 		border-radius: 16px; padding: 18px 22px; margin-bottom: 12px;
 		display: flex; gap: 16px; align-items: flex-start;
 	}
+	.card.just-accepted {
+		border-color: var(--violet);
+		box-shadow: 0 0 0 3px rgba(124,92,255,0.18);
+		animation: just-pulse 1.4s ease-out 3;
+	}
+	@keyframes just-pulse {
+		0% { box-shadow: 0 0 0 0 rgba(124,92,255,0.45); }
+		100% { box-shadow: 0 0 0 14px rgba(124,92,255,0); }
+	}
 	.card .body { flex: 1; min-width: 0; }
 	.card .title {
 		font-size: 16px; font-weight: 600; margin-bottom: 4px;
@@ -108,8 +117,17 @@
 <div id="toast" class="toast"></div>
 
 <main>
-	<div id="empty" class="empty" style="display:none">Очередь пустая. Чтобы статья сюда попала, прими её в редакторе.</div>
-	<div id="list"></div>
+	<section style="margin-bottom: 28px;">
+		<h2 style="font-size:14px;text-transform:uppercase;letter-spacing:0.06em;color:var(--violet);margin:0 0 12px;">К публикации</h2>
+		<div id="list-ready"></div>
+		<div id="empty-ready" class="empty" style="display:none;padding:28px 20px;">Здесь пусто. Прими статью в редакторе.</div>
+	</section>
+
+	<section>
+		<h2 style="font-size:14px;text-transform:uppercase;letter-spacing:0.06em;color:var(--violet);margin:0 0 12px;">Опубликовано — готово к TG</h2>
+		<div id="list-approved"></div>
+		<div id="empty-approved" class="empty" style="display:none;padding:28px 20px;">После публикации сюда попадают статьи, которые ждут отправки в @scqr_ai.</div>
+	</section>
 </main>
 
 <script>
@@ -123,27 +141,56 @@ function showToast(kind, message, sub) {
 	showToast._timer = setTimeout(() => { t.className = 'toast'; }, 5000);
 }
 
+const justSlug = new URL(location.href).searchParams.get('just');
+
 async function load() {
-	const r = await fetch('/api/articles?status=ready');
-	const data = await r.json();
-	const list = data.articles || [];
-	const wrap = $('#list');
-	wrap.innerHTML = '';
-	if (list.length === 0) {
-		$('#empty').style.display = 'block';
-		return;
-	}
-	$('#empty').style.display = 'none';
-	for (const a of list) {
-		wrap.appendChild(itemCard(a));
+	const [readyRes, approvedRes] = await Promise.all([
+		fetch('/api/articles?status=ready'),
+		fetch('/api/articles?status=approved'),
+	]);
+	const ready = (await readyRes.json()).articles || [];
+	const approved = (await approvedRes.json()).articles || [];
+
+	renderList('#list-ready', '#empty-ready', ready, 'ready');
+	renderList('#list-approved', '#empty-approved', approved, 'approved');
+
+	if (justSlug) {
+		const card = document.querySelector(`[data-slug="${justSlug}"]`);
+		if (card) {
+			card.classList.add('just-accepted');
+			card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			const a = ready.find((x) => x.slug === justSlug) || approved.find((x) => x.slug === justSlug);
+			if (a) showToast('ok', 'Статья в очереди', a.title);
+		}
 	}
 }
 
-function itemCard(a) {
+function renderList(listSel, emptySel, items, kind) {
+	const wrap = $(listSel);
+	wrap.innerHTML = '';
+	if (items.length === 0) {
+		$(emptySel).style.display = 'block';
+		return;
+	}
+	$(emptySel).style.display = 'none';
+	for (const a of items) {
+		wrap.appendChild(itemCard(a, kind));
+	}
+}
+
+function itemCard(a, kind) {
 	const card = document.createElement('article');
 	card.className = 'card';
 	card.dataset.slug = a.slug;
 	const date = (a.pubDate || '').slice(0, 16).replace('T', ' ');
+	const tgSent = a.tgSent || (a.tgSentAt ? true : false);
+
+	const actionsHtml = kind === 'ready'
+		? `<a class="btn">В редактор</a>
+		   <button class="btn primary publish-btn">Опубликовать</button>`
+		: `<a class="btn" target="_blank" rel="noopener">Открыть</a>
+		   <a class="btn">В редактор</a>
+		   <button class="btn primary tg-btn">${tgSent ? '↻ Переотправить в TG' : '📨 Отправить в TG бот'}</button>`;
 
 	card.innerHTML = `
 		<div class="body">
@@ -157,28 +204,35 @@ function itemCard(a) {
 				<span class="badge ${a.heroImage ? 'ok' : 'no'}">${a.heroImage ? 'обложка ✓' : 'без обложки'}</span>
 				<span class="badge ${a.hasTgPost ? 'ok' : 'no'}">${a.hasTgPost ? 'TG-пост ✓' : 'без TG-поста'}</span>
 				<span class="badge ${a.hasCoverPrompt ? 'ok' : 'no'}">${a.hasCoverPrompt ? 'промт ✓' : 'без промта'}</span>
+				${kind === 'approved' && tgSent ? '<span class="badge ok">в TG ✓</span>' : ''}
 			</div>
 		</div>
-		<div class="actions">
-			<a class="btn" target="_blank" rel="noopener">Превью</a>
-			<a class="btn">В редактор</a>
-			<button class="btn primary publish-btn">Опубликовать</button>
-		</div>
+		<div class="actions">${actionsHtml}</div>
 	`;
 	card.querySelector('.title').textContent = a.title;
 	card.querySelector('.meta code').textContent = a.slug;
 	card.querySelector('.deck').textContent = (a.deck || '').slice(0, 280) + ((a.deck || '').length > 280 ? '…' : '');
-	const previewBtn = card.querySelector('.actions a:nth-child(1)');
-	previewBtn.href = `https://ai.scqr.ru/${a.slug}/`;
-	const editBtn = card.querySelector('.actions a:nth-child(2)');
-	editBtn.href = `/editor?slug=${encodeURIComponent(a.slug)}`;
-	editBtn.addEventListener('click', async (e) => {
-		e.preventDefault();
-		await fetch('/api/article-unaccept/' + encodeURIComponent(a.slug), { method: 'POST' });
-		location.href = `/editor?slug=${encodeURIComponent(a.slug)}`;
-	});
-	const pubBtn = card.querySelector('.publish-btn');
-	pubBtn.addEventListener('click', () => publish(a, pubBtn));
+
+	const editBtn = card.querySelector('.actions a:not([target])');
+	if (editBtn) {
+		editBtn.href = `/editor?slug=${encodeURIComponent(a.slug)}`;
+		editBtn.addEventListener('click', async (e) => {
+			e.preventDefault();
+			await fetch('/api/article-unaccept/' + encodeURIComponent(a.slug), { method: 'POST' });
+			location.href = `/editor?slug=${encodeURIComponent(a.slug)}`;
+		});
+	}
+
+	if (kind === 'ready') {
+		const pubBtn = card.querySelector('.publish-btn');
+		pubBtn.addEventListener('click', () => publish(a, pubBtn));
+	} else {
+		const openBtn = card.querySelector('.actions a[target]');
+		if (openBtn) openBtn.href = `https://ai.scqr.ru/${a.slug}/`;
+		const tgBtn = card.querySelector('.tg-btn');
+		tgBtn.addEventListener('click', () => sendTg(a, tgBtn));
+	}
+
 	return card;
 }
 
@@ -191,12 +245,32 @@ async function publish(a, btn) {
 		const r = await fetch('/api/article-publish/' + encodeURIComponent(a.slug), { method: 'POST' });
 		const data = await r.json();
 		if (!r.ok) throw new Error(data.error || 'publish error');
-		showToast('ok', 'Опубликовано', `${a.slug} · git push прошёл, ждём Vercel`);
+		showToast('ok', 'Опубликовано', `${a.slug} · git push прошёл, ждём Vercel. Дальше можно отправить в TG.`);
 		await load();
 	} catch (e) {
 		btn.disabled = false;
 		btn.textContent = 'Опубликовать';
 		showToast('err', 'Ошибка публикации', e.message);
+	}
+}
+
+async function sendTg(a, btn) {
+	btn.disabled = true;
+	btn.textContent = 'отправляю…';
+	try {
+		const r = await fetch('/api/article-tg-send/' + encodeURIComponent(a.slug), {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({}),
+		});
+		const data = await r.json();
+		if (!r.ok) throw new Error(data.error || 'tg send error');
+		showToast('ok', 'Бот прислал тебе в личку', 'жми «Принять» — пост уйдёт в @scqr_ai');
+		await load();
+	} catch (e) {
+		btn.disabled = false;
+		btn.textContent = '📨 Отправить в TG бот';
+		showToast('err', 'Не удалось отправить', e.message);
 	}
 }
 

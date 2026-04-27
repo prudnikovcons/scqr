@@ -214,13 +214,10 @@
 		</section>
 
 		<section class="card">
-			<h2>
-				TG-пост
-				<button class="btn copy" id="send-tg" style="background:var(--violet);color:#fff;border-color:var(--violet);">📨 Отправить в бот на ревью</button>
-			</h2>
+			<h2>TG-пост</h2>
 			<div class="field">
 				<textarea name="tgPost" class="body" style="min-height:260px"></textarea>
-				<div class="hint">Кнопка отправит текущий текст тебе в бота с inline-кнопками «Принять / Отклонить». Если хочешь поправить — правь в этой textarea и жми «Отправить» снова, новое сообщение придёт.</div>
+				<div class="hint">Это черновик поста для @scqr_ai. Сохраняется автоматически. Отправить его в бота на ревью можно из <a href="/queue" style="color:var(--violet);">очереди</a> — но только после публикации статьи на сайте, чтобы ссылка вела на живую страницу.</div>
 			</div>
 		</section>
 	</div>
@@ -410,14 +407,17 @@ async function uploadCover() {
 
 async function acceptToQueue() {
 	if (!state.current) return;
+	const slug = state.current.slug;
+	const title = state.current.fields && state.current.fields.title;
 	await saveDraft();
 	try {
-		const r = await fetch('/api/article-accept/' + encodeURIComponent(state.current.slug), { method: 'POST' });
+		const r = await fetch('/api/article-accept/' + encodeURIComponent(slug), { method: 'POST' });
 		const data = await r.json();
 		if (!r.ok) throw new Error(data.error || 'accept error');
-		showToast('ok', 'Статья в очереди на публикацию', `slug: ${state.current.slug}`);
-		// удалить из списка черновиков
-		await loadList();
+		showToast('ok', 'Статья в очереди на публикацию', `${title} → переходим в /queue`);
+		setTimeout(() => {
+			window.location.href = '/queue?just=' + encodeURIComponent(slug);
+		}, 1100);
 	} catch (e) {
 		showToast('err', 'Не удалось принять', e.message);
 	}
@@ -473,7 +473,6 @@ $('#save-now').addEventListener('click', saveDraft);
 $('#accept').addEventListener('click', acceptToQueue);
 $('#cover-upload').addEventListener('click', uploadCover);
 $('#copy-prompt').addEventListener('click', copyPrompt);
-$('#send-tg').addEventListener('click', sendTg);
 
 loadList();
 </script>

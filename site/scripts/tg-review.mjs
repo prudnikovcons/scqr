@@ -202,12 +202,38 @@ async function sendReview(slug) {
 
 async function publishToChannel(slug, channelText) {
 	const channel = process.env.SCQR_TG_CHANNEL || '@scqr_ai';
-	const r = await tg('sendMessage', {
-		chat_id: channel,
-		text: channelText,
-		parse_mode: 'HTML',
-		disable_web_page_preview: false,
-	});
+	const siteUrl = process.env.SITE_URL || 'https://ai.scqr.ru';
+
+	// Если для статьи в sidecar указан ogUrl, отправляем sendPhoto с подписью.
+	const ogUrl = readSidecarOgUrl(slug);
+	let r;
+	if (ogUrl) {
+		const photoUrl = `${siteUrl}${ogUrl}`;
+		// Telegram caption ограничен 1024 символами. Если длинный — фолбэк
+		// на sendMessage с preview.
+		if (channelText.length <= 1024) {
+			try {
+				r = await tg('sendPhoto', {
+					chat_id: channel,
+					photo: photoUrl,
+					caption: channelText,
+					parse_mode: 'HTML',
+				});
+			} catch (err) {
+				console.warn(`sendPhoto failed (${err.message}), falling back to sendMessage`);
+				r = null;
+			}
+		}
+	}
+	if (!r) {
+		r = await tg('sendMessage', {
+			chat_id: channel,
+			text: channelText,
+			parse_mode: 'HTML',
+			disable_web_page_preview: false,
+		});
+	}
+
 	appendPostsLog({
 		ts: new Date().toISOString(),
 		slug,
@@ -215,9 +241,29 @@ async function publishToChannel(slug, channelText) {
 		chat_id: r.chat.id,
 		channel,
 		via: 'review-approve',
+		hadPhoto: Boolean(ogUrl && r.photo),
 	});
 	const channelUsername = (channel.startsWith('@') ? channel.slice(1) : channel);
 	return `https://t.me/${channelUsername}/${r.message_id}`;
+}
+
+function readSidecarOgUrl(slug) {
+	const sidecarPath = path.join(WORKSPACE_ROOT, '.scqr', 'articles', slug, 'sidecar.json');
+	if (!fs.existsSync(sidecarPath)) return null;
+	try {
+		const data = JSON.parse(fs.readFileSync(sidecarPath, 'utf8'));
+		return (data.ogUrl || '').trim() || null;
+	} catch {
+		return null;
+	}
+}
+
+async function safeAnswerCb(cbId, text, alert = false) {
+	try {
+		await tg('answerCallbackQuery', { callback_query_id: cbId, text, show_alert: alert });
+	} catch (err) {
+		console.warn(`answerCallbackQuery soft-fail: ${err.message}`);
+	}
 }
 
 async function processCallback(cb, state) {
@@ -227,11 +273,7 @@ async function processCallback(cb, state) {
 	const [action, slugFragment] = data.split(':');
 
 	if (fromId !== ownerId) {
-		await tg('answerCallbackQuery', {
-			callback_query_id: cb.id,
-			text: 'Решения по публикациям принимает только редактор SCQR.',
-			show_alert: true,
-		});
+		await safeAnswerCb(cb.id, 'Решения по публикациям принимает только редактор SCQR.', true);
 		console.log(`unauthorized callback from id=${fromId} (${cb.from?.username})`);
 		return;
 	}
@@ -239,11 +281,7 @@ async function processCallback(cb, state) {
 	// Find pending review whose slug matches the fragment.
 	const pending = Object.values(state.pending).find((p) => p.slug.startsWith(slugFragment));
 	if (!pending) {
-		await tg('answerCallbackQuery', {
-			callback_query_id: cb.id,
-			text: 'Драфт уже не в работе.',
-			show_alert: false,
-		});
+		await safeAnswerCb(cb.id, 'Драфт уже не в работе.');
 		return;
 	}
 
@@ -306,21 +344,37 @@ async function processCallback(cb, state) {
 }
 
 async function watch(timeoutSeconds = 600) {
-	const state = loadState();
+	let state = loadState();
 	const deadline = Date.now() + timeoutSeconds * 1000;
 	console.log(`watching for callbacks (timeout ${timeoutSeconds}s, pending=${Object.keys(state.pending).length})`);
 	let offset = state.lastUpdate + 1;
-	while (Date.now() < deadline && Object.keys(state.pending).length > 0) {
-		const updates = await tg('getUpdates', { offset, timeout: 25, allowed_updates: ['callback_query'] });
-		if (updates.length === 0) continue;
-		for (const u of updates) {
-			offset = u.update_id + 1;
-			state.lastUpdate = u.update_id;
-			if (u.callback_query) {
-				await processCallback(u.callback_query, state);
+
+	// При старте watcher'а из review-server-а pending может быть пустым, но
+	// мы всё равно слушаем, чтобы обрабатывать новые отправки в течение
+	// окна 24 часа. Условие выхода — только по deadline.
+	while (Date.now() < deadline) {
+		try {
+			const updates = await tg('getUpdates', { offset, timeout: 25, allowed_updates: ['callback_query'] });
+			if (!updates || updates.length === 0) continue;
+			for (const u of updates) {
+				offset = u.update_id + 1;
+				state.lastUpdate = u.update_id;
+				if (u.callback_query) {
+					try {
+						await processCallback(u.callback_query, state);
+					} catch (err) {
+						console.error('processCallback error (non-fatal):', err.message);
+					}
+				}
 			}
+			saveState(state);
+		} catch (err) {
+			console.error('getUpdates error (non-fatal):', err.message);
+			await new Promise((r) => setTimeout(r, 3000));
+			// перечитаем state на случай, если он обновился из-за параллельной
+			// записи (review-server мог положить новый pending).
+			try { state = loadState(); } catch {}
 		}
-		saveState(state);
 	}
 	console.log('watch done.');
 }

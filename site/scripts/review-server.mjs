@@ -442,15 +442,23 @@ async function uploadCover(slug, payload) {
 	const ext = m[2] === 'jpeg' ? 'jpg' : m[2];
 	const buf = Buffer.from(m[3], 'base64');
 
-	// /site/src/assets/editorial/contributed/<YYYY-MM-DD>/<slug>.<ext>
+	// 1) site/src/assets/editorial/contributed/<YYYY-MM-DD>/<slug>.<ext> — для Astro hero
 	const dateMatch = safe.match(/^(\d{4}-\d{2}-\d{2})/);
 	const dateDir = dateMatch ? dateMatch[1] : 'misc';
-	const targetDir = join(ASSETS_DIR, dateDir);
-	await mkdir(targetDir, { recursive: true });
-	const targetPath = join(targetDir, `${safe}.${ext}`);
-	await writeFile(targetPath, buf);
+	const assetDir = join(ASSETS_DIR, dateDir);
+	await mkdir(assetDir, { recursive: true });
+	const assetPath = join(assetDir, `${safe}.${ext}`);
+	await writeFile(assetPath, buf);
 
-	// относительный путь от поста
+	// 2) site/public/editorial/og/<YYYY-MM-DD>/<slug>.<ext> — для Telegram sendPhoto
+	//    (Astro обрабатывает только src/assets, /public идёт без изменений)
+	const ogDir = join(ROOT, 'site', 'public', 'editorial', 'og', dateDir);
+	await mkdir(ogDir, { recursive: true });
+	const ogPath = join(ogDir, `${safe}.${ext}`);
+	await writeFile(ogPath, buf);
+	const ogUrl = `/editorial/og/${dateDir}/${safe}.${ext}`;
+
+	// относительный путь heroImage от поста (Astro)
 	const relPath = `../../assets/editorial/contributed/${dateDir}/${safe}.${ext}`;
 
 	// обновить frontmatter
@@ -463,7 +471,18 @@ async function uploadCover(slug, payload) {
 	}
 	await writeFile(postPath, joinFrontmatter(fm, body), 'utf8');
 
-	return { ok: true, heroImage: relPath, savedBytes: buf.length };
+	// записать ogUrl в sidecar
+	const sidecarDir = join(ARTICLES_DIR, safe);
+	await mkdir(sidecarDir, { recursive: true });
+	const sidecarPath = join(sidecarDir, 'sidecar.json');
+	const existing = (await readJsonSafe(sidecarPath)) || {};
+	existing.slug = safe;
+	existing.ogUrl = ogUrl;
+	existing.updatedAt = new Date().toISOString();
+	if (!existing.createdAt) existing.createdAt = existing.updatedAt;
+	await writeFile(sidecarPath, JSON.stringify(existing, null, 2), 'utf8');
+
+	return { ok: true, heroImage: relPath, ogUrl, savedBytes: buf.length };
 }
 
 async function publishArticle(slug) {
@@ -712,8 +731,74 @@ const server = createServer(async (req, res) => {
 	}
 });
 
+// ─────────────────────────────────────────────────────────────────────────
+// TG watcher — авто-поднимаемый дочерний процесс
+// ─────────────────────────────────────────────────────────────────────────
+
+function loadEnvLocalIntoServer() {
+	// чтобы знать, есть ли SCQR_AI_BOT_TOKEN — он лежит в .env.local
+	const file = join(ROOT, '.env.local');
+	try {
+		const buf = require('node:fs').readFileSync(file, 'utf8');
+		for (const line of buf.split(/\r?\n/)) {
+			const m = line.match(/^([A-Z_][A-Z0-9_]*)=(.*)$/);
+			if (m && !process.env[m[1]]) process.env[m[1]] = m[2];
+		}
+	} catch {}
+}
+
+let watcherChild = null;
+let watcherShouldRun = true;
+
+function startTgWatcher() {
+	if (!watcherShouldRun) return;
+	if (!process.env.SCQR_AI_BOT_TOKEN) {
+		console.log('  [tg-watcher] disabled — SCQR_AI_BOT_TOKEN missing in .env.local');
+		return;
+	}
+	const scriptPath = join(__dirname, 'tg-review.mjs');
+	// 86400 секунд = 24 часа; getUpdates long-poll 25 сек
+	const child = spawn(process.execPath, [scriptPath, '--watch', '86400'], {
+		cwd: ROOT,
+		stdio: ['ignore', 'pipe', 'pipe'],
+		env: process.env,
+	});
+	watcherChild = child;
+	child.stdout.on('data', (d) => {
+		const s = d.toString().trim();
+		if (s) console.log('[tg-watcher]', s);
+	});
+	child.stderr.on('data', (d) => {
+		const s = d.toString().trim();
+		if (s) console.error('[tg-watcher]', s);
+	});
+	child.on('exit', (code, signal) => {
+		watcherChild = null;
+		if (!watcherShouldRun) return;
+		console.log(`[tg-watcher] exited code=${code} signal=${signal}, respawning in 5s`);
+		setTimeout(startTgWatcher, 5000);
+	});
+	console.log('  [tg-watcher] started, listening for callbacks');
+}
+
+function stopTgWatcher() {
+	watcherShouldRun = false;
+	if (watcherChild) {
+		try { watcherChild.kill(); } catch {}
+		watcherChild = null;
+	}
+}
+
+process.on('SIGINT', () => { stopTgWatcher(); process.exit(0); });
+process.on('SIGTERM', () => { stopTgWatcher(); process.exit(0); });
+
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+loadEnvLocalIntoServer();
+
 server.listen(PORT, () => {
 	console.log(`SCQR Review UI: http://localhost:${PORT}/`);
 	console.log(`  packs:   ${PACKS_DIR}`);
 	console.log(`  reviews: ${REVIEWS_DIR}`);
+	startTgWatcher();
 });
