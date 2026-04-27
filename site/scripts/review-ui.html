@@ -530,11 +530,13 @@ function updateDock() {
 	const writeCount = Object.values(state.actions).filter((a) => a && a.kind === 'write').length;
 	const decided = Object.values(state.actions).filter((a) => a && a.kind).length;
 	const total = state.pack ? state.pack.signals.length : 0;
+	const finalized = !!state.finalSavedAt;
 	$('#dock-left').innerHTML = `
 		размечено <b>${decided}</b> из <b>${total}</b> · в работу <b>${writeCount}</b>
-		${state.finalSavedAt ? `· зафиксировано в ${fmtTime(state.finalSavedAt)}` : ''}
+		${finalized ? `· зафиксировано в ${fmtTime(state.finalSavedAt)} <span style="opacity:0.7">— карточки можно править и зафиксировать заново</span>` : ''}
 	`;
 	$('#finalize').disabled = decided === 0;
+	$('#finalize').textContent = finalized ? 'Перезаписать рецензию' : 'Зафиксировать рецензию';
 }
 
 async function finalizeReview() {
