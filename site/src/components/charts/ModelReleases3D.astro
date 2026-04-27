@@ -1,0 +1,577 @@
+---
+// Интерактивный 3D-график релизов фронтирных моделей за 12 месяцев.
+// Холст рисуется на canvas, можно крутить мышкой, наводить на точки,
+// прятать линейки в легенде. Подписи — короткие версии моделей над точками,
+// полные — в подсказке по наведению.
+//
+// Палитра выровнена с SCQR-вариантом сайта: лиловый фон, тёмная типографика,
+// лаймовый акцент только для линий.
+
+interface Props {
+	startDate?: string; // ISO дата начала окна, по умолчанию -1 год от endDate
+	endDate?: string;   // ISO дата конца окна, по умолчанию сегодня
+	noteText?: string;  // подпись под графиком
+}
+
+const { startDate, endDate, noteText } = Astro.props;
+---
+
+<figure class="chart-container">
+	<div class="chart-grid">
+		<div class="chart-box">
+			<canvas id="model-releases-3d" width="1380" height="900"></canvas>
+			<div class="tooltip" id="model-releases-tooltip"></div>
+		</div>
+		<aside class="chart-side">
+			<h3>Линии моделей</h3>
+			<div class="chart-controls">
+				<button data-action="reset">Сбросить вид</button>
+				<button data-action="show-all">Показать все</button>
+				<button data-action="hide-all">Скрыть все</button>
+				<button data-action="toggle-labels">Подписи: вкл</button>
+			</div>
+			<div class="chart-legend"></div>
+		</aside>
+	</div>
+	<figcaption class="chart-caption">
+		<strong>Оси:</strong> X — дата релиза, Y — порядковый номер внутри линейки, Z — отдельная линейка моделей.
+		Крутить — мышкой. Прятать линии — кликом по легенде. Полное название модели — по наведению.
+		{noteText ?? 'Включены значимые публичные релизы и заметные обновления; микроварианты опущены, чтобы график оставался читаемым. Даты могут расходиться с тем, как линейки маркируются у разных вендоров — учтена основная вышедшая версия.'}
+	</figcaption>
+</figure>
+
+<script
+	define:vars={{
+		propsStartDate: startDate ?? null,
+		propsEndDate: endDate ?? null,
+	}}
+>
+	(() => {
+		const rawSeries = [
+			{ name: 'OpenAI GPT', vendor: 'OpenAI', events: [['2025-08-07', 'GPT-5'], ['2025-11-12', 'GPT-5.1'], ['2025-12-11', 'GPT-5.2'], ['2026-03-05', 'GPT-5.4'], ['2026-04-23', 'GPT-5.5']], note: 'основная линейка GPT' },
+			{ name: 'OpenAI Codex', vendor: 'OpenAI', events: [['2025-09-15', 'GPT-5-Codex'], ['2026-02-05', 'GPT-5.3-Codex'], ['2026-02-05', 'GPT-5.3-Codex-Spark']], note: 'кодинг-линия' },
+			{ name: 'Anthropic Opus', vendor: 'Anthropic', events: [['2025-05-22', 'Opus 4'], ['2025-08-05', 'Opus 4.1'], ['2025-11-24', 'Opus 4.5'], ['2026-02-05', 'Opus 4.6'], ['2026-04-17', 'Opus 4.7']], note: 'тяжёлая флагманская' },
+			{ name: 'Anthropic Sonnet', vendor: 'Anthropic', events: [['2025-05-22', 'Sonnet 4'], ['2025-09-29', 'Sonnet 4.5'], ['2026-02-17', 'Sonnet 4.6']], note: 'сбалансированная средняя' },
+			{ name: 'Anthropic Haiku', vendor: 'Anthropic', events: [['2025-10-15', 'Haiku 4.5']], note: 'быстрая лёгкая' },
+			{ name: 'Gemini Pro', vendor: 'Google', events: [['2025-06-17', 'Gemini 2.5 Pro stable'], ['2025-11-18', 'Gemini 3 Pro'], ['2026-02-19', 'Gemini 3.1 Pro Preview']], note: 'основная Pro-линейка' },
+			{ name: 'Gemini Flash', vendor: 'Google', events: [['2025-06-17', 'Gemini 2.5 Flash stable'], ['2025-12-17', 'Gemini 3 Flash'], ['2026-03-03', 'Gemini 3.1 Flash-Lite Preview'], ['2026-04-17', 'Gemini 3.1 Flash TTS']], note: 'быстрая / низкая задержка' },
+			{ name: 'Gemini Live / CU', vendor: 'Google', events: [['2025-10-07', 'Gemini 2.5 Computer Use'], ['2026-03-20', 'Gemini 3.1 Flash Live Preview']], note: 'Live и computer-use' },
+			{ name: 'xAI Grok', vendor: 'xAI', events: [['2025-07-09', 'Grok 4'], ['2025-11-17', 'Grok 4.1']], note: 'основная Grok' },
+			{ name: 'xAI Grok Fast', vendor: 'xAI', events: [['2025-09-19', 'Grok 4 Fast'], ['2025-11-19', 'Grok 4.1 Fast']], note: 'fast / agent-tools' },
+			{ name: 'DeepSeek Reasoning', vendor: 'DeepSeek', events: [['2025-05-28', 'DeepSeek-R1-0528']], note: 'reasoning-линия' },
+			{ name: 'DeepSeek Mainline', vendor: 'DeepSeek', events: [['2025-08-21', 'DeepSeek-V3.1'], ['2025-09-22', 'DeepSeek-V3.1-Terminus'], ['2025-09-29', 'DeepSeek-V3.2-Exp'], ['2025-12-01', 'DeepSeek-V3.2'], ['2026-04-24', 'DeepSeek-V4-Pro / V4-Flash']], note: 'основная DeepSeek' },
+			{ name: 'Qwen Mainline', vendor: 'Qwen / Alibaba', events: [['2025-04-29', 'Qwen3'], ['2025-09-23', 'Qwen3-Max'], ['2026-04-01', 'Qwen3.6-Plus']], note: 'основная Qwen' },
+			{ name: 'Qwen Coder', vendor: 'Qwen / Alibaba', events: [['2025-07-22', 'Qwen3-Coder']], note: 'кодинг-вариант' },
+			{ name: 'Kimi K2', vendor: 'Moonshot', events: [['2025-07-11', 'Kimi K2'], ['2025-08-01', 'Kimi K2 Turbo'], ['2025-09-05', 'Kimi K2 Preview'], ['2025-11-06', 'Kimi K2 Think']], note: 'семейство K2' },
+			{ name: 'ERNIE', vendor: 'Baidu', events: [['2025-06-30', 'ERNIE 4.5 OSS family'], ['2025-11-13', 'ERNIE 5.0 Preview'], ['2026-02-10', 'ERNIE 5.0 paper/blog']], note: 'Baidu ERNIE' },
+		];
+		const vendorColors = {
+			OpenAI: '#10a37f',
+			Anthropic: '#d97706',
+			Google: '#2563eb',
+			xAI: '#db2777',
+			DeepSeek: '#7c3aed',
+			'Qwen / Alibaba': '#0f766e',
+			Moonshot: '#b91c1c',
+			Baidu: '#475569',
+		};
+
+		const start = new Date(propsStartDate ?? '2025-04-27T00:00:00Z');
+		const end = new Date(propsEndDate ?? '2026-04-27T00:00:00Z');
+		const totalMs = end - start;
+		const canvas = document.getElementById('model-releases-3d');
+		if (!canvas) return;
+		const ctx = canvas.getContext('2d');
+		const tooltip = document.getElementById('model-releases-tooltip');
+		const root = canvas.closest('.chart-container');
+		const legend = root.querySelector('.chart-legend');
+		const buttons = root.querySelectorAll('.chart-controls button');
+
+		let rotX = -0.45;
+		let rotY = -0.78;
+		let zoom = 1.1;
+		let panX = 0;
+		let panY = 18;
+		let dragging = false;
+		let lastX = 0;
+		let lastY = 0;
+		let hoverPoint = null;
+		let showLabels = true;
+		const hidden = new Set();
+
+		function shortLabel(model) {
+			const parts = model.split(/[\s,]+/);
+			for (const p of parts.slice().reverse()) {
+				if (/\d/.test(p)) return p.replace(/^\(/, '').replace(/\)$/, '').slice(0, 18);
+			}
+			return model.slice(0, 12);
+		}
+
+		function seriesId(name) {
+			return name.replace(/[^a-zA-Z0-9]+/g, '_');
+		}
+
+		const prepared = rawSeries.map((s, idx) => {
+			const zBase = (idx - (rawSeries.length - 1) / 2) * 1.2;
+			const points = s.events.map((ev, i) => {
+				const dt = new Date(ev[0] + 'T00:00:00Z');
+				const x = ((dt - start) / totalMs) * 24 - 12;
+				return {
+					date: ev[0],
+					model: ev[1],
+					short: shortLabel(ev[1]),
+					x,
+					y: i * 2.0,
+					z: zBase,
+					level: i + 1,
+				};
+			});
+			return { ...s, color: vendorColors[s.vendor] || '#334155', sid: seriesId(s.name), zBase, points };
+		});
+
+		function renderLegend() {
+			legend.innerHTML = '';
+			prepared.forEach((s) => {
+				const item = document.createElement('div');
+				item.className = 'chart-legend-item' + (hidden.has(s.sid) ? ' off' : '');
+				item.innerHTML = `<span class="chart-swatch" style="background:${s.color}"></span><div><div class="chart-legend-title">${s.name}</div><div class="chart-legend-sub">${s.vendor}<br>${s.note || ''}</div></div>`;
+				item.addEventListener('click', () => {
+					if (hidden.has(s.sid)) hidden.delete(s.sid);
+					else hidden.add(s.sid);
+					renderLegend();
+					draw();
+				});
+				legend.appendChild(item);
+			});
+		}
+
+		function project(p) {
+			const x = p.x;
+			const y = p.y - 4.5;
+			const z = p.z;
+			const cy = Math.cos(rotY), sy_ = Math.sin(rotY);
+			const x1 = x * cy + z * sy_;
+			const z1 = -x * sy_ + z * cy;
+			const cx = Math.cos(rotX), sx_ = Math.sin(rotX);
+			const y2 = y * cx - z1 * sx_;
+			const z2 = y * sx_ + z1 * cx;
+			const dist = 28;
+			const persp = 560 / (dist - z2);
+			return {
+				sx: canvas.width / 2 + panX + x1 * persp * zoom,
+				sy: canvas.height / 2 + panY - y2 * persp * zoom,
+				scale: Math.max(0.35, persp / 55),
+				depth: z2,
+			};
+		}
+
+		function drawAxes() {
+			ctx.save();
+			ctx.lineWidth = 1;
+			ctx.strokeStyle = 'rgba(124, 92, 255, 0.18)';
+			ctx.fillStyle = '#5C5685';
+			ctx.font = '12px Inter, "Helvetica Neue", Arial, sans-serif';
+
+			for (let gx = -12; gx <= 12; gx += 2) {
+				const a = project({ x: gx, y: 0, z: -10 });
+				const b = project({ x: gx, y: 0, z: 10 });
+				ctx.beginPath();
+				ctx.moveTo(a.sx, a.sy);
+				ctx.lineTo(b.sx, b.sy);
+				ctx.stroke();
+			}
+			for (let gz = -10; gz <= 10; gz += 2) {
+				const a = project({ x: -12, y: 0, z: gz });
+				const b = project({ x: 12, y: 0, z: gz });
+				ctx.beginPath();
+				ctx.moveTo(a.sx, a.sy);
+				ctx.lineTo(b.sx, b.sy);
+				ctx.stroke();
+			}
+			for (let gy = 0; gy <= 10; gy += 2) {
+				const a = project({ x: -12, y: gy, z: -10 });
+				const b = project({ x: -12, y: gy, z: 10 });
+				ctx.beginPath();
+				ctx.moveTo(a.sx, a.sy);
+				ctx.lineTo(b.sx, b.sy);
+				ctx.stroke();
+				ctx.fillText(String(Math.round(gy / 2) + 1), a.sx - 22, a.sy + 4);
+			}
+
+			ctx.strokeStyle = 'rgba(23, 20, 46, 0.45)';
+			ctx.lineWidth = 1.6;
+			const xA = project({ x: -12, y: 0, z: -10 });
+			const xB = project({ x: 12, y: 0, z: -10 });
+			const yA = project({ x: -12, y: 0, z: -10 });
+			const yB = project({ x: -12, y: 10, z: -10 });
+			const zA = project({ x: -12, y: 0, z: -10 });
+			const zB = project({ x: -12, y: 0, z: 10 });
+			ctx.beginPath();
+			ctx.moveTo(xA.sx, xA.sy);
+			ctx.lineTo(xB.sx, xB.sy);
+			ctx.stroke();
+			ctx.beginPath();
+			ctx.moveTo(yA.sx, yA.sy);
+			ctx.lineTo(yB.sx, yB.sy);
+			ctx.stroke();
+			ctx.beginPath();
+			ctx.moveTo(zA.sx, zA.sy);
+			ctx.lineTo(zB.sx, zB.sy);
+			ctx.stroke();
+
+			const monthLabels = ['2025-05', '2025-07', '2025-09', '2025-11', '2026-01', '2026-03'];
+			ctx.fillStyle = '#5C5685';
+			ctx.font = '12px Inter, "Helvetica Neue", Arial, sans-serif';
+			monthLabels.forEach((m) => {
+				const dt = new Date(m + '-01T00:00:00Z');
+				const x = ((dt - start) / totalMs) * 24 - 12;
+				const p = project({ x, y: 0, z: -10 });
+				ctx.fillText(m, p.sx - 18, p.sy + 18);
+			});
+
+			ctx.font = 'bold 13px Inter, "Helvetica Neue", Arial, sans-serif';
+			ctx.fillStyle = '#17142E';
+			const lx = project({ x: 12.6, y: 0, z: -10 });
+			const ly = project({ x: -12, y: 10.8, z: -10 });
+			const lz = project({ x: -12, y: 0, z: 10.7 });
+			ctx.fillText('X: дата', lx.sx - 8, lx.sy + 4);
+			ctx.fillText('Y: номер релиза', ly.sx - 18, ly.sy);
+			ctx.fillText('Z: серия', lz.sx - 6, lz.sy);
+			ctx.restore();
+		}
+
+		function draw() {
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			drawAxes();
+
+			const segments = [];
+			const pointsToDraw = [];
+			prepared.forEach((s) => {
+				if (hidden.has(s.sid)) return;
+				for (let i = 0; i < s.points.length - 1; i++) {
+					const a = project(s.points[i]);
+					const b = project(s.points[i + 1]);
+					segments.push({ a, b, color: s.color, depth: (a.depth + b.depth) / 2 });
+				}
+				s.points.forEach((p) => {
+					const pr = project(p);
+					pointsToDraw.push({ ...pr, raw: p, series: s, depth: pr.depth });
+				});
+			});
+
+			segments.sort((a, b) => a.depth - b.depth);
+			pointsToDraw.sort((a, b) => a.depth - b.depth);
+
+			segments.forEach((seg) => {
+				ctx.strokeStyle = seg.color;
+				ctx.globalAlpha = 0.6;
+				ctx.lineWidth = 1.5;
+				ctx.beginPath();
+				ctx.moveTo(seg.a.sx, seg.a.sy);
+				ctx.lineTo(seg.b.sx, seg.b.sy);
+				ctx.stroke();
+				ctx.globalAlpha = 1;
+			});
+
+			pointsToDraw.forEach((p) => {
+				const r = 4 + p.scale * 2.4;
+				ctx.fillStyle = p.series.color;
+				ctx.beginPath();
+				ctx.arc(p.sx, p.sy, r, 0, Math.PI * 2);
+				ctx.fill();
+				ctx.lineWidth = hoverPoint && hoverPoint.raw === p.raw && hoverPoint.series.sid === p.series.sid ? 3 : 1.6;
+				ctx.strokeStyle = '#ffffff';
+				ctx.stroke();
+			});
+
+			if (showLabels) {
+				ctx.font = '11px "JetBrains Mono", "SF Mono", Menlo, monospace';
+				ctx.textAlign = 'center';
+				pointsToDraw.forEach((p) => {
+					const txt = p.raw.short;
+					ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+					ctx.lineWidth = 4;
+					ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
+					ctx.strokeText(txt, p.sx, p.sy - 11);
+					ctx.fillStyle = p.series.color;
+					ctx.fillText(txt, p.sx, p.sy - 11);
+				});
+				ctx.textAlign = 'start';
+			}
+
+			window._modelReleasesPoints = pointsToDraw;
+		}
+
+		function canvasPos(evt) {
+			const rect = canvas.getBoundingClientRect();
+			return {
+				x: (evt.clientX - rect.left) * (canvas.width / rect.width),
+				y: (evt.clientY - rect.top) * (canvas.height / rect.height),
+				rect,
+			};
+		}
+
+		function handleHover(evt) {
+			const pos = canvasPos(evt);
+			const points = window._modelReleasesPoints || [];
+			let best = null;
+			let bestDist = 1e9;
+			for (const p of points) {
+				const d = Math.hypot(p.sx - pos.x, p.sy - pos.y);
+				if (d < bestDist) {
+					bestDist = d;
+					best = p;
+				}
+			}
+			if (best && bestDist <= 14) {
+				hoverPoint = best;
+				draw();
+				tooltip.style.display = 'block';
+				tooltip.innerHTML = `
+					<div class="chart-tooltip-title">${best.raw.model}</div>
+					<div><b>Разработчик:</b> ${best.series.vendor}</div>
+					<div><b>Линейка:</b> ${best.series.name}</div>
+					<div><b>Дата релиза:</b> ${best.raw.date}</div>
+					<div><b>Номер в линейке:</b> ${best.raw.level}</div>
+				`;
+				tooltip.style.left = (evt.clientX - pos.rect.left + 16) + 'px';
+				tooltip.style.top = (evt.clientY - pos.rect.top + 16) + 'px';
+			} else {
+				if (hoverPoint) {
+					hoverPoint = null;
+					draw();
+				}
+				tooltip.style.display = 'none';
+			}
+		}
+
+		canvas.addEventListener('mousedown', (evt) => {
+			dragging = true;
+			lastX = evt.clientX;
+			lastY = evt.clientY;
+			canvas.classList.add('dragging');
+		});
+		window.addEventListener('mouseup', () => {
+			dragging = false;
+			canvas.classList.remove('dragging');
+		});
+		window.addEventListener('mousemove', (evt) => {
+			if (dragging) {
+				const dx = evt.clientX - lastX;
+				const dy = evt.clientY - lastY;
+				rotY += dx * 0.008;
+				rotX += dy * 0.008;
+				rotX = Math.max(-1.45, Math.min(1.1, rotX));
+				lastX = evt.clientX;
+				lastY = evt.clientY;
+				draw();
+			} else {
+				handleHover(evt);
+			}
+		});
+		canvas.addEventListener('mouseleave', () => {
+			tooltip.style.display = 'none';
+			if (hoverPoint) {
+				hoverPoint = null;
+				draw();
+			}
+		});
+		canvas.addEventListener('wheel', (evt) => {
+			evt.preventDefault();
+			zoom *= evt.deltaY < 0 ? 1.08 : 0.93;
+			zoom = Math.max(0.45, Math.min(2.5, zoom));
+			draw();
+		}, { passive: false });
+
+		canvas.addEventListener('touchstart', (evt) => {
+			if (evt.touches.length === 1) {
+				dragging = true;
+				lastX = evt.touches[0].clientX;
+				lastY = evt.touches[0].clientY;
+			}
+		}, { passive: true });
+		canvas.addEventListener('touchmove', (evt) => {
+			if (!dragging || evt.touches.length !== 1) return;
+			const dx = evt.touches[0].clientX - lastX;
+			const dy = evt.touches[0].clientY - lastY;
+			rotY += dx * 0.008;
+			rotX += dy * 0.008;
+			rotX = Math.max(-1.45, Math.min(1.1, rotX));
+			lastX = evt.touches[0].clientX;
+			lastY = evt.touches[0].clientY;
+			draw();
+		}, { passive: true });
+		canvas.addEventListener('touchend', () => {
+			dragging = false;
+		});
+
+		buttons.forEach((b) => {
+			b.addEventListener('click', () => {
+				const action = b.dataset.action;
+				if (action === 'reset') {
+					rotX = -0.45;
+					rotY = -0.78;
+					zoom = 1.1;
+					panX = 0;
+					panY = 18;
+				}
+				if (action === 'show-all') hidden.clear();
+				if (action === 'hide-all') prepared.forEach((s) => hidden.add(s.sid));
+				if (action === 'toggle-labels') {
+					showLabels = !showLabels;
+					b.textContent = `Подписи: ${showLabels ? 'вкл' : 'выкл'}`;
+				}
+				renderLegend();
+				draw();
+			});
+		});
+
+		renderLegend();
+		draw();
+	})();
+</script>
+
+<style>
+	/* Контейнер вырывается из узкой колонки статьи (~720px) и
+	   занимает почти всю ширину viewport до 1280px. */
+	.chart-container {
+		position: relative;
+		left: 50%;
+		transform: translateX(-50%);
+		width: min(calc(100vw - 32px), 1280px);
+		margin: 36px auto;
+	}
+	.chart-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 280px;
+		gap: 14px;
+		align-items: start;
+	}
+	@media (max-width: 900px) {
+		.chart-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+	.chart-box {
+		position: relative;
+		border: 1px solid #d7cdf5;
+		border-radius: 16px;
+		overflow: hidden;
+		background: linear-gradient(180deg, #ffffff 0%, #f6f1ff 100%);
+		box-shadow: 0 1px 0 rgba(124, 92, 255, 0.04);
+	}
+	.chart-box canvas {
+		display: block;
+		width: 100%;
+		height: auto;
+		cursor: grab;
+	}
+	.chart-box canvas.dragging {
+		cursor: grabbing;
+	}
+	.tooltip {
+		position: absolute;
+		display: none;
+		pointer-events: none;
+		z-index: 10;
+		min-width: 220px;
+		max-width: 360px;
+		padding: 10px 12px;
+		border-radius: 10px;
+		color: #ffffff;
+		background: rgba(23, 20, 46, 0.94);
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+		font-size: 13px;
+		line-height: 1.45;
+	}
+	.chart-tooltip-title {
+		font-weight: 700;
+		margin-bottom: 4px;
+	}
+	.chart-side {
+		border: 1px solid #d7cdf5;
+		border-radius: 16px;
+		padding: 14px;
+		background: #ffffff;
+	}
+	.chart-side h3 {
+		margin: 4px 0 12px;
+		font-size: 14px;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: #7c5cff;
+	}
+	.chart-controls {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+		margin-bottom: 14px;
+	}
+	.chart-controls button {
+		border: 1px solid #d7cdf5;
+		background: #f1ecff;
+		color: #17142e;
+		padding: 7px 11px;
+		border-radius: 8px;
+		cursor: pointer;
+		font-size: 12.5px;
+		font-family: inherit;
+	}
+	.chart-controls button:hover {
+		background: #ffffff;
+		border-color: #7c5cff;
+	}
+	.chart-legend {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		max-height: 660px;
+		overflow: auto;
+		padding-right: 4px;
+	}
+	.chart-legend-item {
+		display: flex;
+		align-items: flex-start;
+		gap: 9px;
+		border: 1px solid #d7cdf5;
+		border-radius: 10px;
+		padding: 8px 10px;
+		cursor: pointer;
+		background: #fafaff;
+		transition: background 0.12s;
+	}
+	.chart-legend-item:hover {
+		background: #ffffff;
+	}
+	.chart-legend-item.off {
+		opacity: 0.4;
+	}
+	.chart-swatch {
+		width: 12px;
+		height: 12px;
+		border-radius: 999px;
+		margin-top: 4px;
+		flex: 0 0 12px;
+	}
+	.chart-legend-title {
+		font-weight: 600;
+		font-size: 13.5px;
+		color: #17142e;
+	}
+	.chart-legend-sub {
+		color: #5c5685;
+		font-size: 11.5px;
+		line-height: 1.4;
+		margin-top: 2px;
+	}
+	.chart-caption {
+		margin-top: 14px;
+		font-size: 13px;
+		color: #5c5685;
+		line-height: 1.5;
+	}
+	.chart-caption strong {
+		color: #17142e;
+	}
+</style>

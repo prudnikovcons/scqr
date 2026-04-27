@@ -235,13 +235,13 @@ function setFmRaw(fm, name, rawValue) {
 async function listArticles(filterStatus) {
 	let files = [];
 	try {
-		files = (await readdir(POSTS_DIR)).filter((f) => f.endsWith('.md'));
+		files = (await readdir(POSTS_DIR)).filter((f) => f.endsWith('.md') || f.endsWith('.mdx'));
 	} catch {
 		return [];
 	}
 	const items = [];
 	for (const file of files) {
-		const slug = file.replace(/\.md$/, '');
+		const slug = file.replace(/\.(md|mdx)$/, '');
 		try {
 			const md = await readFile(join(POSTS_DIR, file), 'utf8');
 			const { fm } = splitFrontmatter(md);
@@ -276,7 +276,7 @@ function safeSlug(slug) {
 
 async function getArticle(slug) {
 	const safe = safeSlug(slug);
-	const md = await readFile(join(POSTS_DIR, `${safe}.md`), 'utf8');
+	const md = await readArticleMd(safe);
 	const { fm, body } = splitFrontmatter(md);
 	let sidecar = null;
 	try {
@@ -318,9 +318,25 @@ const FORMAT_LABELS = {
 
 const FORMAT_ORDER = ['news', 'column', 'analysis', 'illustration'];
 
+async function readArticleMd(safe) {
+	const md = join(POSTS_DIR, `${safe}.md`);
+	if (await pathExists(md)) return readFile(md, 'utf8');
+	const mdx = join(POSTS_DIR, `${safe}.mdx`);
+	if (await pathExists(mdx)) return readFile(mdx, 'utf8');
+	throw new Error(`article not found: ${safe}`);
+}
+
+async function articleMdPath(safe) {
+	const md = join(POSTS_DIR, `${safe}.md`);
+	if (await pathExists(md)) return md;
+	const mdx = join(POSTS_DIR, `${safe}.mdx`);
+	if (await pathExists(mdx)) return mdx;
+	throw new Error(`article not found: ${safe}`);
+}
+
 async function saveArticle(slug, payload) {
 	const safe = safeSlug(slug);
-	const path = join(POSTS_DIR, `${safe}.md`);
+	const path = await articleMdPath(safe);
 	const md = await readFile(path, 'utf8');
 	let { fm, body } = splitFrontmatter(md);
 
@@ -487,18 +503,32 @@ async function uploadCover(slug, payload) {
 
 async function publishArticle(slug) {
 	const safe = safeSlug(slug);
-	// 1) status: ready → approved
-	await saveArticle(safe, { fields: { status: 'approved' } });
-
-	// 2) git add + commit + push
-	const filesToAdd = [
-		`site/src/content/posts/${safe}.md`,
-	];
-	// если есть обложка — добавим директорию ассетов
 	const dateMatch = safe.match(/^(\d{4}-\d{2}-\d{2})/);
+
+	// Собираем список путей: только реально существующие
+	const filesToAdd = [];
+	const postMd = join(POSTS_DIR, `${safe}.md`);
+	const postMdx = join(POSTS_DIR, `${safe}.mdx`);
+	if (await pathExists(postMd)) filesToAdd.push(`site/src/content/posts/${safe}.md`);
+	else if (await pathExists(postMdx)) filesToAdd.push(`site/src/content/posts/${safe}.mdx`);
+	else throw new Error(`article md not found for ${safe}`);
+
+	// Каталог обложки в src/assets — добавляем только если реально создан
 	if (dateMatch) {
-		filesToAdd.push(`site/src/assets/editorial/contributed/${dateMatch[1]}`);
+		const assetDir = join(ASSETS_DIR, dateMatch[1]);
+		if (await pathExists(assetDir)) {
+			filesToAdd.push(`site/src/assets/editorial/contributed/${dateMatch[1]}`);
+		}
 	}
+
+	// Каталог публичной OG-картинки (для TG sendPhoto)
+	if (dateMatch) {
+		const ogDir = join(ROOT, 'site', 'public', 'editorial', 'og', dateMatch[1]);
+		if (await pathExists(ogDir)) {
+			filesToAdd.push(`site/public/editorial/og/${dateMatch[1]}`);
+		}
+	}
+
 	const title = (await getArticle(safe)).fields.title;
 	const message = `post: ${title}`;
 
@@ -506,7 +536,19 @@ async function publishArticle(slug) {
 	await gitRun(['commit', '-m', message]);
 	await gitRun(['push']);
 
+	// Status → approved ТОЛЬКО после успешного push
+	await saveArticle(safe, { fields: { status: 'approved' } });
+
 	return { ok: true, slug: safe, message };
+}
+
+async function pathExists(p) {
+	try {
+		await stat(p);
+		return true;
+	} catch {
+		return false;
+	}
 }
 
 async function sendTgReview(slug) {

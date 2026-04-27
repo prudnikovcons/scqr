@@ -7,7 +7,7 @@ import {
 } from './data/editorial-image-styles.js';
 
 const posts = defineCollection({
-	loader: glob({ base: './src/content/posts', pattern: '**/*.md' }),
+	loader: glob({ base: './src/content/posts', pattern: '**/*.{md,mdx}' }),
 	schema: ({ image }) =>
 		z.object({
 			title: z.string(),
