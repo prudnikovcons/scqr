@@ -208,9 +208,10 @@
 			<div id="cover-current"></div>
 			<div class="upload-zone">
 				<input type="file" id="cover-file" accept="image/png,image/jpeg,image/webp" />
-				<button class="btn" id="cover-upload">Загрузить</button>
+				<button class="btn" id="cover-upload">Загрузить вручную</button>
+				<button class="btn" id="cover-generate" style="margin-left:auto;background:var(--violet-soft);border-color:var(--violet);">🎨 Сгенерировать (бесплатно)</button>
 			</div>
-			<div class="hint">PNG / JPG / WebP до 10 МБ. После загрузки <code>heroImage</code> в frontmatter обновится автоматически.</div>
+			<div class="hint">«Загрузить» — взять файл с диска (например, экспорт из Codex Desktop). «Сгенерировать» — отдать промт обложки в pollinations.ai (FLUX, бесплатно, ~30–90 сек), результат подвяжется автоматически. Качество ниже, чем у платных моделей, но для проверки идеи или быстрого черновика подойдёт.</div>
 		</section>
 
 		<section class="card">
@@ -397,6 +398,28 @@ function scheduleSave() {
 	state.saveTimer = setTimeout(saveDraft, 600);
 }
 
+async function generateCover() {
+	if (!state.current) return;
+	const btn = $('#cover-generate');
+	btn.disabled = true;
+	btn.textContent = 'генерирую…';
+	showToast('ok', 'Генерация запущена', 'pollinations.ai обычно отвечает за 30–90 секунд');
+	try {
+		const r = await fetch('/api/article-generate-cover/' + encodeURIComponent(state.current.slug), {
+			method: 'POST',
+		});
+		const data = await r.json();
+		if (!r.ok) throw new Error(data.error || 'gen error');
+		showToast('ok', 'Обложка сгенерирована', `${data.model} · ${(data.bytes / 1024).toFixed(0)} КБ`);
+		await loadArticle(state.current.slug);
+	} catch (e) {
+		showToast('err', 'Не получилось сгенерировать', e.message);
+	} finally {
+		btn.disabled = false;
+		btn.textContent = '🎨 Сгенерировать (бесплатно)';
+	}
+}
+
 async function uploadCover() {
 	const file = $('#cover-file').files[0];
 	if (!file) { showToast('err', 'Выбери файл'); return; }
@@ -487,6 +510,7 @@ $('#format-picker').addEventListener('change', switchFormat);
 $('#save-now').addEventListener('click', saveDraft);
 $('#accept').addEventListener('click', acceptToQueue);
 $('#cover-upload').addEventListener('click', uploadCover);
+$('#cover-generate').addEventListener('click', generateCover);
 $('#copy-prompt').addEventListener('click', copyPrompt);
 
 loadList();

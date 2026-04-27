@@ -450,6 +450,69 @@ async function readJsonSafe(path) {
 	}
 }
 
+async function generateCover(slug) {
+	const safe = safeSlug(slug);
+	const sidecarDir = join(ARTICLES_DIR, safe);
+	const sidecarPath = join(sidecarDir, 'sidecar.json');
+	const sidecar = (await readJsonSafe(sidecarPath)) || {};
+	const prompt = (sidecar.coverPrompt || '').trim();
+	if (!prompt) throw new Error('coverPrompt в sidecar пустой — нечего генерировать');
+
+	// Бесплатный путь: pollinations.ai (FLUX-backed, без регистрации).
+	// Качество ниже, чем у gpt-image-1, но без оплаты.
+	// Для надёжности добавляем seed=<timestamp>, чтобы при повторе картинка
+	// менялась. nologo=true убирает водяной знак.
+	const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1536&height=1024&model=flux&nologo=true&seed=${Date.now()}`;
+
+	let r;
+	try {
+		r = await fetch(url, { signal: AbortSignal.timeout(180000) });
+	} catch (err) {
+		throw new Error(`не дозвонился до pollinations.ai: ${err.message}`);
+	}
+	if (!r.ok) {
+		const text = await r.text().catch(() => '');
+		throw new Error(`pollinations.ai вернул ${r.status}: ${text.slice(0, 200)}`);
+	}
+	const buf = Buffer.from(await r.arrayBuffer());
+	if (buf.length < 5000) {
+		throw new Error('подозрительно маленький файл — возможно, провайдер вернул заглушку');
+	}
+
+	// Сохраняем в asset (для Astro hero) и в public/editorial/og (для TG sendPhoto)
+	const dateMatch = safe.match(/^(\d{4}-\d{2}-\d{2})/);
+	const dateDir = dateMatch ? dateMatch[1] : 'misc';
+	const assetDir = join(ASSETS_DIR, dateDir);
+	await mkdir(assetDir, { recursive: true });
+	const assetPath = join(assetDir, `${safe}.png`);
+	await writeFile(assetPath, buf);
+
+	const ogDir = join(ROOT, 'site', 'public', 'editorial', 'og', dateDir);
+	await mkdir(ogDir, { recursive: true });
+	const ogPath = join(ogDir, `${safe}.png`);
+	await writeFile(ogPath, buf);
+	const ogUrl = `/editorial/og/${dateDir}/${safe}.png`;
+	const relPath = `../../assets/editorial/contributed/${dateDir}/${safe}.png`;
+
+	// Обновляем frontmatter
+	const postPath = await articleMdPath(safe);
+	const md = await readFile(postPath, 'utf8');
+	let { fm, body } = splitFrontmatter(md);
+	fm = setFmRaw(fm, 'heroImage', relPath);
+	if (!getFmField(fm, 'heroSource')) fm = setFmField(fm, 'heroSource', 'generated');
+	await writeFile(postPath, joinFrontmatter(fm, body), 'utf8');
+
+	// Обновляем sidecar
+	await mkdir(sidecarDir, { recursive: true });
+	sidecar.slug = safe;
+	sidecar.ogUrl = ogUrl;
+	sidecar.updatedAt = new Date().toISOString();
+	if (!sidecar.createdAt) sidecar.createdAt = sidecar.updatedAt;
+	await writeFile(sidecarPath, JSON.stringify(sidecar, null, 2), 'utf8');
+
+	return { ok: true, heroImage: relPath, ogUrl, bytes: buf.length, model: 'FLUX (pollinations.ai)' };
+}
+
 async function uploadCover(slug, payload) {
 	const safe = safeSlug(slug);
 	const dataUrl = payload.dataUrl || '';
@@ -743,6 +806,13 @@ const server = createServer(async (req, res) => {
 			const slug = decodeURIComponent(pathname.slice('/api/article-cover/'.length));
 			const body = await readBody(req, { maxBytes: 10 * 1024 * 1024 });
 			const result = await uploadCover(slug, body);
+			return send(res, 200, result);
+		}
+
+		// API: сгенерировать обложку через бесплатный pollinations.ai (FLUX)
+		if (method === 'POST' && pathname.startsWith('/api/article-generate-cover/')) {
+			const slug = decodeURIComponent(pathname.slice('/api/article-generate-cover/'.length));
+			const result = await generateCover(slug);
 			return send(res, 200, result);
 		}
 
