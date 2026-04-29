@@ -584,7 +584,7 @@ async function importCodexCover(slug) {
 	const md = await readFile(postPath, 'utf8');
 	let { fm, body } = splitFrontmatter(md);
 	fm = setFmRaw(fm, 'heroImage', relPath);
-	if (!getFmField(fm, 'heroSource')) fm = setFmField(fm, 'heroSource', 'codex');
+	if (!getFmField(fm, 'heroSource')) fm = setFmField(fm, 'heroSource', 'generated');
 	await writeFile(postPath, joinFrontmatter(fm, body), 'utf8');
 
 	const sidecarPath = join(ARTICLES_DIR, safe, 'sidecar.json');

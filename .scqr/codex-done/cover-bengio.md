@@ -4,10 +4,11 @@ slug: 2026-04-27-bengio-vernulsya-k-bezopasnosti
 target_path: D:\CODEX\gitscqr\scqr\site\src\assets\editorial\contributed\2026-04-27\2026-04-27-bengio-vernulsya-k-bezopasnosti.png
 size: 1536x1024
 priority: high
-status: "pending"
+status: "done"
 created_at: 2026-04-29T18:00:00Z
 note: переделать прежнюю FLUX-обложку, текущий файл удалён, ждём свежий рендер от Codex
-started_at: "2026-04-29T15:11:44.794Z"
+started_at: "2026-04-29T16:02:15.683Z"
+completed_at: "2026-04-29T16:02:45.796Z"
 ---
 
 # Обложка для статьи «Бенжио вернулся к разговору про безопасность ИИ»

@@ -7,7 +7,7 @@ tgTeaser: "Что значит, когда инженерная тема поп�
 pubDate: "2026-04-27T15:00:00"
 articleType: "analysis"
 stage: "morning-2026-04-27"
-status: "draft"
+status: "ready"
 rubrics: ["tendencies", "automations"]
 rubricLabels: ["Тенденции", "Автоматизации"]
 topics: ["data fabric", "корпоративный ИИ", "слой данных", "MIT Tech Review", "СУБД", "нижние этажи стека"]
@@ -16,6 +16,8 @@ readingTime: 3
 publicUrl: "/2026-04-27-data-fabric-bolshe-ne-konkurentnoe-preimushchestvo/"
 heroAlt: "Слой за слоем: на нижнем — слой данных как сетка; над ней — приложения как карточки; стрелки идут только вверх."
 heroStyle: "editorial_still_life"
+heroImage: ../../assets/editorial/contributed/2026-04-27/2026-04-27-data-fabric-bolshe-ne-konkurentnoe-preimushchestvo.png
+heroSource: "generated"
 ---
 
 MIT Technology Review публикует обзор: предприятиям нужен сильный единый слой данных, чтобы внедрённый ИИ приносил пользу. Без него ассистенты дают противоречивые ответы, агенты ходят в разные источники и не сходятся, а решения принимаются на основании отчёта, в который попало вчерашнее значение из ERP и сегодняшнее из CRM.

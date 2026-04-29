@@ -4,9 +4,10 @@ slug: 2026-04-27-data-fabric-bolshe-ne-konkurentnoe-preimushchestvo
 target_path: D:\CODEX\gitscqr\scqr\site\src\assets\editorial\contributed\2026-04-27\2026-04-27-data-fabric-bolshe-ne-konkurentnoe-preimushchestvo.png
 size: 1536x1024
 priority: high
-status: "pending"
+status: "done"
 created_at: 2026-04-29T18:00:00Z
 started_at: "2026-04-29T15:10:44.782Z"
+completed_at: "2026-04-29T16:02:45.884Z"
 ---
 
 # Обложка для статьи «Слой данных пришёл в обзоры. Это значит, что он перестал быть конкурентным преимуществом»
