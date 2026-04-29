@@ -17,6 +17,9 @@ const ROOT = resolve(__dirname, '..', '..');
 const PACKS_DIR = join(ROOT, '.scqr', 'packs');
 const REVIEWS_DIR = join(ROOT, '.scqr', 'reviews');
 const ARTICLES_DIR = join(ROOT, '.scqr', 'articles');
+const CODEX_INBOX_DIR = join(ROOT, '.scqr', 'codex-inbox');
+const CODEX_DONE_DIR = join(ROOT, '.scqr', 'codex-done');
+const CODEX_FAILED_DIR = join(ROOT, '.scqr', 'codex-failed');
 const POSTS_DIR = join(ROOT, 'site', 'src', 'content', 'posts');
 const ASSETS_DIR = join(ROOT, 'site', 'src', 'assets', 'editorial', 'contributed');
 const UI_HTML = join(__dirname, 'review-ui.html');
@@ -1040,6 +1043,138 @@ const server = createServer(async (req, res) => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────
+// Codex inbox watcher — обрабатывает .scqr/codex-inbox/*.md
+// ─────────────────────────────────────────────────────────────────────────
+
+let codexInboxRunning = false;
+let codexInboxTimer = null;
+const CODEX_INBOX_INTERVAL_MS = 30000; // 30 секунд
+
+async function processCodexInbox() {
+	if (codexInboxRunning) return;
+	codexInboxRunning = true;
+	try {
+		await mkdir(CODEX_INBOX_DIR, { recursive: true });
+		await mkdir(CODEX_DONE_DIR, { recursive: true });
+		await mkdir(CODEX_FAILED_DIR, { recursive: true });
+		const files = (await readdir(CODEX_INBOX_DIR)).filter((f) => f.endsWith('.md'));
+
+		for (const file of files) {
+			const inboxPath = join(CODEX_INBOX_DIR, file);
+			let raw;
+			try {
+				raw = await readFile(inboxPath, 'utf8');
+			} catch {
+				continue;
+			}
+			const { fm, body } = splitFrontmatter(raw);
+			const status = (getFmField(fm, 'status') || 'pending').toLowerCase();
+			if (status !== 'pending') continue;
+
+			const targetPath = (getFmField(fm, 'target_path') || '').trim();
+			if (!targetPath) {
+				console.warn(`[codex-inbox] ${file}: пустой target_path, отправляю в failed`);
+				await moveTo(inboxPath, CODEX_FAILED_DIR, file);
+				continue;
+			}
+
+			// Если файл уже существует по target_path — задание выполнено,
+			// просто финализируем (например, если Codex отработал раньше watcher).
+			if (await pathExists(targetPath)) {
+				await finalizeCodexTask(file, fm, body, inboxPath, raw);
+				continue;
+			}
+
+			// Помечаем in_progress
+			let updatedFm = setFmField(fm, 'status', 'in_progress');
+			updatedFm = setFmField(updatedFm, 'started_at', new Date().toISOString());
+			await writeFile(inboxPath, joinFrontmatter(updatedFm, body), 'utf8');
+
+			console.log(`[codex-inbox] ${file}: spawning codex…`);
+			const codexCmd = (process.env.SCQR_CODEX_CMD || '').trim();
+			if (!codexCmd) {
+				console.warn(`[codex-inbox] ${file}: SCQR_CODEX_CMD не задан — оставляю задание в inbox для ручного запуска Codex`);
+				// откатываем status обратно в pending, чтобы Codex мог взять руками
+				const reverted = setFmField(updatedFm, 'status', 'pending');
+				await writeFile(inboxPath, joinFrontmatter(reverted, body), 'utf8');
+				break; // прерываем — нет смысла пытаться остальные тоже
+			}
+
+			let spawnError = null;
+			try {
+				await spawnCodex(codexCmd, body);
+			} catch (err) {
+				spawnError = err.message;
+			}
+
+			// Проверяем, появился ли target_path
+			if (await pathExists(targetPath)) {
+				await finalizeCodexTask(file, fm, body, inboxPath, raw);
+			} else {
+				console.error(`[codex-inbox] ${file}: target_path не создан — переношу в failed`);
+				let failFm = setFmField(updatedFm, 'status', 'failed');
+				failFm = setFmField(failFm, 'failed_at', new Date().toISOString());
+				if (spawnError) failFm = setFmField(failFm, 'error', spawnError);
+				await writeFile(inboxPath, joinFrontmatter(failFm, body), 'utf8');
+				await moveTo(inboxPath, CODEX_FAILED_DIR, file);
+			}
+		}
+	} catch (err) {
+		console.error('[codex-inbox] error:', err.message);
+	} finally {
+		codexInboxRunning = false;
+	}
+}
+
+async function finalizeCodexTask(file, fm, body, inboxPath, originalRaw) {
+	const slug = getFmField(fm, 'slug') || '';
+	const type = (getFmField(fm, 'type') || '').toLowerCase();
+
+	// Если это обложка статьи — сразу подвязываем через importCodexCover
+	if (type === 'cover' && slug) {
+		try {
+			const result = await importCodexCover(slug);
+			if (result.ready) {
+				console.log(`[codex-inbox] ${file}: cover подвязан к ${slug}, ${(result.bytes / 1024).toFixed(0)} КБ`);
+			}
+		} catch (err) {
+			console.error(`[codex-inbox] ${file}: import-cover error: ${err.message}`);
+		}
+	}
+
+	let doneFm = setFmField(fm, 'status', 'done');
+	doneFm = setFmField(doneFm, 'completed_at', new Date().toISOString());
+	await writeFile(inboxPath, joinFrontmatter(doneFm, body), 'utf8');
+	await moveTo(inboxPath, CODEX_DONE_DIR, file);
+}
+
+async function moveTo(srcPath, destDir, name) {
+	const destPath = join(destDir, name);
+	try {
+		const buf = await readFile(srcPath);
+		await mkdir(destDir, { recursive: true });
+		await writeFile(destPath, buf);
+		await import('node:fs/promises').then((fs) => fs.unlink(srcPath));
+	} catch (err) {
+		console.error('moveTo error:', err.message);
+	}
+}
+
+function startCodexInboxWatcher() {
+	if (codexInboxTimer) return;
+	console.log(`  [codex-inbox] watching every ${CODEX_INBOX_INTERVAL_MS / 1000}s`);
+	processCodexInbox(); // первый прогон сразу
+	codexInboxTimer = setInterval(processCodexInbox, CODEX_INBOX_INTERVAL_MS);
+}
+
+function stopCodexInboxWatcher() {
+	if (codexInboxTimer) {
+		clearInterval(codexInboxTimer);
+		codexInboxTimer = null;
+	}
+}
+
+// ─────────────────────────────────────────────────────────────────────────
 // TG watcher — авто-поднимаемый дочерний процесс
 // ─────────────────────────────────────────────────────────────────────────
 
@@ -1139,8 +1274,8 @@ function stopTgWatcher() {
 	}
 }
 
-process.on('SIGINT', () => { stopTgWatcher(); stopAstroDev(); process.exit(0); });
-process.on('SIGTERM', () => { stopTgWatcher(); stopAstroDev(); process.exit(0); });
+process.on('SIGINT', () => { stopTgWatcher(); stopAstroDev(); stopCodexInboxWatcher(); process.exit(0); });
+process.on('SIGTERM', () => { stopTgWatcher(); stopAstroDev(); stopCodexInboxWatcher(); process.exit(0); });
 
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
@@ -1151,6 +1286,7 @@ server.listen(PORT, () => {
 	console.log(`  packs:   ${PACKS_DIR}`);
 	console.log(`  reviews: ${REVIEWS_DIR}`);
 	startTgWatcher();
+	startCodexInboxWatcher();
 	if (process.env.SCQR_PREVIEW !== '0') {
 		startAstroDev();
 	}
