@@ -1057,7 +1057,10 @@ async function processCodexInbox() {
 		await mkdir(CODEX_INBOX_DIR, { recursive: true });
 		await mkdir(CODEX_DONE_DIR, { recursive: true });
 		await mkdir(CODEX_FAILED_DIR, { recursive: true });
-		const files = (await readdir(CODEX_INBOX_DIR)).filter((f) => f.endsWith('.md'));
+		const SERVICE_FILES = new Set(['README.md', 'START-HERE.md']);
+		const files = (await readdir(CODEX_INBOX_DIR)).filter(
+			(f) => f.endsWith('.md') && !f.startsWith('.') && !SERVICE_FILES.has(f),
+		);
 
 		for (const file of files) {
 			const inboxPath = join(CODEX_INBOX_DIR, file);
@@ -1073,8 +1076,7 @@ async function processCodexInbox() {
 
 			const targetPath = (getFmField(fm, 'target_path') || '').trim();
 			if (!targetPath) {
-				console.warn(`[codex-inbox] ${file}: пустой target_path, отправляю в failed`);
-				await moveTo(inboxPath, CODEX_FAILED_DIR, file);
+				console.warn(`[codex-inbox] ${file}: пустой target_path — пропускаю (служебный файл?)`);
 				continue;
 			}
 
