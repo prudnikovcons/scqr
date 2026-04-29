@@ -17,7 +17,7 @@ publicUrl: "/2026-04-24-rynok-ii-stanovitsya-infrastrukturnoy-gonkoy/"
 heroAlt: "Редакционная обложка SCQR к материалу «Почему рынок ИИ всё больше похож на инфраструктурную гонку, а не на гонку приложений»."
 heroStyle: "industrial_plate"
 heroSource: "generated"
-heroImage: ../../assets/editorial/2026-04-24-rynok-ii-stanovitsya-infrastrukturnoy-gonkoy-hero.svg
+heroImage: ../../assets/editorial/contributed/2026-04-24-v4/2026-04-24-rynok-ii-stanovitsya-infrastrukturnoy-gonkoy.png
 ---
 
 Когда рынок только входил в массовое сознание, почти все спорили об одном: кто сделает лучшее приложение на основе искусственного интеллекта. Прошло немного времени, и стало видно, что этот спор был полезен для витрины, но плохо описывал настоящую механику отрасли. Деньги, власть и стратегическая устойчивость всё явственнее уходят вниз по стеку — туда, где находятся энергия, чипы, сети, центры обработки данных и облачные площадки.

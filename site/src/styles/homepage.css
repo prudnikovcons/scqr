@@ -86,7 +86,7 @@ body { font-family: var(--font-body); }
 .hero-feature .meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-400); }
 .hero-feature img { width: 100%; max-width: 280px; height: auto; }
 
-.hero-sub-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 24px; }
+.hero-sub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 24px; }
 .sub-card {
   background: #fff;
   border: 1px solid var(--line);

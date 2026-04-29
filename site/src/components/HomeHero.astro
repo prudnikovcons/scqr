@@ -15,7 +15,7 @@ const { lead, subgrid } = Astro.props;
 const leadHref = getPostHref(lead);
 const leadDeck = getDeck(lead);
 
-const subgridItems = subgrid.slice(0, 4).map((post) => ({
+const subgridItems = subgrid.slice(0, 3).map((post) => ({
 	post,
 	href: getPostHref(post),
 	title: post.data.title,

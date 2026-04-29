@@ -17,7 +17,7 @@ publicUrl: "/2026-04-24-bolshie-laboratorii-prodayut-ne-prosto-model/"
 heroAlt: "Редакционная обложка SCQR к материалу «Большие лаборатории продают уже не просто модель, а режим доступа к ней»."
 heroStyle: "threshold_space"
 heroSource: "generated"
-heroImage: ../../assets/editorial/2026-04-24-bolshie-laboratorii-prodayut-ne-prosto-model-hero-v2.png
+heroImage: ../../assets/editorial/contributed/2026-04-24-v4/2026-04-24-bolshie-laboratorii-prodayut-ne-prosto-model.png
 ---
 
 Ещё недавно лаборатории продавали рынку историю про саму модель: кто умнее, кто быстрее, кто лучше пишет код или отвечает на вопросы. Весной 2026 года продаётся уже не только это. Продаётся право войти в особый контур доступа — туда, где есть мощности, корпоративные гарантии, особая поддержка и предсказуемая доступность.

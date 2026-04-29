@@ -16,8 +16,8 @@ readingTime: 2
 publicUrl: "/2026-04-24-kitay-reguliruet-ne-model-a-privyazannost-k-ney/"
 heroAlt: "Редакционная иллюстрация о регуляторных границах и контроле эмоционального взаимодействия с ИИ."
 heroStyle: "threshold_space"
-heroSource: "user-supplied"
-heroImage: ../../assets/editorial/contributed/2026-04-24/sig-20260424-eu-ai-omnibus.png
+heroSource: "generated"
+heroImage: ../../assets/editorial/contributed/2026-04-24-v4/2026-04-24-kitay-reguliruet-ne-model-a-privyazannost-k-ney.png
 ---
 
 Новые временные меры CAC важны не как ещё один китайский регламент для генеративного ИИ. Их настоящий смысл в другом: регулятор впервые выделяет в особый класс не все ИИ-сервисы подряд, а только те, что имитируют человека и строят с пользователем длительное эмоциональное взаимодействие. То есть в центре документа оказывается не то, что модель отвечает, а какие отношения она формирует.

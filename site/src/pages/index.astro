@@ -13,8 +13,8 @@ import { buildCollectionPageJsonLd, buildWebsiteJsonLd } from '../lib/structured
 
 const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
 const lead = posts[0];
-const subgrid = posts.slice(1, 5);
-const miniFeed = posts.slice(5, 10);
+const subgrid = posts.slice(1, 4);
+const miniFeed = posts.slice(4, 9);
 const clusters = buildClusterSummary(posts).slice(0, 4);
 
 const jsonLd = [

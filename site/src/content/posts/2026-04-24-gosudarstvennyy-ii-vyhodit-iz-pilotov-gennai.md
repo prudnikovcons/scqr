@@ -16,8 +16,8 @@ readingTime: 2
 publicUrl: "/2026-04-24-gosudarstvennyy-ii-vyhodit-iz-pilotov-gennai/"
 heroAlt: "Гражданский чертёж государственного ИИ, в котором административный контур проходит через ведомственную архитектуру."
 heroStyle: "civic_blueprint"
-heroSource: "user-supplied"
-heroImage: ../../assets/editorial/contributed/2026-04-24-v3/sig-20260424-japan-gennai-v3.png
+heroSource: "generated"
+heroImage: ../../assets/editorial/contributed/2026-04-24-v4/2026-04-24-gosudarstvennyy-ii-vyhodit-iz-pilotov-gennai.png
 ---
 
 Японское цифровое агентство запускает пилот Government AI Gennai для центральных ведомств. Масштаб уже сам по себе заметный: речь идёт о десятках и затем сотнях тысяч государственных служащих. Но главное здесь не размер пилота и не очередная красивая государственная презентация. Главное — сама постановка задачи.

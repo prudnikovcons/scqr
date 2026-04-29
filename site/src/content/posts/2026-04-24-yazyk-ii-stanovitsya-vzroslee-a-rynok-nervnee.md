@@ -17,7 +17,7 @@ publicUrl: "/2026-04-24-yazyk-ii-stanovitsya-vzroslee-a-rynok-nervnee/"
 heroAlt: "Редакционная обложка SCQR к материалу «Мы вошли в фазу, где язык ИИ становится взрослее, а рынок — нервнее»."
 heroStyle: "quiet_monument"
 heroSource: "generated"
-heroImage: ../../assets/editorial/2026-04-24-yazyk-ii-stanovitsya-vzroslee-a-rynok-nervnee-hero.svg
+heroImage: ../../assets/editorial/contributed/2026-04-24-v4/2026-04-24-yazyk-ii-stanovitsya-vzroslee-a-rynok-nervnee.png
 ---
 
 В начале бума ИИ лидеры отрасли говорили с рынком так, будто мы находимся на большой ярмарке чудес. Речь шла о прорывах, возможностях, удивлении, новых границах. Весной 2026 года этот язык заметно взрослеет. В нём стало меньше восторга и больше слов вроде “инфраструктура”, “кадры”, “институты”, “допуск”, “устойчивость”, “мощности”.

@@ -17,7 +17,7 @@ publicUrl: "/2026-04-24-korporativnyy-ai-dogonyaet-potrebitelskiy-rynok/"
 heroAlt: "Редакционная обложка SCQR к материалу «Корпоративный ИИ догоняет потребительский рынок по деньгам и влиянию»."
 heroStyle: "quiet_monument"
 heroSource: "generated"
-heroImage: ../../assets/editorial/2026-04-24-korporativnyy-ai-dogonyaet-potrebitelskiy-rynok-hero-v2.png
+heroImage: ../../assets/editorial/contributed/2026-04-24-v4/2026-04-24-korporativnyy-ai-dogonyaet-potrebitelskiy-rynok.png
 ---
 
 Потребительский ажиотаж вокруг ИИ никуда не делся, но центр тяжести уже смещается. Всё больше отраслевых сигналов указывает на то, что главным полем монетизации становится не массовый пользователь, а корпоративный заказчик.
