@@ -17,7 +17,7 @@ publicUrl: "/2026-04-24-epokha-ii-delaet-skuchnye-kompanii-vazhnymi/"
 heroAlt: "Редакционная обложка SCQR к материалу «Эпоха ИИ делает скучные компании самыми важными»."
 heroStyle: "quiet_monument"
 heroSource: "generated"
-heroImage: ../../assets/editorial/2026-04-24-epokha-ii-delaet-skuchnye-kompanii-vazhnymi-hero.svg
+heroImage: ../../assets/editorial/contributed/2026-04-24-v4/2026-04-24-epokha-ii-delaet-skuchnye-kompanii-vazhnymi.png
 ---
 
 У любой технологической эпохи есть свой романтический слой и свой обязательный хозяйственный слой. Романтический слой ИИ уже хорошо виден: модели, агенты, генерация, код, голос, биология, чудеса производительности. А вот хозяйственный слой по-прежнему кажется многим второстепенным. Это ошибка.

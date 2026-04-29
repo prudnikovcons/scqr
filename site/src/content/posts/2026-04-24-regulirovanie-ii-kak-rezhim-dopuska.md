@@ -17,7 +17,7 @@ publicUrl: "/2026-04-24-regulirovanie-ii-kak-rezhim-dopuska/"
 heroAlt: "Редакционная обложка SCQR к материалу «Регулирование ИИ в 2026 году: уже не запрет, а режим допуска»."
 heroStyle: "threshold_space"
 heroSource: "generated"
-heroImage: ../../assets/editorial/2026-04-24-regulirovanie-ii-kak-rezhim-dopuska-hero.svg
+heroImage: ../../assets/editorial/contributed/2026-04-24-v4/2026-04-24-regulirovanie-ii-kak-rezhim-dopuska.png
 ---
 
 Разговор о регулировании ИИ долгое время был слишком примитивным. Одни говорили о свободе и скорости, другие — о запретах и страхах. Но к весне 2026 года отрасль подошла к куда более зрелой реальности. Регулирование всё чаще определяет не то, можно ли строить сильные системы вообще, а то, кто, в каком режиме и при каких гарантиях получает право их разворачивать.

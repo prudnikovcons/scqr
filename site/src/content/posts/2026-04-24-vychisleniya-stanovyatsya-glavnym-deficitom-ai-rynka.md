@@ -17,7 +17,7 @@ publicUrl: "/2026-04-24-vychisleniya-stanovyatsya-glavnym-deficitom-ai-rynka/"
 heroAlt: "Редакционная обложка SCQR к материалу «Вычисления становятся главным дефицитом рынка ИИ»."
 heroStyle: "industrial_plate"
 heroSource: "generated"
-heroImage: ../../assets/editorial/2026-04-24-vychisleniya-stanovyatsya-glavnym-deficitom-ai-rynka-hero-v2.png
+heroImage: ../../assets/editorial/contributed/2026-04-24-v4/2026-04-24-vychisleniya-stanovyatsya-glavnym-deficitom-ai-rynka.png
 ---
 
 Ещё недавно казалось, что главный дефицит рынка ИИ — это редкая идея, талантливая команда или удачная модель. Весной 2026 года картина уже другая. Главным узким местом становятся вычисления: электричество, чипы, линии связи, центры обработки данных и право занять место в этой очереди.

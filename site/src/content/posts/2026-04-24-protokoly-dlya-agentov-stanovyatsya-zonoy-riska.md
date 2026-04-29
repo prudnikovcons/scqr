@@ -17,7 +17,7 @@ publicUrl: "/2026-04-24-protokoly-dlya-agentov-stanovyatsya-zonoy-riska/"
 heroAlt: "Редакционная обложка SCQR к материалу «Протоколы для агентов становятся новой зоной риска»."
 heroStyle: "signal_network"
 heroSource: "generated"
-heroImage: ../../assets/editorial/2026-04-24-protokoly-dlya-agentov-stanovyatsya-zonoy-riska-hero-v2.png
+heroImage: ../../assets/editorial/contributed/2026-04-24-v4/2026-04-24-protokoly-dlya-agentov-stanovyatsya-zonoy-riska.png
 ---
 
 Когда рынок начинает быстро стандартизироваться, это почти всегда выглядит как победа зрелости. Так было и с протоколами для агентных систем. За несколько месяцев Model Context Protocol стал почти обязательным языком для связки модели с внешними инструментами. Но именно здесь удобство внезапно обернулось новой площадью атаки.
