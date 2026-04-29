@@ -16,8 +16,8 @@ readingTime: 2
 publicUrl: "/2026-04-24-alphafold-4-ot-struktury-k-povedeniyu/"
 heroAlt: "Светлая научная иллюстрация белковой формы, из которой расходятся линии взаимодействий и молекулярных связей."
 heroStyle: "scientific_lucid"
-heroSource: "user-supplied"
-heroImage: ../../assets/editorial/contributed/2026-04-24-evening/2026-04-24-alphafold4-editorial.png
+heroSource: "generated"
+heroImage: ../../assets/editorial/contributed/2026-04-24-v4/2026-04-24-alphafold-4-ot-struktury-k-povedeniyu.png
 ---
 
 Главный прорыв AlphaFold в своё время состоял в том, что предсказание трёхмерной структуры белка перестало быть задачей, которую биология решает только руками, кристаллами и годами лабораторной работы. Структурная биология стала вычислительной дисциплиной, и это само по себе уже изменило отрасль.

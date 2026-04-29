@@ -16,8 +16,8 @@ readingTime: 3
 publicUrl: "/2026-04-24-gde-vstrechayutsya-pamyat-i-logika/"
 heroAlt: "Редакционная обложка с высокой вычислительной башней, где слои памяти и логики сходятся в один контур."
 heroStyle: "editorial_still_life"
-heroSource: "user-supplied"
-heroImage: ../../assets/editorial/contributed/2026-04-24-evening/2026-04-24-memory-logic-editorial.png
+heroSource: "generated"
+heroImage: ../../assets/editorial/contributed/2026-04-24-v4/2026-04-24-gde-vstrechayutsya-pamyat-i-logika.png
 ---
 
 Современные ускорители всё чаще упираются не в математику, а в перемещение данных. Время и энергия уходят не только на сами операции, но и на подачу весов и активаций между памятью и вычислительными ядрами. Разрыв фон Неймана никуда не исчез, он просто вырос до масштаба, где его уже считают мегаваттами.

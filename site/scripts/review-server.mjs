@@ -559,6 +559,59 @@ function spawnCodex(commandLine, taskText) {
 	});
 }
 
+async function importCoverFromPath(slug, taskTargetPath) {
+	const safe = safeSlug(slug);
+	const targetPath = taskTargetPath || codexTargetPath(safe).targetPath;
+
+	if (!(await pathExists(targetPath))) {
+		return { ready: false, targetPath };
+	}
+	const st = await stat(targetPath);
+	if (st.size < 5000) {
+		return { ready: false, targetPath, note: 'файл существует, но весит меньше 5 КБ' };
+	}
+
+	// Извлекаем папку, в которой лежит target — туда же привязываем heroImage
+	const targetDir = dirname(targetPath);
+	const ext = extname(targetPath).slice(1) || 'png';
+	// Считаем относительный путь от поста: мы храним в site/src/assets/editorial/contributed/.../<file>
+	// или site/src/assets/editorial/.../<file>. Astro ожидает путь относительно поста.
+	const assetsRoot = join(ROOT, 'site', 'src', 'assets');
+	const rel = targetDir.startsWith(assetsRoot)
+		? `../../assets/${targetDir.slice(assetsRoot.length + 1).replace(/\\/g, '/')}/${safe}.${ext}`
+		: `../../assets/editorial/contributed/${safe.match(/^(\d{4}-\d{2}-\d{2})/)?.[1] || 'misc'}/${safe}.${ext}`;
+
+	// OG-копия в public — для TG sendPhoto
+	const dateMatch = safe.match(/^(\d{4}-\d{2}-\d{2})/);
+	const dateDir = dateMatch ? dateMatch[1] : 'misc';
+	const ogDir = join(ROOT, 'site', 'public', 'editorial', 'og', dateDir);
+	await mkdir(ogDir, { recursive: true });
+	const ogPath = join(ogDir, `${safe}.${ext}`);
+	const buf = await readFile(targetPath);
+	await writeFile(ogPath, buf);
+	const ogUrl = `/editorial/og/${dateDir}/${safe}.${ext}`;
+
+	// Обновляем frontmatter поста
+	const postPath = await articleMdPath(safe);
+	const md = await readFile(postPath, 'utf8');
+	let { fm, body } = splitFrontmatter(md);
+	fm = setFmRaw(fm, 'heroImage', rel);
+	if (!getFmField(fm, 'heroSource')) fm = setFmField(fm, 'heroSource', 'generated');
+	await writeFile(postPath, joinFrontmatter(fm, body), 'utf8');
+
+	// Sidecar
+	const sidecarPath = join(ARTICLES_DIR, safe, 'sidecar.json');
+	const sidecar = (await readJsonSafe(sidecarPath)) || {};
+	sidecar.slug = safe;
+	sidecar.ogUrl = ogUrl;
+	sidecar.updatedAt = new Date().toISOString();
+	if (!sidecar.createdAt) sidecar.createdAt = sidecar.updatedAt;
+	await mkdir(dirname(sidecarPath), { recursive: true });
+	await writeFile(sidecarPath, JSON.stringify(sidecar, null, 2), 'utf8');
+
+	return { ready: true, ogUrl, heroImage: rel, bytes: buf.length };
+}
+
 async function importCodexCover(slug) {
 	const safe = safeSlug(slug);
 	const { dateDir, targetPath } = codexTargetPath(safe);
@@ -1131,11 +1184,12 @@ async function processCodexInbox() {
 async function finalizeCodexTask(file, fm, body, inboxPath, originalRaw) {
 	const slug = getFmField(fm, 'slug') || '';
 	const type = (getFmField(fm, 'type') || '').toLowerCase();
+	const taskTargetPath = (getFmField(fm, 'target_path') || '').trim();
 
-	// Если это обложка статьи — сразу подвязываем через importCodexCover
-	if (type === 'cover' && slug) {
+	// Если это обложка статьи — сразу подвязываем
+	if (type === 'cover' && slug && taskTargetPath) {
 		try {
-			const result = await importCodexCover(slug);
+			const result = await importCoverFromPath(slug, taskTargetPath);
 			if (result.ready) {
 				console.log(`[codex-inbox] ${file}: cover подвязан к ${slug}, ${(result.bytes / 1024).toFixed(0)} КБ`);
 			}

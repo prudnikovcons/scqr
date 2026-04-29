@@ -17,7 +17,7 @@ publicUrl: "/2026-04-24-korporativnye-agenty-vyhodyat-iz-pilota/"
 heroAlt: "Редакционная обложка SCQR к материалу «Корпоративные агенты выходят из пилота и становятся частью штатной работы»."
 heroStyle: "signal_network"
 heroSource: "generated"
-heroImage: ../../assets/editorial/2026-04-24-korporativnye-agenty-vyhodyat-iz-pilota-hero-v2.png
+heroImage: ../../assets/editorial/contributed/2026-04-24-v4/2026-04-24-korporativnye-agenty-vyhodyat-iz-pilota.png
 ---
 
 Главный сдвиг весны не в том, что у искусственного интеллекта появились новые трюки. Главный сдвиг в том, что крупные компании перестали относиться к агентам как к лабораторной игрушке. Они начинают ставить их туда, где раньше держали только людей, регламенты и дорогое корпоративное программное обеспечение.

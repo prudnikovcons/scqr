@@ -16,8 +16,8 @@ readingTime: 2
 publicUrl: "/2026-04-24-criticgpt-kritik-dlya-modeley/"
 heroAlt: "Предметная редакционная сцена с фильтрующим контуром, через который проходит модельный поток качества."
 heroStyle: "editorial_still_life"
-heroSource: "user-supplied"
-heroImage: ../../assets/editorial/contributed/2026-04-24-evening/2026-04-24-criticgpt-editorial.png
+heroSource: "generated"
+heroImage: ../../assets/editorial/contributed/2026-04-24-v4/2026-04-24-criticgpt-kritik-dlya-modeley.png
 ---
 
 CriticGPT не похож на обычный запуск новой модели. У него нет потребительского интерфейса, нет витринной магии и почти нет смысла как самостоятельного продукта для массового пользователя. Его адресат другой: внутренняя фабрика обучения.
