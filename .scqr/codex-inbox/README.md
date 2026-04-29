@@ -1,49 +1,38 @@
-# Codex Inbox — формат задания
+# Codex Inbox
 
-Сюда я (Claude) кладу задания на генерацию графики. Codex (твой Codex Desktop / Codex CLI) выполняет их и кладёт результат по указанному пути. Watcher в `review-server` проверяет инбокс каждые 30 секунд.
+> Канонический entry-point для Codex — `START-HERE.md` в этой папке. Читай его при каждом запуске.
 
-## Папки
+## Пайплайн в две фразы
 
-- `codex-inbox/` — задания со статусом `pending`, ждут выполнения.
-- `codex-done/` — выполненные задания (с обновлённым frontmatter).
-- `codex-failed/` — задания, которые Codex не смог завершить.
+**Owner → Codex:**
 
-## Формат файла
+> Прочитай `D:\CODEX\gitscqr\scqr\.scqr\codex-inbox\START-HERE.md` и выполни всё, что там написано.
 
-Каждое задание — один `.md` файл с YAML-frontmatter и markdown-телом.
+**Owner → Claude (после того, как Codex отчитался):**
 
-```
----
-type: cover                          # cover | mascot | illustration | infographic
-slug: 2026-04-27-marketplace-...    # slug статьи (для type=cover) или имя ассета
-target_path: D:\CODEX\gitscqr\scqr\site\src\assets\editorial\contributed\2026-04-27\<slug>.png
-size: 1536x1024
-priority: high                       # high | normal | low
-status: pending                      # pending | in_progress | done | failed
-created_at: 2026-04-29T18:00:00Z
----
+> Codex закончил.
 
-# Полный промт для Codex
+Между этими двумя фразами автоматика подхватывает всё сама: watcher в `review-server` каждые 30 секунд проверяет, не появились ли новые PNG по `target_path` из заданий, и переносит задания в `codex-done/`. Для `type: cover` сразу подвязывает обложку к статье через `/api/article-codex-import` (frontmatter `heroImage` + sidecar `ogUrl`).
 
-Здесь стиль, композиция, что нарисовать, какие цвета,
-какие надписи на обложке, нужен ли маскот и в какой позе…
+## Структура папки
 
-Заканчиваем явным указанием:
-**Сохрани результат строго по пути:** `<target_path выше>`
-```
+| Папка | Содержимое |
+|---|---|
+| `codex-inbox/` | Pending-задания + START-HERE + этот README |
+| `codex-done/` | Выполненные задания |
+| `codex-failed/` | Задания, которые Codex не смог сделать (с `error:` в фронтматтере) |
 
-## Workflow
+## Как Claude кладёт задание
 
-1. Я кладу файл в `codex-inbox/` со статусом `pending`.
-2. **Если задано `SCQR_CODEX_CMD` в `.env.local`** (например `codex exec --full-auto`):  
-   review-server каждые 30 секунд берёт по одному `pending`, обновляет статус на `in_progress`, вызывает Codex CLI с телом задания, проверяет, что файл создан по `target_path`, переносит задание в `codex-done/`. Если для `type=cover` указан `slug` — автоматически подвязывает обложку к статье через `/api/article-codex-import`.
-3. **Если CLI не настроен** — watcher оставляет задания в `pending`. Ты периодически открываешь Codex Desktop и одной командой говоришь:  
-   ```
-   Открой папку D:\CODEX\gitscqr\scqr\.scqr\codex-inbox\, возьми любое задание со статусом pending, выполни промт из тела, сохрани файл по target_path. После этого пометь у файла status: done, completed_at: <iso>, и я подтяну остальное автоматически.
-   ```
+1. Создаёт `.md` со стандартным frontmatter (`type`, `slug`, `target_path`, `size`, `priority`, `status: pending`, `created_at`).
+2. В теле — полный самодостаточный промт: стиль, тезис, сцена, маскот, текст на обложке, тех-требования.
+3. В конце явно повторяет `**Сохрани результат строго по пути:** <target_path>`.
 
-## Что делает review-server при появлении файла
+## Как Claude забирает результаты
 
-- `type: cover` + `slug`: копирует PNG в `site/public/editorial/og/<date>/<slug>.png`, прописывает `heroImage` в frontmatter статьи и `ogUrl` в sidecar. Обложка сразу появляется в `/editor` и `/queue`.
-- `type: mascot`: ничего сверх перемещения в `done/` (просто сохраняем файл по нужному пути).
-- `type: illustration` / `infographic`: то же самое — Codex просто кладёт файл, я (Claude) потом руками вписываю его в нужное место.
+После фразы owner'а «Codex закончил» Claude:
+
+1. Сканирует `codex-done/` — какие задания добавились с момента предыдущей синхронизации.
+2. Проверяет, что все PNG лежат по своим target_path и подвязаны к статьям.
+3. Для `failed/` — поднимает что произошло, может составить новое задание с уточнениями.
+4. Докладывает owner'у: что готово, что в очереди дальше, что требует ручной правки.
