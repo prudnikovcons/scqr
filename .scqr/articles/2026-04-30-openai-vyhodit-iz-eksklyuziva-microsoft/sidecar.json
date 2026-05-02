@@ -1,0 +1,17 @@
+{
+  "slug": "2026-04-30-openai-vyhodit-iz-eksklyuziva-microsoft",
+  "createdAt": "2026-04-30T10:00:00.000Z",
+  "updatedAt": "2026-05-01T13:53:57.169Z",
+  "activeFormat": "analysis",
+  "coverPrompt": "См. .scqr/codex-inbox/cover-openai-aws-deal.md — обложка готовится отдельно через Codex pipeline.",
+  "tgPost": "🌐 OpenAI выходит из эксклюзива Microsoft. Это меняет облачный ИИ за неделю до IPO\n\n27 апреля OpenAI закрыла сделку с Amazon на $50 млрд и сняла эксклюзивные коммерческие права с Microsoft. На следующий день AWS открыл день-ноль доступ к GPT, Codex и Managed Agents через Bedrock. Параллельно тихо ушла «AGI-клауза» — единственная защита Microsoft от внезапного объявления AGI. Всё за 48 часов и за неделю до IPO.\n\nЭто не расширение партнёрской сети — это конец моноэксклюзива. Похожее уже было: IBM-Apple 1991, Spotify-Sony 2010-е, Boeing с двумя двигателями. Эксклюзив держится, пока младший партнёр зависит от мощности старшего. Anthropic первым показал, что фронтирная лаборатория зависит не от одного облака, а от мощности как таковой. OpenAI повторила шаг — из более жёсткой стартовой позиции.\n\nAGI-клауза мертва как корпоративный термин. У Microsoft больше нет асимметричного рычага, у OpenAI — переключателя. Из контрактов слово «AGI» ушло.\n\nДвухвендорная модель станет нормой. Корпоративные покупатели в США выбирают между Azure OpenAI и Bedrock OpenAI по экономике. Российский покупатель сидит в этой картине иначе: больше каналов проникновения через посредников, и собственный суверенный стек становится рациональнее не из патриотизма, а из того, что каналы за периметром усложнились.\n\n👉 https://ai.scqr.ru/2026-04-30-openai-vyhodit-iz-eksklyuziva-microsoft/?utm_source=tg\n\n#OpenAI #AWS #Microsoft #облачный_ии #IPO #инфраструктура",
+  "sourceLinks": [
+    "https://techcrunch.com/2026/04/27/openai-ends-microsoft-legal-peril-over-its-50b-amazon-deal/",
+    "https://techcrunch.com/2026/04/28/amazon-is-already-offering-new-openai-products-on-aws/",
+    "https://openai.com/index/openai-on-aws",
+    "https://stratechery.com/2026/an-interview-with-openai-ceo-sam-altman-and-aws-ceo-matt-garman-about-bedrock-managed-agents/",
+    "https://simonwillison.net/2026/Apr/27/now-deceased-agi-clause/",
+    "https://openai.com/index/openai-available-at-fedramp-moderate"
+  ],
+  "ogUrl": "/editorial/og/2026-04-30/2026-04-30-openai-vyhodit-iz-eksklyuziva-microsoft.png"
+}

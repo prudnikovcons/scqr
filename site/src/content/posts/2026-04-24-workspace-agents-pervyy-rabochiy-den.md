@@ -17,8 +17,8 @@ readingTime: 2
 publicUrl: "/2026-04-24-workspace-agents-pervyy-rabochiy-den/"
 heroAlt: "Редакционная схема общего рабочего агента, который собирает разрозненные командные процессы в один контур."
 heroStyle: "signal_network"
-heroSource: "user-supplied"
-heroImage: ../../assets/editorial/contributed/2026-04-24-v3/sig-20260424-workspace-agents-v3.png
+heroSource: "generated"
+heroImage: ../../assets/editorial/contributed/2026-04-24-v4/2026-04-24-workspace-agents-pervyy-rabochiy-den.png
 ---
 
 OpenAI открыла общий доступ к workspace agents — командным агентам внутри ChatGPT, которые работают с корпоративными инструментами, помнят контекст общей задачи и могут продолжать её без человека у экрана. До 6 мая продукт идёт в режиме открытого пилота, затем включается тарификация по квотам. Но главное здесь не модель и не интерфейс. Главное — смена самого формата работы.

@@ -1,0 +1,14 @@
+{
+  "slug": "2026-04-30-anthropic-i-google-rashodyatsya-po-politicheskomu-konturu",
+  "createdAt": "2026-04-30T13:00:00.000Z",
+  "updatedAt": "2026-05-01T13:53:57.088Z",
+  "activeFormat": "column",
+  "coverPrompt": "См. .scqr/codex-inbox/cover-anthropic-google-pentagon.md — обложка готовится отдельно через Codex pipeline.",
+  "tgPost": "🛡️ Anthropic и Google разошлись по политическому контуру. Фронтир делится не по технологии\n\nЗа одну неделю фронтирный клуб разделился. Anthropic публично отказал Минобороны США в доступе к моделям для domestic mass surveillance и autonomous weapons. Через несколько дней Google расширил Pentagon-контракт по Gemini. На той же неделе стартап Scout AI поднял $100 млн под фронтирный военный ИИ. Впервые два игрока фронтирного клуба оказались на разных сторонах одного вопроса — и оба остались в фронтире.\n\nВ 2018-м Google под давлением сотрудников вышла из Project Maven — это считалось самоубийственным жестом. Anthropic в 2026-м делает похожий шаг, только структурно: это политика в RSP, в режиме коммерческой позиции. Google забирает освободившуюся выручку.\n\nПохожее уже было. В 1960-е Boeing держал коммерческие самолёты, Lockheed военные. Обе компании остались в первой лиге, обе зарабатывали, но в разных коридорах. Рынок ИИ повторяет траекторию — и быстрее. Anthropic в коридоре «фронтир минус автономное оружие», Google в коридоре «фронтир плюс расширенные госконтракты», Scout AI — только военный фронтир. Венчур готов финансировать обе крайности.\n\nКорпоративный покупатель теперь выбирает поставщика не только по бенчмаркам, но и по политической позиции. Это часть due diligence, которой раньше не существовало.\n\n👉 https://ai.scqr.ru/2026-04-30-anthropic-i-google-rashodyatsya-po-politicheskomu-konturu/?utm_source=tg\n\n#Anthropic #Google #Pentagon #ИИ_и_государство #фронтир",
+  "sourceLinks": [
+    "https://techcrunch.com/2026/04/28/google-expands-pentagons-access-to-its-ai-after-anthropics-refusal/",
+    "https://techcrunch.com/2026/04/29/coby-adcocks-scout-ai-raises-100-million-to-train-models-for-war-we-visited-its-bootcamp/",
+    "https://cset.georgetown.edu/article/chinas-pla-challenges-and-competitions/"
+  ],
+  "ogUrl": "/editorial/og/2026-04-30/2026-04-30-anthropic-i-google-rashodyatsya-po-politicheskomu-konturu.png"
+}
