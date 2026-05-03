@@ -19,10 +19,26 @@ const currentPath = Astro.url.pathname;
 			</a>
 			<span class="nav-tagline">аналитика рынка<br />искусственного интеллекта</span>
 			<span class="nav-actions">
-				<button class="nav-search-icon" aria-label="Поиск" type="button">
+				<button class="nav-icon-btn nav-search-icon" aria-label="Поиск" type="button">
 					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 						<circle cx="11" cy="11" r="7" />
 						<path d="m21 21-4.3-4.3" />
+					</svg>
+				</button>
+				<button class="nav-icon-btn nav-theme-toggle" aria-label="Переключить тему" type="button" data-theme-toggle>
+					<svg class="nav-theme-toggle__icon nav-theme-toggle__icon--moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+					</svg>
+					<svg class="nav-theme-toggle__icon nav-theme-toggle__icon--sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<circle cx="12" cy="12" r="4" />
+						<path d="M12 2v2" />
+						<path d="M12 20v2" />
+						<path d="M4.93 4.93l1.41 1.41" />
+						<path d="M17.66 17.66l1.41 1.41" />
+						<path d="M2 12h2" />
+						<path d="M20 12h2" />
+						<path d="M6.34 17.66l-1.41 1.41" />
+						<path d="M19.07 4.93l-1.41 1.41" />
 					</svg>
 				</button>
 				<a href="https://t.me/scqr_ai" class="nav-cta" target="_blank" rel="noopener">Подписаться</a>
@@ -55,10 +71,13 @@ const currentPath = Astro.url.pathname;
 		position: sticky;
 		top: 0;
 		z-index: 50;
-		background: rgba(255, 255, 255, 0.95);
+		background: var(--nav-bg, rgba(255, 255, 255, 0.95));
 		backdrop-filter: blur(8px);
 		-webkit-backdrop-filter: blur(8px);
 		border-bottom: 1px solid var(--line);
+	}
+	:global([data-theme='dark']) .nav-wrap {
+		background: rgba(14, 17, 22, 0.92);
 	}
 	.nav-row1 {
 		display: flex;
@@ -91,22 +110,51 @@ const currentPath = Astro.url.pathname;
 		align-items: center;
 		gap: 12px;
 	}
-	.nav-search-icon {
+	.nav-icon-btn {
 		width: 36px;
 		height: 36px;
 		border-radius: 50%;
 		border: 1px solid var(--line);
-		background: #fff;
+		background: var(--bg-card, #fff);
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		color: var(--ink-700);
 		cursor: pointer;
-		transition: border-color 120ms;
+		transition: border-color 120ms, color 120ms, background 120ms;
+		padding: 0;
 	}
-	.nav-search-icon:hover {
+	.nav-icon-btn:hover {
 		border-color: var(--line-strong);
 		color: var(--violet-600);
+	}
+
+	.nav-theme-toggle {
+		position: relative;
+	}
+	.nav-theme-toggle__icon {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		transition: opacity 160ms ease, transform 200ms ease;
+	}
+	.nav-theme-toggle__icon--sun {
+		opacity: 0;
+		transform: translate(-50%, -50%) rotate(-90deg) scale(0.6);
+	}
+	:global([data-theme='dark']) .nav-theme-toggle__icon--moon {
+		opacity: 0;
+		transform: translate(-50%, -50%) rotate(90deg) scale(0.6);
+	}
+	:global([data-theme='dark']) .nav-theme-toggle__icon--sun {
+		opacity: 1;
+		transform: translate(-50%, -50%) rotate(0deg) scale(1);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.nav-theme-toggle__icon {
+			transition: none;
+		}
 	}
 	.nav-cta {
 		border: 1px solid var(--violet-500);
@@ -177,3 +225,45 @@ const currentPath = Astro.url.pathname;
 		}
 	}
 </style>
+
+<script>
+	function init() {
+		const buttons = document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]');
+		if (!buttons.length) return;
+
+		const apply = (theme: 'light' | 'dark') => {
+			document.documentElement.setAttribute('data-theme', theme);
+			try {
+				localStorage.setItem('scqr-theme', theme);
+			} catch {
+				/* localStorage недоступен — переключение работает только в текущей сессии */
+			}
+			// Сообщаем кнопке о текущем состоянии для screen readers.
+			buttons.forEach((btn) => {
+				btn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+				btn.setAttribute(
+					'title',
+					theme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на тёмную тему',
+				);
+			});
+		};
+
+		const current =
+			document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+		apply(current);
+
+		buttons.forEach((btn) => {
+			btn.addEventListener('click', () => {
+				const next =
+					document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+				apply(next);
+			});
+		});
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', init);
+	} else {
+		init();
+	}
+</script>
