@@ -35,4 +35,46 @@ const posts = defineCollection({
 		}),
 });
 
-export const collections = { posts };
+const digests = defineCollection({
+	loader: glob({ base: './src/content/digests', pattern: '**/*.md' }),
+	schema: z.object({
+		weekISO: z.string(),
+		weekStart: z.coerce.date(),
+		weekEnd: z.coerce.date(),
+		title: z.string(),
+		deck: z.string(),
+		pubDate: z.coerce.date(),
+		storylines: z
+			.array(
+				z.object({
+					headline: z.string(),
+					narrative: z.string(),
+					clusterSlug: z.string().optional(),
+					posts: z.array(z.string()).default([]),
+				}),
+			)
+			.default([]),
+		newsPicks: z
+			.array(
+				z.object({
+					slug: z.string(),
+					why: z.string(),
+				}),
+			)
+			.default([]),
+		externalReads: z
+			.array(
+				z.object({
+					title: z.string(),
+					url: z.string(),
+					source: z.string().optional(),
+					why: z.string().optional(),
+				}),
+			)
+			.default([]),
+		verdict: z.string(),
+		status: z.enum(['draft', 'ready']).default('ready'),
+	}),
+});
+
+export const collections = { posts, digests };
