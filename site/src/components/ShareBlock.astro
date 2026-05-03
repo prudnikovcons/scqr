@@ -1,0 +1,151 @@
+---
+import { SITE_URL } from '../consts';
+
+interface Props {
+	title: string;
+	path: string;
+	deck?: string;
+}
+
+const { title, path, deck } = Astro.props;
+
+const safePath = path.startsWith('/') ? path : `/${path}`;
+const absoluteUrl = `${SITE_URL}${safePath}`;
+const shareText = deck ? `${title} — ${deck}` : title;
+
+// Telegram: https://t.me/share/url?url=…&text=…
+const tgShare = `https://t.me/share/url?url=${encodeURIComponent(absoluteUrl)}&text=${encodeURIComponent(shareText)}`;
+---
+
+<aside class="share-block" aria-label="Поделиться материалом">
+	<span class="share-block__label">Поделиться</span>
+	<a
+		class="share-btn share-btn--tg"
+		href={tgShare}
+		target="_blank"
+		rel="noopener"
+		aria-label="Поделиться в Telegram"
+	>
+		<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+			<path
+				d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.24 3.64 11.95c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"
+			></path>
+		</svg>
+		<span>Telegram</span>
+	</a>
+	<button class="share-btn share-btn--copy" data-share-url={absoluteUrl} type="button" aria-label="Скопировать ссылку">
+		<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+			<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+			<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+		</svg>
+		<span class="share-btn__label-default">Скопировать ссылку</span>
+		<span class="share-btn__label-copied">Скопировано</span>
+	</button>
+</aside>
+
+<style>
+	.share-block {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 10px;
+		padding: 16px 0;
+		border-top: 1px solid var(--line);
+		border-bottom: 1px solid var(--line);
+		margin: 28px 0;
+	}
+	.share-block__label {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ink-500);
+		margin-right: 4px;
+	}
+	.share-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 7px 14px;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 13px;
+		color: var(--ink-700);
+		background: #fff;
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		text-decoration: none;
+		cursor: pointer;
+		transition: border-color 120ms, color 120ms, background 120ms;
+	}
+	.share-btn:hover {
+		border-color: var(--violet-300);
+		color: var(--violet-600);
+	}
+	.share-btn--tg:hover {
+		background: var(--violet-50);
+	}
+	.share-btn svg {
+		flex-shrink: 0;
+	}
+	.share-btn--copy .share-btn__label-copied {
+		display: none;
+		color: var(--violet-600);
+	}
+	.share-btn--copy.is-copied {
+		border-color: var(--violet-500);
+		color: var(--violet-600);
+		background: var(--violet-50);
+	}
+	.share-btn--copy.is-copied .share-btn__label-default {
+		display: none;
+	}
+	.share-btn--copy.is-copied .share-btn__label-copied {
+		display: inline;
+	}
+
+	@media (max-width: 720px) {
+		.share-block__label {
+			width: 100%;
+			margin-bottom: 4px;
+		}
+	}
+</style>
+
+<script>
+	function init() {
+		const buttons = document.querySelectorAll<HTMLButtonElement>('.share-btn--copy[data-share-url]');
+		buttons.forEach((btn) => {
+			btn.addEventListener('click', async () => {
+				const url = btn.dataset.shareUrl;
+				if (!url) return;
+				try {
+					if (navigator.clipboard && window.isSecureContext) {
+						await navigator.clipboard.writeText(url);
+					} else {
+						// Фолбэк для http и старых браузеров.
+						const ta = document.createElement('textarea');
+						ta.value = url;
+						ta.style.position = 'fixed';
+						ta.style.opacity = '0';
+						document.body.appendChild(ta);
+						ta.select();
+						document.execCommand('copy');
+						document.body.removeChild(ta);
+					}
+					btn.classList.add('is-copied');
+					setTimeout(() => btn.classList.remove('is-copied'), 1800);
+				} catch {
+					// Тихо проглатываем — пользователь увидит, что класс не сменился, и поймёт.
+				}
+			});
+		});
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', init);
+	} else {
+		init();
+	}
+</script>
