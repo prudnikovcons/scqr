@@ -5,8 +5,9 @@ style: teal-cyan
 target_path: D:\CODEX\gitscqr\scqr\site\src\assets\editorial\contributed\2026-05-01\2026-05-01-rynok-nachal-prodavat-ogranicheniya.png
 size: 1536x1024
 priority: high
-status: pending
+status: "done"
 created_at: 2026-05-01T16:00:00Z
+completed_at: "2026-05-03T05:00:00Z"
 note: семья C — методология safety, рассудочный лабораторный тон; ограничения перевешивают возможности
 ---
 

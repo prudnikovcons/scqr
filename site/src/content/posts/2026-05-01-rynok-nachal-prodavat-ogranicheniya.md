@@ -18,8 +18,8 @@ readingTime: 3
 publicUrl: "/2026-05-01-rynok-nachal-prodavat-ogranicheniya/"
 heroAlt: "Редакционная обложка SCQR: на витрине лаборатории слева — список того, что модель умеет, справа — отдельный детализированный список того, что она не делает; правая витрина больше."
 heroStyle: "editorial_still_life"
-heroImage: ../../assets/editorial/secondary-regulations-hero.svg
-heroSource: "user-supplied"
+heroImage: ../../assets/editorial/contributed/2026-05-01/2026-05-01-rynok-nachal-prodavat-ogranicheniya.png
+heroSource: "generated"
 ---
 
 CSET Georgetown через TIME выпустила обзор: GPT-Rosalind, Claude Mythos и ряд других самых способных моделей сейчас не отдаются публике. Лаборатории всё чаще держат сильнейшие веса за дверью из-за рисков двойного назначения — в биологии, химии, кибербезопасности. Параллельно OpenAI публикует пятичастный план «Кибербезопасность в эпоху интеллекта»: пять линий обороны вокруг моделей, которые умеют сами проводить разведку и эксплуатацию уязвимостей. И тогда же выходят разборы system card к GPT-5.5 — Zvi Mowshowitz и Скотт Александер показывают, что ограничений в карточке модели стало в разы больше, чем заявленных способностей.

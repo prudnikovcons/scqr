@@ -5,8 +5,9 @@ style: amber-indigo
 target_path: D:\CODEX\gitscqr\scqr\site\src\assets\editorial\contributed\2026-05-01\2026-05-01-silver-stavit-na-konec-data-hungry-epohi.png
 size: 1536x1024
 priority: high
-status: pending
+status: "done"
 created_at: 2026-05-01T17:00:00Z
+completed_at: "2026-05-03T05:00:00Z"
 note: семья B — крупный венчурный раунд $1.1B при оценке $5.1B, исторический подход (AlphaZero); документальный, архивный
 ---
 
