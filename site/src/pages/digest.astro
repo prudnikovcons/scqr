@@ -1,13 +1,25 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import HomeNewsletterBanner from '../components/HomeNewsletterBanner.astro';
 import { SITE_TITLE } from '../consts';
 import { buildWebsiteJsonLd } from '../lib/structuredData';
 
 const description =
-	'Дайджест SCQR — еженедельная сводка о рынке искусственного интеллекта: что сдвинулось, что закрепилось, что значит для строящих бизнес.';
+	'Дайджест SCQR — недельная сводка о рынке искусственного интеллекта: что сдвинулось, что закрепилось, что значит для строящих бизнес.';
+
+const allDigests = (await getCollection('digests')).filter(
+	(entry) => entry.data.status !== 'draft',
+);
+const digests = [...allDigests].sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const lead = digests[0];
+const archive = digests.slice(1);
 
 const jsonLd = buildWebsiteJsonLd({
 	title: `Дайджест — ${SITE_TITLE}`,
@@ -19,31 +31,79 @@ const jsonLd = buildWebsiteJsonLd({
 <!doctype html>
 <html lang="ru">
 	<head>
-		<BaseHead title={`Дайджест — ${SITE_TITLE}`} description={description} jsonLd={jsonLd} />
+		<BaseHead
+			title={`Дайджест — ${SITE_TITLE}`}
+			description={description}
+			jsonLd={jsonLd}
+		/>
 	</head>
 	<body>
 		<Header />
-		<main class="soon-page container">
-			<section class="soon-hero">
-				<span class="soon-hero__pill">СКОРО</span>
-				<h1>Дайджест недели</h1>
+		<main class="digest-index container">
+			<header class="digest-index__hero">
+				<span class="digest-index__pill">ДАЙДЖЕСТ</span>
+				<h1>Что изменилось на рынке ИИ за неделю</h1>
 				<p>
-					Каждую пятницу — короткий разбор того, что изменилось на рынке ИИ за прошедшую
-					неделю. Пять-семь сдвигов, которые имели значение, и почему. С отсылками к
-					материалам SCQR за неделю и к первоисточникам.
+					Каждую пятницу — структурные сдвиги, которые имели значение, без
+					пересказа новостной ленты. Только связанные сюжеты, исторические
+					параллели и ссылки на материалы SCQR.
 				</p>
-				<p class="soon-hero__when">Первый выпуск — на следующей неделе.</p>
-			</section>
+			</header>
 
-			<section class="soon-promise">
-				<h2>Что будет в каждом выпуске</h2>
-				<ul>
-					<li>5–7 ключевых сдвигов с тезисом и связью между ними</li>
-					<li>Главный сюжет недели — что изменилось в логике рынка</li>
-					<li>Тихие, но важные новости, которые мы не довели до отдельной статьи</li>
-					<li>Что читать у других на этой неделе</li>
-				</ul>
-			</section>
+			{
+				digests.length === 0 && (
+					<section class="digest-empty">
+						<p>Первый выпуск — на следующей неделе.</p>
+					</section>
+				)
+			}
+
+			{
+				lead && (
+					<a class="digest-lead" href={`/digest/${lead.id}/`}>
+						<div class="digest-lead__meta">
+							<span class="digest-lead__week">{lead.data.weekISO}</span>
+							<span class="digest-lead__sep">·</span>
+							<FormattedDate date={lead.data.pubDate} />
+						</div>
+						<h2>{lead.data.title}</h2>
+						<p class="digest-lead__deck">{lead.data.deck}</p>
+						<div class="digest-lead__meta-bottom">
+							<span>
+								{lead.data.storylines.length} сюжет
+								{lead.data.storylines.length === 1
+									? ''
+									: lead.data.storylines.length < 5
+										? 'а'
+										: 'ов'}
+							</span>
+							<span class="digest-lead__sep">·</span>
+							<span>{lead.data.externalReads.length} ссылок</span>
+						</div>
+					</a>
+				)
+			}
+
+			{
+				archive.length > 0 && (
+					<section class="digest-archive">
+						<h3>Прошлые выпуски</h3>
+						<ul>
+							{archive.map((entry) => (
+								<li>
+									<a href={`/digest/${entry.id}/`}>
+										<span class="digest-archive__week">{entry.data.weekISO}</span>
+										<span class="digest-archive__title">{entry.data.title}</span>
+										<span class="digest-archive__date">
+											<FormattedDate date={entry.data.pubDate} />
+										</span>
+									</a>
+								</li>
+							))}
+						</ul>
+					</section>
+				)
+			}
 
 			<HomeNewsletterBanner />
 		</main>
@@ -52,16 +112,16 @@ const jsonLd = buildWebsiteJsonLd({
 </html>
 
 <style>
-	.soon-page {
+	.digest-index {
 		padding-top: 32px;
 		padding-bottom: 64px;
 	}
-	.soon-hero {
+	.digest-index__hero {
 		max-width: 760px;
+		margin: 0 auto 36px;
 		text-align: center;
-		margin: 0 auto 48px;
 	}
-	.soon-hero__pill {
+	.digest-index__pill {
 		display: inline-block;
 		font-family: var(--font-display);
 		font-weight: 700;
@@ -74,73 +134,158 @@ const jsonLd = buildWebsiteJsonLd({
 		color: #fff;
 		margin-bottom: 16px;
 	}
-	.soon-hero h1 {
+	.digest-index__hero h1 {
 		font-family: var(--font-display);
 		font-weight: 700;
-		font-size: 40px;
+		font-size: 38px;
 		line-height: 1.15;
 		letter-spacing: -0.025em;
 		color: var(--ink-900);
 		margin: 0 0 14px;
 	}
-	.soon-hero p {
+	.digest-index__hero p {
 		font-family: var(--font-body);
-		font-size: 17px;
+		font-size: 16px;
 		line-height: 1.6;
 		color: var(--ink-700);
-		margin: 0 0 12px;
+		margin: 0;
 	}
-	.soon-hero__when {
-		font-family: var(--font-display);
-		font-weight: 600;
-		font-size: 14px;
-		color: var(--violet-600);
+
+	.digest-empty {
+		text-align: center;
+		padding: 48px 0;
+		color: var(--ink-500);
+		font-family: var(--font-body);
+		font-size: 16px;
 	}
-	.soon-promise {
-		max-width: 720px;
+
+	.digest-lead {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+		max-width: 820px;
 		margin: 0 auto 48px;
-		padding: 24px 28px;
-		background: var(--paper-2);
+		padding: 28px 32px;
+		background: #fff;
 		border: 1px solid var(--line);
-		border-radius: 16px;
+		border-radius: 18px;
+		transition: border-color 120ms, box-shadow 120ms, transform 120ms;
 	}
-	.soon-promise h2 {
+	.digest-lead:hover {
+		border-color: var(--violet-500);
+		box-shadow: var(--shadow-1);
+		transform: translateY(-1px);
+	}
+	.digest-lead__meta,
+	.digest-lead__meta-bottom {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-family: var(--font-display);
+		font-size: 12px;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--violet-600);
+		margin-bottom: 12px;
+	}
+	.digest-lead__meta-bottom {
+		color: var(--ink-500);
+		margin-top: 16px;
+		margin-bottom: 0;
+	}
+	.digest-lead__sep {
+		color: var(--ink-300);
+	}
+	.digest-lead h2 {
 		font-family: var(--font-display);
 		font-weight: 700;
-		font-size: 18px;
-		margin: 0 0 14px;
+		font-size: 26px;
+		line-height: 1.25;
+		letter-spacing: -0.015em;
 		color: var(--ink-900);
+		margin: 0 0 12px;
 	}
-	.soon-promise ul {
+	.digest-lead__deck {
+		font-family: var(--font-body);
+		font-size: 16px;
+		line-height: 1.55;
+		color: var(--ink-700);
+		margin: 0;
+	}
+
+	.digest-archive {
+		max-width: 820px;
+		margin: 0 auto 48px;
+	}
+	.digest-archive h3 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 16px;
+		color: var(--ink-900);
+		margin: 0 0 16px;
+		padding-bottom: 10px;
+		border-bottom: 1px solid var(--line);
+	}
+	.digest-archive ul {
 		list-style: none;
 		padding: 0;
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
+		gap: 4px;
 	}
-	.soon-promise li {
-		font-family: var(--font-body);
+	.digest-archive a {
+		display: grid;
+		grid-template-columns: 90px 1fr auto;
+		gap: 16px;
+		align-items: baseline;
+		text-decoration: none;
+		color: inherit;
+		padding: 14px 16px;
+		border-radius: 10px;
+		transition: background 120ms;
+	}
+	.digest-archive a:hover {
+		background: var(--paper-2);
+	}
+	.digest-archive__week {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 12px;
+		color: var(--violet-600);
+		letter-spacing: 0.04em;
+	}
+	.digest-archive__title {
+		font-family: var(--font-display);
+		font-weight: 600;
 		font-size: 15px;
-		line-height: 1.55;
 		color: var(--ink-900);
-		padding-left: 22px;
-		position: relative;
+		line-height: 1.4;
 	}
-	.soon-promise li::before {
-		content: '';
-		position: absolute;
-		left: 0;
-		top: 9px;
-		width: 12px;
-		height: 12px;
-		border-radius: 50%;
-		border: 2px solid var(--violet-500);
+	.digest-archive__date {
+		font-family: var(--font-body);
+		font-size: 13px;
+		color: var(--ink-500);
+		white-space: nowrap;
 	}
 
 	@media (max-width: 720px) {
-		.soon-hero h1 {
+		.digest-index__hero h1 {
 			font-size: 28px;
+		}
+		.digest-lead {
+			padding: 22px 20px;
+		}
+		.digest-lead h2 {
+			font-size: 22px;
+		}
+		.digest-archive a {
+			grid-template-columns: 70px 1fr;
+		}
+		.digest-archive__date {
+			grid-column: 1 / -1;
+			font-size: 12px;
 		}
 	}
 </style>

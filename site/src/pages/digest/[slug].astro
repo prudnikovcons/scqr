@@ -1,0 +1,439 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+import {
+	getDeck,
+	getPostHref,
+	getVisiblePosts,
+	sortPosts,
+} from '../../lib/site';
+import { buildWebsiteJsonLd } from '../../lib/structuredData';
+
+type DigestEntry = CollectionEntry<'digests'>;
+type PostEntry = CollectionEntry<'posts'>;
+
+export async function getStaticPaths() {
+	const digests = await getCollection('digests');
+	const posts = sortPosts(getVisiblePosts(await getCollection('posts')));
+	const postsBySlug = new Map(posts.map((p) => [p.id, p]));
+	return digests
+		.filter((entry) => entry.data.status !== 'draft')
+		.map((entry) => ({
+			params: { slug: entry.id },
+			props: { entry, postsBySlug },
+		}));
+}
+
+interface Props {
+	entry: DigestEntry;
+	postsBySlug: Map<string, PostEntry>;
+}
+
+const { entry, postsBySlug } = Astro.props;
+const { Content } = await render(entry);
+
+const data = entry.data;
+
+const storylines = data.storylines.map((line) => ({
+	...line,
+	resolvedPosts: line.posts
+		.map((slug) => postsBySlug.get(slug))
+		.filter((p): p is PostEntry => Boolean(p)),
+}));
+
+const newsPicks = data.newsPicks
+	.map((pick) => ({
+		why: pick.why,
+		post: postsBySlug.get(pick.slug),
+	}))
+	.filter((p): p is { why: string; post: PostEntry } => Boolean(p.post));
+
+const dateRangeFormatter = new Intl.DateTimeFormat('ru-RU', {
+	day: 'numeric',
+	month: 'long',
+});
+const sameMonth =
+	data.weekStart.getMonth() === data.weekEnd.getMonth() &&
+	data.weekStart.getFullYear() === data.weekEnd.getFullYear();
+const startLabel = sameMonth
+	? new Intl.DateTimeFormat('ru-RU', { day: 'numeric' }).format(data.weekStart)
+	: dateRangeFormatter.format(data.weekStart);
+const endLabel = dateRangeFormatter.format(data.weekEnd);
+const yearLabel = new Intl.DateTimeFormat('ru-RU', { year: 'numeric' }).format(
+	data.weekEnd,
+);
+const dateRangeLabel = `${startLabel}–${endLabel} ${yearLabel}`;
+
+const jsonLd = buildWebsiteJsonLd({
+	title: `${data.title} — ${SITE_TITLE}`,
+	description: data.deck,
+	path: `/digest/${entry.id}/`,
+});
+---
+
+<!doctype html>
+<html lang="ru">
+	<head>
+		<BaseHead
+			title={`${data.title} — ${SITE_TITLE}`}
+			description={data.deck}
+			jsonLd={jsonLd}
+		/>
+	</head>
+	<body>
+		<Header />
+		<main class="digest-issue">
+			<div class="digest-issue__container container">
+				<header class="digest-issue__hero">
+					<a class="digest-issue__back" href="/digest/">← Все выпуски</a>
+					<div class="digest-issue__meta">
+						<span class="digest-issue__week">{data.weekISO}</span>
+						<span class="digest-issue__sep">·</span>
+						<span>{dateRangeLabel}</span>
+					</div>
+					<h1>{data.title}</h1>
+					<p class="digest-issue__deck">{data.deck}</p>
+					<div class="digest-issue__pubdate">
+						Опубликовано <FormattedDate date={data.pubDate} />
+					</div>
+				</header>
+
+				<section class="digest-issue__verdict">
+					<h2>Главное за неделю</h2>
+					<p>{data.verdict}</p>
+				</section>
+
+				{
+					storylines.length > 0 && (
+						<section class="digest-issue__storylines">
+							<h2>Сюжетные линии</h2>
+							<ol>
+								{storylines.map((line) => (
+									<li class="storyline">
+										<header>
+											<h3>{line.headline}</h3>
+										</header>
+										<p class="storyline__narrative">{line.narrative}</p>
+										{line.resolvedPosts.length > 0 && (
+											<ul class="storyline__posts">
+												{line.resolvedPosts.map((post) => (
+													<li>
+														<a href={getPostHref(post)} class="storyline__post">
+															<span class="storyline__post-title">
+																{post.data.title}
+															</span>
+															<span class="storyline__post-deck">{getDeck(post)}</span>
+														</a>
+													</li>
+												))}
+											</ul>
+										)}
+									</li>
+								))}
+							</ol>
+						</section>
+					)
+				}
+
+				{
+					newsPicks.length > 0 && (
+						<section class="digest-issue__picks">
+							<h2>Тихие новости недели</h2>
+							<ul>
+								{newsPicks.map(({ post, why }) => (
+									<li>
+										<a class="pick" href={getPostHref(post)}>
+											<span class="pick__title">{post.data.title}</span>
+											<span class="pick__why">{why}</span>
+										</a>
+									</li>
+								))}
+							</ul>
+						</section>
+					)
+				}
+
+				{
+					data.externalReads.length > 0 && (
+						<section class="digest-issue__externals">
+							<h2>Что читать у других</h2>
+							<ul>
+								{data.externalReads.map((read) => (
+									<li>
+										<a class="ext" href={read.url} target="_blank" rel="noopener">
+											<span class="ext__title">{read.title}</span>
+											{read.source && <span class="ext__source">{read.source}</span>}
+											{read.why && <span class="ext__why">{read.why}</span>}
+										</a>
+									</li>
+								))}
+							</ul>
+						</section>
+					)
+				}
+
+				<section class="digest-issue__body">
+					<Content />
+				</section>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.digest-issue__container {
+		padding-top: 24px;
+		padding-bottom: 64px;
+		max-width: 820px;
+	}
+	.digest-issue__back {
+		display: inline-block;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 13px;
+		color: var(--violet-600);
+		text-decoration: none;
+		margin-bottom: 16px;
+	}
+	.digest-issue__back:hover {
+		text-decoration: underline;
+	}
+	.digest-issue__meta {
+		display: flex;
+		gap: 8px;
+		align-items: center;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 12px;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--violet-600);
+		margin-bottom: 14px;
+	}
+	.digest-issue__sep {
+		color: var(--ink-300);
+	}
+	.digest-issue__hero h1 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 34px;
+		line-height: 1.18;
+		letter-spacing: -0.02em;
+		color: var(--ink-900);
+		margin: 0 0 16px;
+	}
+	.digest-issue__deck {
+		font-family: var(--font-body);
+		font-size: 17px;
+		line-height: 1.55;
+		color: var(--ink-700);
+		margin: 0 0 12px;
+	}
+	.digest-issue__pubdate {
+		font-family: var(--font-body);
+		font-size: 13px;
+		color: var(--ink-500);
+		margin-bottom: 36px;
+	}
+
+	.digest-issue h2 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 22px;
+		line-height: 1.25;
+		color: var(--ink-900);
+		margin: 0 0 14px;
+	}
+
+	.digest-issue__verdict {
+		padding: 22px 24px;
+		background: var(--paper-2);
+		border-left: 3px solid var(--violet-500);
+		border-radius: 0 12px 12px 0;
+		margin-bottom: 40px;
+	}
+	.digest-issue__verdict p {
+		font-family: var(--font-body);
+		font-size: 16px;
+		line-height: 1.6;
+		color: var(--ink-900);
+		margin: 0;
+		white-space: pre-line;
+	}
+
+	.digest-issue__storylines ol {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		counter-reset: storyline;
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
+	}
+	.storyline {
+		counter-increment: storyline;
+		padding: 20px 22px;
+		background: #fff;
+		border: 1px solid var(--line);
+		border-radius: 14px;
+	}
+	.storyline header {
+		display: flex;
+		align-items: baseline;
+		gap: 12px;
+		margin-bottom: 10px;
+	}
+	.storyline header::before {
+		content: counter(storyline, decimal-leading-zero);
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: 13px;
+		color: var(--violet-500);
+		letter-spacing: 0.05em;
+	}
+	.storyline h3 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 18px;
+		line-height: 1.3;
+		color: var(--ink-900);
+		margin: 0;
+	}
+	.storyline__narrative {
+		font-family: var(--font-body);
+		font-size: 15px;
+		line-height: 1.6;
+		color: var(--ink-700);
+		margin: 0 0 14px;
+		white-space: pre-line;
+	}
+	.storyline__posts {
+		list-style: none;
+		padding: 0;
+		margin: 14px 0 0;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.storyline__post {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+		padding: 12px 14px;
+		background: var(--paper-2);
+		border-radius: 10px;
+		transition: background 120ms;
+	}
+	.storyline__post:hover {
+		background: var(--paper-3);
+	}
+	.storyline__post-title {
+		display: block;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 14px;
+		color: var(--ink-900);
+		line-height: 1.4;
+		margin-bottom: 2px;
+	}
+	.storyline__post-deck {
+		display: block;
+		font-family: var(--font-body);
+		font-size: 13px;
+		line-height: 1.5;
+		color: var(--ink-500);
+	}
+
+	.digest-issue__picks,
+	.digest-issue__externals {
+		margin-top: 40px;
+	}
+	.digest-issue__picks ul,
+	.digest-issue__externals ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.pick,
+	.ext {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+		padding: 14px 16px;
+		border: 1px solid var(--line);
+		border-radius: 10px;
+		transition: border-color 120ms, background 120ms;
+	}
+	.pick:hover,
+	.ext:hover {
+		border-color: var(--violet-300);
+		background: var(--paper-2);
+	}
+	.pick__title,
+	.ext__title {
+		display: block;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 14px;
+		color: var(--ink-900);
+		line-height: 1.4;
+		margin-bottom: 4px;
+	}
+	.pick__why,
+	.ext__why {
+		display: block;
+		font-family: var(--font-body);
+		font-size: 13px;
+		line-height: 1.5;
+		color: var(--ink-500);
+	}
+	.ext__source {
+		display: inline-block;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 11px;
+		letter-spacing: 0.03em;
+		text-transform: uppercase;
+		color: var(--violet-600);
+		margin-bottom: 4px;
+	}
+
+	.digest-issue__body {
+		margin-top: 48px;
+		padding-top: 36px;
+		border-top: 1px solid var(--line);
+		font-family: var(--font-body);
+		font-size: 16px;
+		line-height: 1.7;
+		color: var(--ink-900);
+	}
+	.digest-issue__body :global(p) {
+		margin: 0 0 18px;
+	}
+	.digest-issue__body :global(strong) {
+		color: var(--ink-900);
+	}
+
+	@media (max-width: 720px) {
+		.digest-issue__hero h1 {
+			font-size: 26px;
+		}
+		.digest-issue h2 {
+			font-size: 19px;
+		}
+		.storyline {
+			padding: 16px;
+		}
+		.storyline h3 {
+			font-size: 16px;
+		}
+	}
+</style>
