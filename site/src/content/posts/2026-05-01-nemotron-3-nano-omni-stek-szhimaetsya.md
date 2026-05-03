@@ -18,8 +18,8 @@ readingTime: 2
 publicUrl: "/2026-05-01-nemotron-3-nano-omni-stek-szhimaetsya/"
 heroAlt: "Редакционная обложка SCQR: на одной стороне сборка из нескольких маленьких блоков-моделей, между ними тонкие связи; на другой — один большой блок с теми же входами и выходами."
 heroStyle: "editorial_still_life"
-heroImage: ../../assets/editorial/secondary-innovations-hero.svg
-heroSource: "user-supplied"
+heroImage: ../../assets/editorial/contributed/2026-05-01/2026-05-01-nemotron-3-nano-omni-stek-szhimaetsya.png
+heroSource: "generated"
 ---
 
 NVIDIA выпустила Nemotron 3 Nano Omni — мультимодальную модель, которая обрабатывает экраны, документы, аудио, видео и текст в одной перцептивной петле. Модель появилась с дня релиза на Hugging Face и в каталоге AWS SageMaker JumpStart. NVIDIA позиционирует её как «один эффективный открытый вес для агентного рассуждения», не как ещё одну добавку к существующему стеку.

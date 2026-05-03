@@ -18,8 +18,8 @@ readingTime: 3
 publicUrl: "/2026-05-01-silver-stavit-na-konec-data-hungry-epohi/"
 heroAlt: "Редакционная обложка SCQR: бесконечно повторяющаяся пара зеркальных шахматных досок-моделей, которые играют сами с собой; рядом — почти исчерпанный архив человеческих партий."
 heroStyle: "editorial_still_life"
-heroImage: ../../assets/editorial/secondary-theories-hero.svg
-heroSource: "user-supplied"
+heroImage: ../../assets/editorial/contributed/2026-05-01/2026-05-01-silver-stavit-na-konec-data-hungry-epohi.png
+heroSource: "generated"
 ---
 
 Дэвид Силвер из DeepMind — один из авторов AlphaGo и AlphaZero, человек, который в 2017 году научил машину играть в Go и шахматы лучше всех в мире, не показав ей ни одной человеческой партии — основал собственную лабораторию Ineffable Intelligence. За четыре месяца после основания она подняла $1.1 миллиарда при оценке $5.1 миллиарда. Ни одного публичного результата, ни одной демки, ни одной модели на бенчмарках — только тезис основателя. Тезис простой: следующий рубеж — это модели, которые учатся без человеческих данных вообще. Через симуляцию и self-play.
