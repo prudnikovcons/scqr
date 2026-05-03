@@ -45,6 +45,8 @@ Thumbs.db
 .scqr/mascot-v2-preview/
 .scqr/mascot-v2-sheets/
 .scqr/tg-assets/
+.scqr/backups/
+.scqr/codex-jobs/
 
 # Vercel
 .vercel/

@@ -16,8 +16,8 @@ readingTime: 2
 publicUrl: "/2026-04-24-privacy-filter-zakryvaet-odnu-dyru-iz-pyati/"
 heroAlt: "Предметная сцена с фильтрующей рамкой, через которую проходит документный поток и отбрасывается лишний слой риска."
 heroStyle: "editorial_still_life"
-heroSource: "user-supplied"
-heroImage: ../../assets/editorial/contributed/2026-04-24-v3/sig-20260424-privacy-filter-v3.png
+heroSource: "generated"
+heroImage: ../../assets/editorial/contributed/2026-04-24-v4/2026-04-24-privacy-filter-zakryvaet-odnu-dyru-iz-pyati.png
 ---
 
 OpenAI выпустила Privacy Filter — отдельную модель с открытыми весами, которая ищет и скрывает персональные данные прямо на устройстве пользователя. Сам по себе этот шаг важен не только как продуктовый релиз. Он честно фиксирует состояние рынка: корпоративный ИИ до сих пор тормозит не из-за слабых моделей, а из-за того, что компании не готовы отдавать в облако настоящие рабочие данные.

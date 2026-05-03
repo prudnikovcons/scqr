@@ -17,7 +17,7 @@ publicUrl: "/2026-04-24-rossiyskiy-ii-rynok-mezhdu-vitrinoy-i-sprosom/"
 heroAlt: "Редакционная обложка SCQR к материалу «Отечественный ИИ-рынок между витриной и реальным спросом»."
 heroStyle: "signal_network"
 heroSource: "generated"
-heroImage: ../../assets/editorial/2026-04-24-rossiyskiy-ii-rynok-mezhdu-vitrinoy-i-sprosom-hero.svg
+heroImage: ../../assets/editorial/contributed/2026-04-24-v4/2026-04-24-rossiyskiy-ii-rynok-mezhdu-vitrinoy-i-sprosom.png
 ---
 
 Отечественный ИИ-рынок уже прошёл стадию, когда сам факт наличия модели или платформы воспринимался как достаточное доказательство зрелости. Теперь вопрос другой: есть ли под этой витриной повторяемый, массовый, платёжеспособный спрос внутри реальных компаний. И вот здесь картина пока гораздо более неровная.

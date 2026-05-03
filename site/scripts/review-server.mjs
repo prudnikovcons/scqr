@@ -193,9 +193,48 @@ async function readReview(name, kind) {
 // ─────────────────────────────────────────────────────────────────────────
 
 function splitFrontmatter(md) {
-	const m = md.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
-	if (!m) return { fm: '', body: md };
-	return { fm: m[1], body: m[2] };
+	// Защита от дубля frontmatter'а: если в начале файла стоит несколько
+	// идущих подряд YAML-блоков (`---/---`) — съедаем все и сливаем в один,
+	// причём ключи из нижних блоков переопределяют верхние (нижние блоки
+	// дописывает watcher, и они всегда свежее).
+	let rest = md;
+	let fm = '';
+	let pickedAny = false;
+	const blockRe = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/;
+	while (true) {
+		const m = rest.match(blockRe);
+		if (!m) break;
+		fm = pickedAny ? mergeFmBlocks(fm, m[1]) : m[1];
+		rest = rest.slice(m[0].length);
+		pickedAny = true;
+		// Между блоками могут быть пустые строки — пропускаем их и проверяем
+		// ещё раз. Если следующего блока нет, выходим.
+		const trimmed = rest.replace(/^[\s\r\n]+/, '');
+		if (!blockRe.test(trimmed)) break;
+		rest = trimmed;
+	}
+	if (!pickedAny) return { fm: '', body: md };
+	return { fm, body: rest };
+}
+
+function mergeFmBlocks(prev, next) {
+	// Простой построчный мерж: нижние ключи побеждают.
+	// Парсер однострочный — этого достаточно для frontmatter SCQR
+	// (массивы вида `[a, b, c]` помещаются в одну строку).
+	let result = prev;
+	const lines = next.split(/\r?\n/);
+	for (const line of lines) {
+		const m = line.match(/^([A-Za-z][\w-]*):\s*.*$/);
+		if (!m) continue;
+		const key = m[1];
+		const re = new RegExp(`^${key}:.*$`, 'm');
+		if (re.test(result)) {
+			result = result.replace(re, line);
+		} else {
+			result = result + '\n' + line;
+		}
+	}
+	return result;
 }
 
 function joinFrontmatter(fm, body) {
