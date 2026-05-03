@@ -1,0 +1,90 @@
+---
+// Тонкая полоска прогресса чтения, фиксированная сверху страницы.
+// Считает процент прокрутки до конца тела статьи (или body, если target не задан).
+// Чистый ванильный JS, без зависимостей.
+
+interface Props {
+	/** CSS-селектор контейнера, прогресс которого считаем. По умолчанию — `.article-body`. */
+	target?: string;
+}
+
+const { target = '.article-body' } = Astro.props;
+---
+
+<div class="reading-progress" data-reading-progress data-target={target} aria-hidden="true">
+	<div class="reading-progress__bar"></div>
+</div>
+
+<style>
+	.reading-progress {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 3px;
+		background: transparent;
+		z-index: 100;
+		pointer-events: none;
+	}
+	.reading-progress__bar {
+		height: 100%;
+		width: 0%;
+		background: linear-gradient(90deg, var(--violet-500), var(--violet-700));
+		transition: width 80ms linear;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.reading-progress__bar {
+			transition: none;
+		}
+	}
+</style>
+
+<script>
+	function init() {
+		const root = document.querySelector<HTMLElement>('[data-reading-progress]');
+		if (!root) return;
+		const bar = root.querySelector<HTMLElement>('.reading-progress__bar');
+		if (!bar) return;
+		const targetSel = root.dataset.target || '.article-body';
+		const target = document.querySelector<HTMLElement>(targetSel);
+		if (!target) {
+			root.style.display = 'none';
+			return;
+		}
+
+		let ticking = false;
+		const compute = () => {
+			const rect = target.getBoundingClientRect();
+			const viewport = window.innerHeight;
+			// Расстояние, которое нужно прокрутить, чтобы пройти всю статью на экране.
+			const total = rect.height - viewport;
+			if (total <= 0) {
+				bar.style.width = '100%';
+				return;
+			}
+			// Сколько уже «съели» — отрицательный top относительно вьюпорта.
+			const consumed = Math.min(Math.max(-rect.top, 0), total);
+			const ratio = consumed / total;
+			bar.style.width = `${Math.round(ratio * 1000) / 10}%`;
+		};
+
+		const onScroll = () => {
+			if (ticking) return;
+			ticking = true;
+			requestAnimationFrame(() => {
+				compute();
+				ticking = false;
+			});
+		};
+
+		compute();
+		window.addEventListener('scroll', onScroll, { passive: true });
+		window.addEventListener('resize', onScroll);
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', init);
+	} else {
+		init();
+	}
+</script>

@@ -6,6 +6,8 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import HomeNewsletterBanner from '../components/HomeNewsletterBanner.astro';
+import ReadingProgress from '../components/ReadingProgress.astro';
+import ShareBlock from '../components/ShareBlock.astro';
 import {
 	getArticleTypeLabelFromValue,
 	getClusterHref,
@@ -21,6 +23,7 @@ type Props = PostEntry['data'] & {
 	clusterSlug?: string | null;
 	clusterTitle?: string | null;
 	clusterSize?: number;
+	related?: PostEntry[];
 };
 
 const {
@@ -40,6 +43,7 @@ const {
 	clusterTitle = null,
 	clusterSize = 0,
 	readingTime = 1,
+	related = [],
 } = Astro.props;
 
 const displayRubrics = rubricLabels.length > 0 ? rubricLabels : rubrics;
@@ -48,7 +52,8 @@ const primaryRubricSlug = rubrics[0] ?? '';
 const topicPreview = topics.slice(0, 8);
 const articleDeck = deck?.trim() || description;
 const showClusterCard = Boolean(clusterSlug && clusterTitle && clusterSize > 1);
-const showSidebar = topicPreview.length > 0 || showClusterCard;
+const hasRelated = related.length > 0;
+const showSidebar = topicPreview.length > 0 || showClusterCard || hasRelated;
 const articleJsonLd = buildArticleJsonLd({
 	title,
 	description: articleDeck,
@@ -76,6 +81,7 @@ const articleJsonLd = buildArticleJsonLd({
 	</head>
 
 	<body>
+		<ReadingProgress />
 		<Header />
 		<main class="article-page container">
 			<article class="article-shell">
@@ -114,6 +120,8 @@ const articleJsonLd = buildArticleJsonLd({
 					)
 				}
 
+				<ShareBlock title={title} path={Astro.url.pathname} deck={articleDeck} />
+
 				<div class={`article-grid ${showSidebar ? '' : 'article-grid--single'}`.trim()}>
 					<div class="article-body prose">
 						<slot />
@@ -139,6 +147,22 @@ const articleJsonLd = buildArticleJsonLd({
 										<strong>{clusterTitle}</strong>
 										<span class="article-rail__sub">{clusterSize} материалов в одной линии</span>
 									</a>
+								)}
+
+								{hasRelated && (
+									<div class="article-rail article-rail--related">
+										<span class="article-rail__kicker">Похожие материалы</span>
+										<ul class="related-list">
+											{related.map((rel) => (
+												<li>
+													<a href={getPostHref(rel)} class="related-item">
+														<span class="related-item__title">{rel.data.title}</span>
+														<span class="related-item__deck">{getDeck(rel)}</span>
+													</a>
+												</li>
+											))}
+										</ul>
+									</div>
 								)}
 							</aside>
 						)
@@ -457,6 +481,48 @@ const articleJsonLd = buildArticleJsonLd({
 		background: var(--violet-50);
 		color: var(--violet-700);
 		border-color: var(--violet-100);
+	}
+
+	/* ---- Related (sidebar) ---- */
+	.article-rail--related {
+		padding-bottom: 16px;
+	}
+	.related-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+	.related-item {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+		padding: 10px 12px;
+		border-radius: 8px;
+		border: 1px solid transparent;
+		transition: background 120ms, border-color 120ms;
+	}
+	.related-item:hover {
+		background: var(--paper-2);
+		border-color: var(--line);
+	}
+	.related-item__title {
+		display: block;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 13px;
+		line-height: 1.35;
+		color: var(--ink-900);
+		margin-bottom: 4px;
+	}
+	.related-item__deck {
+		display: block;
+		font-family: var(--font-body);
+		font-size: 12px;
+		line-height: 1.45;
+		color: var(--ink-500);
 	}
 
 	/* ---- Exit / next ---- */
