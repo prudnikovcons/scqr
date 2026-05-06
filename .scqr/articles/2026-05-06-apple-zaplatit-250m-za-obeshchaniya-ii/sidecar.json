@@ -1,0 +1,16 @@
+{
+  "slug": "2026-05-06-apple-zaplatit-250m-za-obeshchaniya-ii",
+  "createdAt": "2026-05-06T16:00:00.000Z",
+  "updatedAt": "2026-05-06T16:00:00.000Z",
+  "activeFormat": "news",
+  "coverPrompt": "См. .scqr/codex-inbox/cover-apple-settlement.md — обложка готовится отдельно через Codex pipeline.",
+  "tgPost": "⚖️ Apple заплатит $250 млн за обещания AI-функций. Первый прецедент маркетинговой лжи в эпоху ИИ\n\nApple урегулировала class action на $250 млн. 17 июня 2026 судья Northern District of California Ноэль Уайз проведёт слушание о финальном утверждении.\n\nИск касался рекламы Apple Intelligence-функций Siri, которые Apple показала на WWDC 2024 и продвигала с запуска iPhone 16 в сентябре 2024-го, но к марту 2025-го отложила на неопределённый срок.\n\nЦифры: $25 за каждое eligible-устройство (до $95 при низком объёме claim'ов). Eligible: iPhone 16, 16e, 16 Plus, 16 Pro, 16 Pro Max, 15 Pro, 15 Pro Max, купленные в США 10.06.2024–29.03.2025. Settlement охватывает ~37 миллионов устройств.\n\nЮридическая суть: Apple не признала ответственности (стандартная no-admission формула при settlement). Но факт оплаты сам по себе становится прецедентом. До 5 мая маркетинговая ложь про AI стоила репутации; теперь она имеет ценник в $250 млн.\n\nЭто создаёт шаблон для всех крупных вендоров. Любой анонс «новый Copilot к концу года» / «Gemini-агент в следующем релизе» / «Сбер ИИ во втором квартале» теперь несёт класс-экшеновый риск, если функция не выходит в срок. Маркетинг forward-looking функций становится дороже.\n\n👉 https://ai.scqr.ru/2026-05-06-apple-zaplatit-250m-za-obeshchaniya-ii/?utm_source=tg\n\n#Apple #AppleIntelligence #class_action #AI_маркетинг #регуляторика",
+  "sourceLinks": [
+    "https://techcrunch.com/2026/05/06/apple-to-pay-250m-to-settle-lawsuit-over-siris-delayed-ai-features/",
+    "https://www.macrumors.com/2026/05/05/apple-class-action-siri-lawsuit-settlement/",
+    "https://9to5mac.com/2026/05/05/apple-reaches-250m-settlement-over-siri-delays-users-could-get-up-to-95-per-device/",
+    "https://qz.com/apple-siri-ai-false-advertising-lawsuit-settlement-050626",
+    "https://appleinsider.com/articles/26/05/05/lawsuit-over-delayed-siri-features-reaches-massive-250m-settlement",
+    "https://clarksonlawfirm.com/lp/apple-intelligence-false-advertising/"
+  ]
+}
