@@ -5,8 +5,9 @@ style: amber-indigo
 target_path: D:\CODEX\gitscqr\scqr\site\src\assets\editorial\contributed\2026-05-06\2026-05-06-apple-zaplatit-250m-za-obeshchaniya-ii.png
 size: 1536x1024
 priority: high
-status: pending
+status: "done"
 created_at: 2026-05-06T16:30:00Z
+completed_at: "2026-05-07T05:00:00Z"
 note: семья B — судебный прецедент, маркетинговая ложь, документально-архивный тон; цена обещания
 ---
 

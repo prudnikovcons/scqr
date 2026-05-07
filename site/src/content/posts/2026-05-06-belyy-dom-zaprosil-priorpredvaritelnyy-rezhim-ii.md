@@ -18,8 +18,8 @@ readingTime: 4
 publicUrl: "/2026-05-06-belyy-dom-zaprosil-priorpredvaritelnyy-rezhim-ii/"
 heroAlt: "Редакционная обложка SCQR: модель уходит в закрытую дверь с печатью одобрения, прежде чем выйти на рынок; за дверью видна перспектива новых релизов в очереди."
 heroStyle: "editorial_still_life"
-heroImage: ../../assets/editorial/secondary-regulations-hero.svg
-heroSource: "user-supplied"
+heroImage: ../../assets/editorial/contributed/2026-05-06/2026-05-06-belyy-dom-zaprosil-priorpredvaritelnyy-rezhim-ii.png
+heroSource: "generated"
 ---
 
 5 мая в США случился сдвиг, который проще всего пропустить, потому что на одной неделе с ним Apple подписала $250-миллионный settlement, а Microsoft закрыла Xbox Copilot. Тем не менее именно 5 мая Microsoft, Google и xAI подписали с CAISI — Center for AI Standards and Innovation — соглашения о том, что государство получит доступ к их фронтирным моделям до публичного релиза. Это присоединение к контуру, в котором Anthropic и OpenAI уже два года: их меморандумы 2024-го теперь переподписаны под директивы CAISI, преобразованной из AI Safety Institute летом 2025-го при министре торговли Лутнике. Теперь все пять крупнейших фронтирных лабораторий США работают по предрелизному протоколу с государством. Из исключения это стало нормой — за одну неделю.
