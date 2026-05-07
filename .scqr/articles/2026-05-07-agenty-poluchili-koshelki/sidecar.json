@@ -1,0 +1,11 @@
+{
+  "slug": "2026-05-07-agenty-poluchili-koshelki",
+  "createdAt": "2026-05-07T19:30:00.000Z",
+  "updatedAt": "2026-05-07T19:30:00.000Z",
+  "activeFormat": "analysis",
+  "coverPrompt": "См. .scqr/codex-inbox/cover-agentcore-payments.md — обложка готовится отдельно через Codex pipeline.",
+  "tgPost": "💸 Агенты получили кошельки. AWS, Coinbase и Stripe запустили коммерческий контур платежей между ИИ\n\n7 мая Amazon Bedrock AgentCore Payments вышел в preview в четырёх регионах AWS (US East, US West, Frankfurt, Sydney). Агент теперь находит платный API/MCP-сервер/контент, проводит micropayment и продолжает работу — без перерыва на человека.\n\nКрипто-рейл: Coinbase с протоколом x402 (HTTP-нативное расширение, использует код 402 Payment Required из стандарта 1996 года) и стейблкоин-кошельками CDP. Фиатные платежи: Stripe через Privy, в roadmap.\n\nКонтроли есть. Пользователь даёт явное разрешение. Лимиты на сессию. Ключи держит платформа, не агент. Полный аудит транзакций в AgentCore-консоли. У агента нет «открытой двери».\n\nПараллель: Win32 в 1991-м стандартизовал то, что разработчики уже делали кустарно. Stripe в 2010-м открыл API для онлайн-платежей. Через 5 лет вокруг каждого вырастал отдельный сегмент рынка. AgentCore Payments — та же стандартизация, но для машино-машинной экономики.\n\nЧерез 12–18 месяцев экономика ИИ перестанет быть только подписочной. Появится «потребление по транзакции» — у агента нет когнитивного барьера на оплату, есть только лимит.\n\nДля России: x402 идёт через стейблкоины — формально под контролем ЦБ как ЦФА-эквивалент. Российским интеграторам через посредников придётся либо разворачивать собственный платёжный slot, либо договариваться с регулятором.\n\n👉 https://ai.scqr.ru/2026-05-07-agenty-poluchili-koshelki/?utm_source=tg\n\n#AWS #Bedrock #AgentCore #Coinbase #x402 #Stripe #агенты #M2M_коммерция",
+  "sourceLinks": [
+    "https://aws.amazon.com/blogs/machine-learning/agents-that-transact-introducing-amazon-bedrock-agentcore-payments-built-with-coinbase-and-stripe/"
+  ]
+}
