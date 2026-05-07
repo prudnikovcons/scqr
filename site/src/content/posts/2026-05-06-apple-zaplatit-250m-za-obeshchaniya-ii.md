@@ -18,8 +18,8 @@ readingTime: 2
 publicUrl: "/2026-05-06-apple-zaplatit-250m-za-obeshchaniya-ii/"
 heroAlt: "Редакционная обложка SCQR: судебная папка с печатью на тёплом фоне, рядом — телефон с пустым экраном Siri, вокруг счётчик долларов на бумаге."
 heroStyle: "editorial_still_life"
-heroImage: ../../assets/editorial/secondary-illusions-hero.svg
-heroSource: "user-supplied"
+heroImage: ../../assets/editorial/contributed/2026-05-06/2026-05-06-apple-zaplatit-250m-za-obeshchaniya-ii.png
+heroSource: "generated"
 ---
 
 Apple урегулировала class action на 250 миллионов долларов, и 17 июня судья Northern District of California Ноэль Уайз проведёт слушание о финальном утверждении соглашения. Иск касался рекламы Apple Intelligence-функций Siri, которые компания показала на WWDC в июне 2024-го и продвигала вместе с запуском iPhone 16 в сентябре. К марту 2025-го Apple отложила выпуск ключевых обещанных функций на неопределённый срок и тихо сняла видеоролики. Иск был подан в том же 2025-м; сейчас Apple платит, не признавая ответственности.

@@ -5,8 +5,9 @@ style: lilac-lime
 target_path: D:\CODEX\gitscqr\scqr\site\src\assets\editorial\contributed\2026-05-06\2026-05-06-amazon-vyigryvaet-eru-inference.png
 size: 1536x1024
 priority: high
-status: pending
+status: "done"
 created_at: 2026-05-06T14:30:00Z
+completed_at: "2026-05-07T05:00:00Z"
 note: семья A — рынковый сдвиг, нижний этаж стека, инфраструктура; оптимистичный сигнальный тон
 ---
 

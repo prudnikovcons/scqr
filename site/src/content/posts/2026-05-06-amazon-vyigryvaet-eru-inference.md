@@ -18,8 +18,8 @@ readingTime: 3
 publicUrl: "/2026-05-06-amazon-vyigryvaet-eru-inference/"
 heroAlt: "Редакционная обложка SCQR: фундамент дата-центра уходит в землю на нижнем этаже стека, верхние этажи моделей и приложений только-только проступают над ним."
 heroStyle: "editorial_still_life"
-heroImage: ../../assets/editorial/secondary-trajectories-hero.svg
-heroSource: "user-supplied"
+heroImage: ../../assets/editorial/contributed/2026-05-06/2026-05-06-amazon-vyigryvaet-eru-inference.png
+heroSource: "generated"
 ---
 
 Бен Томпсон в Stratechery 5 мая выпустил материал «Amazon's Durability» — продолжение разговора, который он ведёт с прошлого года, и вместе с тем точная фиксация момента. Тезис простой: Amazon в эру training выглядел отстающим, потому что NVIDIA, Microsoft и OpenAI взяли первую волну, а в эру inference он оказывается структурно выгодно расположен. Это происходит благодаря решениям, принятым задолго до того, как ChatGPT стал предметом сетки новостей. Annapurna Labs — куплена в 2015-м, первый собственный AI-чип Amazon выпущен в 2019-м, серия Inferentia и потом Trainium шла без шума. Сейчас Trainium 3 — по оценке Томпсона, «прилично, и кривая ведёт ещё лучше». А значит то, что десять лет лежало в фундаменте AWS, начинает превращаться в продукт.
