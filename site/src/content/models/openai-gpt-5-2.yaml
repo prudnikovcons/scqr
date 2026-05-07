@@ -1,0 +1,8 @@
+vendor: OpenAI
+family: GPT-5
+name: GPT-5.2
+releaseDate: 2025-12-11
+releaseType: frontier-closed
+modality: [text, image, code]
+sourceUrl: https://openai.com/blog/
+notes: Зимний релиз с фокусом на стабильность tools и reasoning-tokens.

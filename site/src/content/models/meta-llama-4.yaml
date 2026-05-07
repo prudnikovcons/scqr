@@ -1,0 +1,8 @@
+vendor: Meta
+family: Llama
+name: Llama 4
+releaseDate: 2025-04-05
+releaseType: frontier-open
+modality: [text, image, code]
+sourceUrl: https://ai.meta.com/blog/
+notes: Четвёртое поколение Llama с открытыми весами; задало планку для открытых фронтирных моделей.

@@ -1,0 +1,8 @@
+vendor: Baidu
+family: ERNIE
+name: ERNIE 4.5 OSS family
+releaseDate: 2025-06-30
+releaseType: frontier-open
+modality: [text, image, code]
+sourceUrl: https://yiyan.baidu.com/
+notes: Открытое семейство ERNIE 4.5 — несколько размеров под разные нагрузки китайского рынка.

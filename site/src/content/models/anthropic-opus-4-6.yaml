@@ -1,0 +1,8 @@
+vendor: Anthropic
+family: Claude Opus
+name: Claude Opus 4.6
+releaseDate: 2026-02-05
+releaseType: frontier-closed
+modality: [text, image, code]
+sourceUrl: https://www.anthropic.com/news
+notes: Зимняя итерация Opus с акцентом на стабильность agentic-loop и обновлённой RSP.

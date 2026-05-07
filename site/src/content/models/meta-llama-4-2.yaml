@@ -1,0 +1,8 @@
+vendor: Meta
+family: Llama
+name: Llama 4.2
+releaseDate: 2026-03-12
+releaseType: frontier-open
+modality: [text, image, code, agent]
+sourceUrl: https://ai.meta.com/blog/
+notes: Текущий референс открытого фронтира США; конкурирует с Qwen и DeepSeek в open-weights сегменте.

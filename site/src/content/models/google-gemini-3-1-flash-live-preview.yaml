@@ -1,0 +1,8 @@
+vendor: Google
+family: Gemini Live / Computer Use
+name: Gemini 3.1 Flash Live Preview
+releaseDate: 2026-03-20
+releaseType: frontier-closed
+modality: [text, audio, image, agent]
+sourceUrl: https://blog.google/technology/google-deepmind/
+notes: Live-вариант Flash 3.1 для real-time голосовых и видео-сценариев.

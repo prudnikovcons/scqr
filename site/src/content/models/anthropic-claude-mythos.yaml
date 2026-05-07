@@ -1,0 +1,10 @@
+vendor: Anthropic
+family: Claude Mythos
+name: Claude Mythos
+releaseDate: 2026-04-09
+releaseType: frontier-closed
+modality: [text, code]
+sourceUrl: https://www.anthropic.com/glasswing
+articleSlug: 2026-05-06-belyy-dom-zaprosil-priorpredvaritelnyy-rezhim-ii
+notes: Кибер-фронтирная модель Anthropic в рамках Project Glasswing. Находит тысячи zero-day-уязвимостей; общедоступного релиза нет, доступ ограничен Белым домом.
+status: restricted

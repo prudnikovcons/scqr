@@ -1,0 +1,8 @@
+vendor: Anthropic
+family: Claude Haiku
+name: Claude Haiku 4.5
+releaseDate: 2025-10-15
+releaseType: frontier-closed
+modality: [text, image, code]
+sourceUrl: https://www.anthropic.com/news
+notes: Быстрая лёгкая модель для high-volume задач и классификации.

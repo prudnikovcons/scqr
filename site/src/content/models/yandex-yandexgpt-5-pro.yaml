@@ -1,0 +1,8 @@
+vendor: Yandex
+family: YandexGPT
+name: YandexGPT 5 Pro
+releaseDate: 2026-04-10
+releaseType: russian
+modality: [text, image, code]
+sourceUrl: https://ya.ru/ai
+notes: Pro-вариант YandexGPT 5 для корпоративного API с расширенным контекстом и tool-use.

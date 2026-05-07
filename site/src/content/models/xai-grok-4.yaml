@@ -1,0 +1,8 @@
+vendor: xAI
+family: Grok
+name: Grok 4
+releaseDate: 2025-07-09
+releaseType: frontier-closed
+modality: [text, image, code]
+sourceUrl: https://x.ai/news
+notes: Четвёртое поколение Grok, основной фронтирный конкурент GPT и Claude.

@@ -77,4 +77,61 @@ const digests = defineCollection({
 	}),
 });
 
-export const collections = { posts, digests };
+const models = defineCollection({
+	loader: glob({ base: './src/content/models', pattern: '**/*.yaml' }),
+	schema: z.object({
+		vendor: z.enum([
+			'OpenAI',
+			'Anthropic',
+			'Google',
+			'xAI',
+			'Meta',
+			'Mistral',
+			'DeepSeek',
+			'Qwen / Alibaba',
+			'Moonshot',
+			'Baidu',
+			'Microsoft',
+			'Cohere',
+			'NVIDIA',
+			'Sber',
+			'Yandex',
+			'MTS',
+			'Other',
+		]),
+		family: z.string(),
+		name: z.string(),
+		releaseDate: z.coerce.date(),
+		releaseType: z.enum([
+			'frontier-closed',
+			'frontier-open',
+			'tier-2-open',
+			'russian',
+			'other',
+		]),
+		modality: z
+			.array(z.enum(['text', 'image', 'audio', 'video', 'code', 'agent']))
+			.default(['text']),
+		contextWindow: z.number().optional(),
+		pricing: z
+			.object({
+				input: z.string(),
+				output: z.string(),
+			})
+			.optional(),
+		benchmarks: z
+			.array(
+				z.object({
+					name: z.string(),
+					score: z.string(),
+				}),
+			)
+			.default([]),
+		sourceUrl: z.string().url(),
+		articleSlug: z.string().optional(),
+		notes: z.string(),
+		status: z.enum(['live', 'deprecated', 'restricted']).default('live'),
+	}),
+});
+
+export const collections = { posts, digests, models };

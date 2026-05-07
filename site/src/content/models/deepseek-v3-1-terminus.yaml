@@ -1,0 +1,8 @@
+vendor: DeepSeek
+family: DeepSeek-V3
+name: DeepSeek-V3.1-Terminus
+releaseDate: 2025-09-22
+releaseType: frontier-open
+modality: [text, code]
+sourceUrl: https://www.deepseek.com/
+notes: Финальная стабильная версия V3.1 перед переходом на V3.2.

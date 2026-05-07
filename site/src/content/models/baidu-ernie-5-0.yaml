@@ -1,0 +1,8 @@
+vendor: Baidu
+family: ERNIE
+name: ERNIE 5.0
+releaseDate: 2026-02-10
+releaseType: frontier-closed
+modality: [text, image, code]
+sourceUrl: https://yiyan.baidu.com/
+notes: Стабильный релиз ERNIE 5.0 — основная Baidu-флагман на китайском рынке.

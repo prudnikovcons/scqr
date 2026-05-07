@@ -1,0 +1,8 @@
+vendor: Anthropic
+family: Claude Opus
+name: Claude Opus 4.7
+releaseDate: 2026-04-17
+releaseType: frontier-closed
+modality: [text, image, code, agent]
+sourceUrl: https://www.anthropic.com/news
+notes: Текущий флагман Anthropic, расширенный system card с явной декларацией ограничений по двойному назначению.

@@ -1,0 +1,8 @@
+vendor: Google
+family: Gemini Pro
+name: Gemini 3 Pro
+releaseDate: 2025-11-18
+releaseType: frontier-closed
+modality: [text, image, video, code]
+sourceUrl: https://blog.google/technology/google-deepmind/
+notes: Третье поколение основной Pro-линейки Gemini.

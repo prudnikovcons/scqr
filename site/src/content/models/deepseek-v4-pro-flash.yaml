@@ -1,0 +1,8 @@
+vendor: DeepSeek
+family: DeepSeek-V4
+name: DeepSeek-V4 Pro / V4 Flash
+releaseDate: 2026-04-24
+releaseType: frontier-open
+modality: [text, code, image]
+sourceUrl: https://www.deepseek.com/
+notes: Двойной запуск V4 — тяжёлая Pro и быстрая Flash. Текущий референс китайского открытого фронтира.

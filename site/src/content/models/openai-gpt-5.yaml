@@ -1,0 +1,8 @@
+vendor: OpenAI
+family: GPT-5
+name: GPT-5
+releaseDate: 2025-08-07
+releaseType: frontier-closed
+modality: [text, image, code]
+sourceUrl: https://openai.com/index/gpt-5/
+notes: Запуск пятой генерации фронтирной модели OpenAI с расширенным reasoning-режимом и мультимодальным вводом.

@@ -1,0 +1,8 @@
+vendor: Other
+family: MiniMax
+name: MiniMax abab-7
+releaseDate: 2025-09-12
+releaseType: frontier-open
+modality: [text, image, audio]
+sourceUrl: https://www.minimax.chat/
+notes: MiniMax — китайская мультимодальная модель с фокусом на голос и аудио.

@@ -1,0 +1,8 @@
+vendor: Google
+family: Gemini Flash
+name: Gemini 3.1 Flash TTS
+releaseDate: 2026-04-17
+releaseType: frontier-closed
+modality: [text, audio]
+sourceUrl: https://blog.google/technology/google-deepmind/
+notes: Специализированная модель для генерации речи на базе Flash 3.1.

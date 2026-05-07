@@ -1,0 +1,8 @@
+vendor: Meta
+family: Llama
+name: Llama 4.1
+releaseDate: 2025-10-22
+releaseType: frontier-open
+modality: [text, image, code]
+sourceUrl: https://ai.meta.com/blog/
+notes: Минорное обновление Llama 4 с улучшениями в multilingual и кодинге.

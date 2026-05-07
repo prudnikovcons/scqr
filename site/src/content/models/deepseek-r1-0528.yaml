@@ -1,0 +1,8 @@
+vendor: DeepSeek
+family: DeepSeek-R1
+name: DeepSeek-R1-0528
+releaseDate: 2025-05-28
+releaseType: frontier-open
+modality: [text, code]
+sourceUrl: https://www.deepseek.com/
+notes: Reasoning-вариант DeepSeek с открытыми весами; задал стандарт для открытых reasoning-моделей.

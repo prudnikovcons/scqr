@@ -1,0 +1,8 @@
+vendor: Mistral
+family: Mistral Medium
+name: Mistral Medium 3
+releaseDate: 2026-01-30
+releaseType: frontier-open
+modality: [text, code]
+sourceUrl: https://mistral.ai/news/
+notes: Средний баланс цена/качество для европейских корпоративных клиентов.
