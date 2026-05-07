@@ -1,0 +1,8 @@
+vendor: Microsoft
+family: Phi
+name: Phi-4
+releaseDate: 2025-07-10
+releaseType: tier-2-open
+modality: [text, code]
+sourceUrl: https://www.microsoft.com/en-us/research/blog/
+notes: Малая Microsoft-модель с открытыми весами для локальных и edge-сценариев.

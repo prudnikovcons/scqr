@@ -1,0 +1,8 @@
+vendor: OpenAI
+family: GPT-Codex
+name: GPT-5-Codex
+releaseDate: 2025-09-15
+releaseType: frontier-closed
+modality: [text, code]
+sourceUrl: https://openai.com/blog/
+notes: Кодинг-вариант GPT-5, оптимизированный под SWE-bench и многошаговые правки кода.

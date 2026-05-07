@@ -1,0 +1,8 @@
+vendor: Sber
+family: GigaChat
+name: GigaChat MAX
+releaseDate: 2025-12-15
+releaseType: russian
+modality: [text, image, code]
+sourceUrl: https://developers.sber.ru/portal/products/gigachat-api
+notes: Тяжёлая флагманская версия GigaChat для корпоративного рынка России. Используется в банках, госуслугах, индустриальных сценариях.

@@ -1,0 +1,8 @@
+vendor: Other
+family: Yi
+name: Yi-Large 2
+releaseDate: 2025-08-30
+releaseType: frontier-open
+modality: [text, code]
+sourceUrl: https://01.ai/
+notes: 01.ai — лаборатория Кай-Фу Ли. Yi-Large 2 — основной Yi-флагман с открытыми весами.

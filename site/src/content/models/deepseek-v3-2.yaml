@@ -1,0 +1,8 @@
+vendor: DeepSeek
+family: DeepSeek-V3
+name: DeepSeek-V3.2
+releaseDate: 2025-12-01
+releaseType: frontier-open
+modality: [text, code]
+sourceUrl: https://www.deepseek.com/
+notes: Стабильная V3.2 с улучшенным MoE и дешевле на inference.

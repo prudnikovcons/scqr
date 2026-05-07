@@ -1,0 +1,8 @@
+vendor: Google
+family: Gemini Live / Computer Use
+name: Gemini 2.5 Computer Use
+releaseDate: 2025-10-07
+releaseType: frontier-closed
+modality: [text, image, agent]
+sourceUrl: https://blog.google/technology/google-deepmind/
+notes: Специализированная агентская модель для управления компьютером через скриншоты.

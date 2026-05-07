@@ -1,0 +1,8 @@
+vendor: MTS
+family: CoType
+name: CoType Pro
+releaseDate: 2026-02-25
+releaseType: russian
+modality: [text, code]
+sourceUrl: https://mts.ai/
+notes: Открытая модель MTS AI с фокусом на корпоративные сценарии и российский регуляторный контур.

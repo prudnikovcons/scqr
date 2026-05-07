@@ -1,0 +1,8 @@
+vendor: Qwen / Alibaba
+family: Qwen3
+name: Qwen3
+releaseDate: 2025-04-29
+releaseType: frontier-open
+modality: [text, image, code]
+sourceUrl: https://qwenlm.github.io/blog/
+notes: Третье поколение Qwen с открытыми весами; задало планку для китайских открытых моделей в 2025-м.

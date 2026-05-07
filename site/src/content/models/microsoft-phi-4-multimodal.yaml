@@ -1,0 +1,8 @@
+vendor: Microsoft
+family: Phi
+name: Phi-4 Multimodal
+releaseDate: 2026-01-15
+releaseType: tier-2-open
+modality: [text, image, audio]
+sourceUrl: https://www.microsoft.com/en-us/research/blog/
+notes: Мультимодальная Phi-4 для on-device и edge-сценариев.

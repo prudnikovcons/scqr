@@ -1,0 +1,8 @@
+vendor: OpenAI
+family: GPT-Codex
+name: GPT-5.3-Codex-Spark
+releaseDate: 2026-02-05
+releaseType: frontier-closed
+modality: [text, code]
+sourceUrl: https://openai.com/blog/
+notes: Лёгкий быстрый вариант Codex-линии для интерактивных сценариев.

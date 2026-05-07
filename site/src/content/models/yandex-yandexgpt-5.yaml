@@ -1,0 +1,8 @@
+vendor: Yandex
+family: YandexGPT
+name: YandexGPT 5
+releaseDate: 2025-11-05
+releaseType: russian
+modality: [text, image]
+sourceUrl: https://ya.ru/ai
+notes: Пятое поколение основной модели Яндекса. Работает в Алисе, Поиске, корпоративном API.

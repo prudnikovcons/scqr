@@ -1,0 +1,8 @@
+vendor: Moonshot
+family: Kimi K2
+name: Kimi K2 Preview
+releaseDate: 2025-09-05
+releaseType: frontier-open
+modality: [text, code]
+sourceUrl: https://www.moonshot.cn/
+notes: Preview-версия следующего шага K2 с обновлённым тренировочным датасетом.

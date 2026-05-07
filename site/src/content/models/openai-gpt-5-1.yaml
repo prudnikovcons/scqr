@@ -1,0 +1,8 @@
+vendor: OpenAI
+family: GPT-5
+name: GPT-5.1
+releaseDate: 2025-11-12
+releaseType: frontier-closed
+modality: [text, image, code]
+sourceUrl: https://openai.com/blog/
+notes: Минорное обновление с улучшениями в long-context и инструмент-call routing.

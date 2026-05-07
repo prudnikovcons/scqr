@@ -1,0 +1,8 @@
+vendor: Google
+family: Gemini Pro
+name: Gemini 2.5 Pro stable
+releaseDate: 2025-06-17
+releaseType: frontier-closed
+modality: [text, image, video, code]
+sourceUrl: https://blog.google/technology/google-deepmind/
+notes: Стабильный релиз Gemini 2.5 Pro с длинным окном контекста и multimodal-входом.

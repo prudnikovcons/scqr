@@ -1,0 +1,8 @@
+vendor: Google
+family: Gemini Pro
+name: Gemini 3.1 Pro Preview
+releaseDate: 2026-02-19
+releaseType: frontier-closed
+modality: [text, image, video, code]
+sourceUrl: https://blog.google/technology/google-deepmind/
+notes: Preview-версия Gemini 3.1 Pro с расширенным reasoning и tool-use.

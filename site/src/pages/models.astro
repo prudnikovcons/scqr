@@ -1,0 +1,1001 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+import {
+	MODALITY_LABELS,
+	RELEASE_TYPE_COLORS,
+	RELEASE_TYPE_LABELS,
+	VENDORS,
+} from '../data/vendor-config';
+import {
+	getModelHref,
+	getRelatedArticleHref,
+	getReleaseIso,
+	getReleaseShortLabel,
+	getVendorColor,
+	groupByVendor,
+	sortModelsByDate,
+	uniqueVendors,
+	uniqueYears,
+} from '../lib/models';
+import { buildWebsiteJsonLd } from '../lib/structuredData';
+
+const description =
+	'Релизы фронтирных и значимых открытых ИИ-моделей в одном месте. Живой реестр с редакционным отбором: даты, лаборатории, modality, ссылки на разборы SCQR.';
+
+const allModels = await getCollection('models');
+const sorted = sortModelsByDate(allModels);
+const vendors = uniqueVendors(sorted);
+const years = uniqueYears(sorted);
+const vendorGroups = groupByVendor(sorted);
+
+// Min/max года для timeline-сетки в Lanes view.
+const dates = sorted.map((m) => m.data.releaseDate.valueOf());
+const minDate = dates.length ? Math.min(...dates) : Date.now();
+const maxDate = dates.length ? Math.max(...dates) : Date.now();
+const totalSpan = Math.max(maxDate - minDate, 1);
+
+const jsonLd = buildWebsiteJsonLd({
+	title: `Релизы моделей — ${SITE_TITLE}`,
+	description,
+	path: '/models/',
+});
+
+function lanePosition(date: Date): number {
+	return ((date.valueOf() - minDate) / totalSpan) * 100;
+}
+---
+
+<!doctype html>
+<html lang="ru">
+	<head>
+		<BaseHead
+			title={`Релизы моделей — ${SITE_TITLE}`}
+			description={description}
+			jsonLd={jsonLd}
+		/>
+	</head>
+	<body>
+		<Header />
+		<main class="models-page container" data-models-root>
+			<header class="models-hero">
+				<span class="models-hero__pill">РЕЛИЗЫ</span>
+				<h1>Карта релизов фронтирных моделей</h1>
+				<p>
+					Живая лента запусков. Фронтирные закрытые лаборатории, открытые
+					веса второго ряда, российский сегмент. Каждая запись — с источником
+					и ссылкой на наш разбор, если он есть. Обновляется ручным
+					редакционным отбором.
+				</p>
+				<div class="models-hero__stats">
+					<span><strong>{sorted.length}</strong> моделей</span>
+					<span class="models-hero__sep"></span>
+					<span><strong>{vendors.length}</strong> лабораторий</span>
+					<span class="models-hero__sep"></span>
+					<span>от <strong>{Math.min(...years)}</strong> до <strong>{Math.max(...years)}</strong></span>
+				</div>
+			</header>
+
+			<section class="models-toolbar" aria-label="Фильтры">
+				<div class="models-toolbar__row">
+					<input
+						type="search"
+						class="models-search"
+						placeholder="Поиск по имени модели или семейству…"
+						aria-label="Поиск"
+						data-models-search
+					/>
+					<div class="models-views" role="tablist" aria-label="Способ отображения">
+						<button class="models-view-btn is-active" data-view="timeline" type="button">
+							Хронология
+						</button>
+						<button class="models-view-btn" data-view="lanes" type="button">
+							Лаборатории
+						</button>
+						<button class="models-view-btn" data-view="cards" type="button">
+							Карточки
+						</button>
+					</div>
+				</div>
+
+				<div class="models-toolbar__row models-toolbar__row--filters">
+					<details class="models-filter">
+						<summary>Лаборатории <span class="models-filter__count" data-filter-count="vendor">все</span></summary>
+						<div class="models-filter__body">
+							{vendors.map((v) => (
+								<label class="models-filter__check">
+									<input
+										type="checkbox"
+										value={v}
+										data-filter="vendor"
+										checked
+									/>
+									<span class="models-filter__dot" style={`background:${getVendorColor(v)}`}></span>
+									{v}
+								</label>
+							))}
+						</div>
+					</details>
+
+					<details class="models-filter">
+						<summary>Тип релиза <span class="models-filter__count" data-filter-count="releaseType">все</span></summary>
+						<div class="models-filter__body">
+							{Object.entries(RELEASE_TYPE_LABELS).map(([key, label]) => (
+								<label class="models-filter__check">
+									<input
+										type="checkbox"
+										value={key}
+										data-filter="releaseType"
+										checked
+									/>
+									<span class="models-filter__dot" style={`background:${RELEASE_TYPE_COLORS[key]}`}></span>
+									{label}
+								</label>
+							))}
+						</div>
+					</details>
+
+					<details class="models-filter">
+						<summary>Год <span class="models-filter__count" data-filter-count="year">все</span></summary>
+						<div class="models-filter__body">
+							{years.map((y) => (
+								<label class="models-filter__check">
+									<input type="checkbox" value={String(y)} data-filter="year" checked />
+									{y}
+								</label>
+							))}
+						</div>
+					</details>
+
+					<button class="models-reset" type="button" data-models-reset>
+						Сбросить фильтры
+					</button>
+				</div>
+			</section>
+
+			<div class="models-counter" data-models-counter>
+				{sorted.length} из {sorted.length}
+			</div>
+
+			<!-- ============== Timeline view (default) ============== -->
+			<section class="models-view models-view--timeline is-active" data-view-pane="timeline">
+				<ol class="timeline-list">
+					{sorted.map((m) => {
+						const articleHref = getRelatedArticleHref(m);
+						const yr = m.data.releaseDate.getFullYear();
+						return (
+							<li
+								class="timeline-row"
+								data-row
+								data-vendor={m.data.vendor}
+								data-release-type={m.data.releaseType}
+								data-year={yr}
+								data-name={(m.data.name + ' ' + m.data.family).toLowerCase()}
+							>
+								<a class="timeline-row__link" href={getModelHref(m)}>
+									<span
+										class="timeline-row__dot"
+										style={`background:${getVendorColor(m.data.vendor)}`}
+										aria-hidden="true"
+									></span>
+									<div class="timeline-row__head">
+										<span class="timeline-row__vendor">{m.data.vendor}</span>
+										<span class="timeline-row__sep">·</span>
+										<span class="timeline-row__family">{m.data.family}</span>
+									</div>
+									<div class="timeline-row__name">{m.data.name}</div>
+									<div class="timeline-row__meta">
+										<time datetime={getReleaseIso(m)}>{getReleaseShortLabel(m)}</time>
+										<span
+											class="timeline-row__type"
+											style={`color:${RELEASE_TYPE_COLORS[m.data.releaseType]}`}
+										>
+											{RELEASE_TYPE_LABELS[m.data.releaseType]}
+										</span>
+										{m.data.modality.length > 0 && (
+											<span class="timeline-row__modality">
+												{m.data.modality
+													.map((mod) => MODALITY_LABELS[mod] || mod)
+													.join(' · ')}
+											</span>
+										)}
+									</div>
+									<p class="timeline-row__notes">{m.data.notes}</p>
+								</a>
+								{articleHref && (
+									<a class="timeline-row__article" href={articleHref}>
+										Наш разбор →
+									</a>
+								)}
+							</li>
+						);
+					})}
+				</ol>
+			</section>
+
+			<!-- ============== Lanes view ============== -->
+			<section class="models-view models-view--lanes" data-view-pane="lanes">
+				<div class="lanes-scroll">
+					<div class="lanes-axis">
+						{years.slice().reverse().map((y) => {
+							const left = lanePosition(new Date(`${y}-01-01T00:00:00Z`));
+							return <span class="lanes-axis__tick" style={`left:${left}%`}>{y}</span>;
+						})}
+					</div>
+					{vendorGroups.map((g) => (
+						<div
+							class="lane"
+							data-lane
+							data-vendor={g.vendor}
+						>
+							<div class="lane__label" style={`color:${getVendorColor(g.vendor)}`}>
+								{g.vendor}
+								<span class="lane__count">{g.models.length}</span>
+							</div>
+							<div class="lane__track">
+								{g.models.map((m) => {
+									const left = lanePosition(m.data.releaseDate);
+									return (
+										<a
+											class="lane__node"
+											data-row
+											data-vendor={m.data.vendor}
+											data-release-type={m.data.releaseType}
+											data-year={m.data.releaseDate.getFullYear()}
+											data-name={(m.data.name + ' ' + m.data.family).toLowerCase()}
+											href={getModelHref(m)}
+											style={`left:${left}%; --vc:${getVendorColor(m.data.vendor)}`}
+											title={`${m.data.name} · ${getReleaseShortLabel(m)}`}
+										>
+											<span class="lane__dot" aria-hidden="true"></span>
+											<span class="lane__name">{m.data.name}</span>
+										</a>
+									);
+								})}
+							</div>
+						</div>
+					))}
+				</div>
+			</section>
+
+			<!-- ============== Cards view ============== -->
+			<section class="models-view models-view--cards" data-view-pane="cards">
+				<div class="cards-grid">
+					{sorted.map((m) => {
+						const articleHref = getRelatedArticleHref(m);
+						return (
+							<article
+								class="model-card"
+								data-row
+								data-vendor={m.data.vendor}
+								data-release-type={m.data.releaseType}
+								data-year={m.data.releaseDate.getFullYear()}
+								data-name={(m.data.name + ' ' + m.data.family).toLowerCase()}
+							>
+								<header class="model-card__head">
+									<span
+										class="model-card__pill"
+										style={`background:${getVendorColor(m.data.vendor)}`}
+									>
+										{m.data.vendor}
+									</span>
+									<time class="model-card__date" datetime={getReleaseIso(m)}>
+										{getReleaseShortLabel(m)}
+									</time>
+								</header>
+								<a class="model-card__title" href={getModelHref(m)}>
+									{m.data.name}
+								</a>
+								<div class="model-card__family">{m.data.family}</div>
+								<div class="model-card__type" style={`color:${RELEASE_TYPE_COLORS[m.data.releaseType]}`}>
+									{RELEASE_TYPE_LABELS[m.data.releaseType]}
+								</div>
+								<p class="model-card__notes">{m.data.notes}</p>
+								{m.data.benchmarks && m.data.benchmarks.length > 0 && (
+									<ul class="model-card__benchmarks">
+										{m.data.benchmarks.slice(0, 3).map((b) => (
+											<li>
+												<span class="bench-name">{b.name}</span>
+												<span class="bench-score">{b.score}</span>
+											</li>
+										))}
+									</ul>
+								)}
+								<footer class="model-card__foot">
+									<a class="model-card__detail" href={getModelHref(m)}>
+										Подробнее →
+									</a>
+									{articleHref && (
+										<a class="model-card__article" href={articleHref}>
+											Наш разбор
+										</a>
+									)}
+								</footer>
+							</article>
+						);
+					})}
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style is:global>
+	.models-page {
+		padding-top: 32px;
+		padding-bottom: 64px;
+	}
+	.models-hero {
+		max-width: 760px;
+		margin: 0 auto 28px;
+		text-align: center;
+	}
+	.models-hero__pill {
+		display: inline-block;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		padding: 5px 12px;
+		border-radius: 999px;
+		background: var(--violet-500);
+		color: #fff;
+		margin-bottom: 14px;
+	}
+	.models-hero h1 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 36px;
+		line-height: 1.15;
+		letter-spacing: -0.025em;
+		color: var(--ink-900);
+		margin: 0 0 12px;
+	}
+	.models-hero p {
+		font-family: var(--font-body);
+		font-size: 16px;
+		line-height: 1.6;
+		color: var(--ink-700);
+		margin: 0 0 14px;
+	}
+	.models-hero__stats {
+		display: inline-flex;
+		gap: 12px;
+		align-items: center;
+		font-family: var(--font-body);
+		font-size: 14px;
+		color: var(--ink-500);
+	}
+	.models-hero__stats strong {
+		color: var(--ink-900);
+		font-weight: 700;
+	}
+	.models-hero__sep {
+		width: 4px;
+		height: 4px;
+		border-radius: 50%;
+		background: var(--ink-300);
+	}
+
+	.models-toolbar {
+		position: sticky;
+		top: 96px;
+		z-index: 10;
+		background: var(--bg-page);
+		padding: 12px 0;
+		border-bottom: 1px solid var(--line);
+		margin-bottom: 18px;
+	}
+	.models-toolbar__row {
+		display: flex;
+		gap: 12px;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+	.models-toolbar__row--filters {
+		margin-top: 10px;
+	}
+	.models-search {
+		flex: 1 1 280px;
+		font-family: var(--font-body);
+		font-size: 14px;
+		padding: 9px 14px;
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		background: var(--bg-card, #fff);
+		color: var(--ink-900);
+		outline: none;
+		transition: border-color 120ms;
+	}
+	.models-search:focus {
+		border-color: var(--violet-500);
+	}
+
+	.models-views {
+		display: inline-flex;
+		gap: 4px;
+		padding: 3px;
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		background: var(--bg-card, #fff);
+	}
+	.models-view-btn {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 13px;
+		padding: 7px 14px;
+		background: transparent;
+		border: 0;
+		border-radius: 999px;
+		color: var(--ink-700);
+		cursor: pointer;
+		transition: background 120ms, color 120ms;
+	}
+	.models-view-btn:hover {
+		color: var(--violet-600);
+	}
+	.models-view-btn.is-active {
+		background: var(--violet-500);
+		color: #fff;
+	}
+
+	.models-filter {
+		position: relative;
+		font-family: var(--font-display);
+		font-size: 13px;
+	}
+	.models-filter > summary {
+		list-style: none;
+		cursor: pointer;
+		padding: 7px 14px;
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		background: var(--bg-card, #fff);
+		font-weight: 600;
+		color: var(--ink-700);
+		display: inline-flex;
+		gap: 6px;
+		align-items: center;
+	}
+	.models-filter > summary::-webkit-details-marker {
+		display: none;
+	}
+	.models-filter > summary:hover {
+		border-color: var(--line-strong);
+	}
+	.models-filter[open] > summary {
+		border-color: var(--violet-500);
+		color: var(--violet-600);
+	}
+	.models-filter__count {
+		font-weight: 500;
+		color: var(--ink-500);
+	}
+	.models-filter__body {
+		position: absolute;
+		top: calc(100% + 6px);
+		left: 0;
+		min-width: 220px;
+		max-height: 280px;
+		overflow-y: auto;
+		background: var(--bg-card, #fff);
+		border: 1px solid var(--line);
+		border-radius: 12px;
+		padding: 10px;
+		box-shadow: var(--shadow-2);
+		z-index: 20;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+	.models-filter__check {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 6px 8px;
+		border-radius: 6px;
+		cursor: pointer;
+		font-weight: 500;
+		color: var(--ink-900);
+	}
+	.models-filter__check:hover {
+		background: var(--paper-2);
+	}
+	.models-filter__check input {
+		accent-color: var(--violet-500);
+	}
+	.models-filter__dot {
+		display: inline-block;
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+	}
+
+	.models-reset {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 13px;
+		padding: 7px 14px;
+		border: 1px solid transparent;
+		border-radius: 999px;
+		background: transparent;
+		color: var(--ink-500);
+		cursor: pointer;
+		transition: color 120ms;
+	}
+	.models-reset:hover {
+		color: var(--violet-600);
+	}
+
+	.models-counter {
+		font-family: var(--font-body);
+		font-size: 13px;
+		color: var(--ink-500);
+		margin-bottom: 12px;
+	}
+	.models-counter strong {
+		color: var(--ink-900);
+		font-weight: 700;
+	}
+
+	.models-view {
+		display: none;
+	}
+	.models-view.is-active {
+		display: block;
+	}
+
+	/* ---- Timeline ---- */
+	.timeline-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.timeline-row {
+		position: relative;
+		display: flex;
+		gap: 12px;
+		align-items: flex-start;
+	}
+	.timeline-row.is-hidden {
+		display: none;
+	}
+	.timeline-row__link {
+		display: grid;
+		grid-template-columns: 18px 1fr;
+		gap: 8px 14px;
+		flex: 1;
+		padding: 14px 18px;
+		background: var(--bg-card, #fff);
+		border: 1px solid var(--line);
+		border-radius: 12px;
+		text-decoration: none;
+		color: inherit;
+		transition: border-color 120ms, box-shadow 120ms;
+	}
+	.timeline-row__link:hover {
+		border-color: var(--violet-300, var(--line-strong));
+		box-shadow: var(--shadow-1);
+	}
+	.timeline-row__dot {
+		grid-row: 1 / span 4;
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		margin-top: 6px;
+		justify-self: center;
+	}
+	.timeline-row__head {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 12px;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--violet-600);
+		grid-column: 2;
+	}
+	.timeline-row__sep {
+		color: var(--ink-300);
+		margin: 0 4px;
+	}
+	.timeline-row__family {
+		color: var(--ink-700);
+	}
+	.timeline-row__name {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 18px;
+		line-height: 1.3;
+		color: var(--ink-900);
+		grid-column: 2;
+	}
+	.timeline-row__meta {
+		display: flex;
+		gap: 10px;
+		flex-wrap: wrap;
+		font-family: var(--font-body);
+		font-size: 13px;
+		color: var(--ink-500);
+		grid-column: 2;
+	}
+	.timeline-row__type {
+		font-weight: 600;
+	}
+	.timeline-row__modality {
+		font-style: italic;
+	}
+	.timeline-row__notes {
+		font-family: var(--font-body);
+		font-size: 14px;
+		line-height: 1.55;
+		color: var(--ink-700);
+		margin: 4px 0 0;
+		grid-column: 2;
+	}
+	.timeline-row__article {
+		flex-shrink: 0;
+		align-self: center;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 12px;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--violet-600);
+		text-decoration: none;
+		padding: 8px 14px;
+		background: var(--violet-50);
+		border-radius: 999px;
+		border: 1px solid transparent;
+		transition: border-color 120ms;
+	}
+	.timeline-row__article:hover {
+		border-color: var(--violet-500);
+	}
+
+	/* ---- Lanes ---- */
+	.lanes-scroll {
+		overflow-x: auto;
+		padding: 8px 0 14px;
+	}
+	.lanes-axis {
+		position: relative;
+		height: 22px;
+		margin-left: 160px;
+		border-bottom: 1px dashed var(--line);
+		margin-bottom: 6px;
+	}
+	.lanes-axis__tick {
+		position: absolute;
+		top: 0;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 11px;
+		color: var(--ink-500);
+		transform: translateX(-50%);
+	}
+	.lane {
+		display: grid;
+		grid-template-columns: 160px 1fr;
+		gap: 12px;
+		align-items: center;
+		min-height: 44px;
+		border-bottom: 1px dashed var(--line);
+	}
+	.lane.is-hidden {
+		display: none;
+	}
+	.lane__label {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 13px;
+		display: flex;
+		gap: 6px;
+		align-items: center;
+	}
+	.lane__count {
+		font-weight: 500;
+		font-size: 11px;
+		color: var(--ink-500);
+		background: var(--paper-2);
+		padding: 1px 7px;
+		border-radius: 999px;
+	}
+	.lane__track {
+		position: relative;
+		height: 38px;
+	}
+	.lane__node {
+		position: absolute;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		display: flex;
+		gap: 6px;
+		align-items: center;
+		padding: 4px 10px 4px 6px;
+		font-family: var(--font-display);
+		font-size: 11px;
+		font-weight: 600;
+		color: var(--ink-900);
+		background: var(--bg-card, #fff);
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		text-decoration: none;
+		white-space: nowrap;
+		transition: transform 120ms, border-color 120ms, box-shadow 120ms;
+		z-index: 1;
+	}
+	.lane__node:hover {
+		transform: translate(-50%, -50%) scale(1.04);
+		border-color: var(--vc);
+		box-shadow: var(--shadow-1);
+		z-index: 5;
+	}
+	.lane__dot {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: var(--vc);
+	}
+	.lane__node.is-hidden {
+		display: none;
+	}
+
+	/* ---- Cards ---- */
+	.cards-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 16px;
+	}
+	.model-card {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding: 18px 20px;
+		background: var(--bg-card, #fff);
+		border: 1px solid var(--line);
+		border-radius: 14px;
+		transition: border-color 120ms, box-shadow 120ms;
+	}
+	.model-card:hover {
+		border-color: var(--violet-300, var(--line-strong));
+		box-shadow: var(--shadow-1);
+	}
+	.model-card.is-hidden {
+		display: none;
+	}
+	.model-card__head {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.model-card__pill {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 11px;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		padding: 3px 10px;
+		border-radius: 999px;
+		color: #fff;
+	}
+	.model-card__date {
+		font-family: var(--font-body);
+		font-size: 12px;
+		color: var(--ink-500);
+	}
+	.model-card__title {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 19px;
+		line-height: 1.25;
+		color: var(--ink-900);
+		text-decoration: none;
+	}
+	.model-card__title:hover {
+		color: var(--violet-600);
+	}
+	.model-card__family {
+		font-family: var(--font-body);
+		font-size: 13px;
+		color: var(--ink-700);
+	}
+	.model-card__type {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 12px;
+		letter-spacing: 0.03em;
+		text-transform: uppercase;
+	}
+	.model-card__notes {
+		font-family: var(--font-body);
+		font-size: 14px;
+		line-height: 1.55;
+		color: var(--ink-700);
+		margin: 0;
+	}
+	.model-card__benchmarks {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+	.model-card__benchmarks li {
+		display: flex;
+		justify-content: space-between;
+		font-family: var(--font-body);
+		font-size: 13px;
+	}
+	.bench-name {
+		color: var(--ink-500);
+	}
+	.bench-score {
+		color: var(--ink-900);
+		font-weight: 600;
+		font-family: var(--font-mono);
+	}
+	.model-card__foot {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: auto;
+		padding-top: 8px;
+		border-top: 1px solid var(--line);
+	}
+	.model-card__detail,
+	.model-card__article {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 12px;
+		letter-spacing: 0.03em;
+		text-transform: uppercase;
+		text-decoration: none;
+		color: var(--violet-600);
+	}
+	.model-card__article {
+		color: var(--ink-500);
+	}
+	.model-card__article:hover {
+		color: var(--violet-600);
+	}
+
+	@media (max-width: 720px) {
+		.models-toolbar {
+			top: 64px;
+		}
+		.models-hero h1 {
+			font-size: 26px;
+		}
+		.timeline-row__link {
+			padding: 12px 14px;
+			grid-template-columns: 14px 1fr;
+		}
+		.timeline-row__name {
+			font-size: 16px;
+		}
+		.timeline-row__article {
+			align-self: flex-start;
+		}
+		.lane {
+			grid-template-columns: 110px 1fr;
+		}
+		.lanes-axis {
+			margin-left: 110px;
+		}
+		.lane__name {
+			display: none;
+		}
+		.lane__node {
+			padding: 6px;
+		}
+	}
+</style>
+
+<script>
+	(function init() {
+		const root = document.querySelector<HTMLElement>('[data-models-root]');
+		if (!root) return;
+
+		const search = root.querySelector<HTMLInputElement>('[data-models-search]');
+		const counter = root.querySelector<HTMLElement>('[data-models-counter]');
+		const filterCheckboxes = root.querySelectorAll<HTMLInputElement>(
+			'input[data-filter]',
+		);
+		const viewBtns = root.querySelectorAll<HTMLButtonElement>('.models-view-btn');
+		const viewPanes = root.querySelectorAll<HTMLElement>('[data-view-pane]');
+		const resetBtn = root.querySelector<HTMLButtonElement>('[data-models-reset]');
+		const filterCounts = root.querySelectorAll<HTMLElement>('[data-filter-count]');
+
+		// Все строки и плитки во всех view, помеченные data-row.
+		const rows = root.querySelectorAll<HTMLElement>('[data-row]');
+
+		const totalRows = (root.querySelector('[data-models-counter]')?.textContent || '')
+			.split(' из ')[1]
+			?.trim();
+
+		function getActiveFilters(name: string): Set<string> {
+			const set = new Set<string>();
+			root
+				.querySelectorAll<HTMLInputElement>(
+					`input[data-filter="${name}"]:checked`,
+				)
+				.forEach((el) => set.add(el.value));
+			return set;
+		}
+
+		function updateCounts() {
+			filterCounts.forEach((el) => {
+				const name = el.dataset.filterCount!;
+				const total = root.querySelectorAll(`input[data-filter="${name}"]`).length;
+				const checked = root.querySelectorAll(
+					`input[data-filter="${name}"]:checked`,
+				).length;
+				el.textContent = checked === total ? 'все' : `${checked}/${total}`;
+			});
+		}
+
+		function applyFilters() {
+			const vendors = getActiveFilters('vendor');
+			const types = getActiveFilters('releaseType');
+			const years = getActiveFilters('year');
+			const q = (search?.value || '').toLowerCase().trim();
+
+			let visible = 0;
+			rows.forEach((row) => {
+				const v = row.dataset.vendor || '';
+				const t = row.dataset.releaseType || '';
+				const y = row.dataset.year || '';
+				const n = row.dataset.name || '';
+				const matchVendor = vendors.has(v);
+				const matchType = types.has(t);
+				const matchYear = years.has(y);
+				const matchSearch = q.length === 0 || n.includes(q);
+				const show = matchVendor && matchType && matchYear && matchSearch;
+				row.classList.toggle('is-hidden', !show);
+				if (show) visible++;
+			});
+
+			// В Lanes view скрываем целые lane'ы, если в них нет ни одного видимого узла.
+			root.querySelectorAll<HTMLElement>('[data-lane]').forEach((lane) => {
+				const anyVisible = lane.querySelector('.lane__node:not(.is-hidden)');
+				lane.classList.toggle('is-hidden', !anyVisible);
+			});
+
+			if (counter && totalRows) {
+				// Каждая модель попадает в три view, поэтому делим на 3.
+				const uniqueVisible = visible / 3;
+				counter.innerHTML = `<strong>${Math.round(uniqueVisible)}</strong> из ${totalRows}`;
+			}
+			updateCounts();
+		}
+
+		filterCheckboxes.forEach((cb) => cb.addEventListener('change', applyFilters));
+		search?.addEventListener('input', applyFilters);
+		resetBtn?.addEventListener('click', () => {
+			filterCheckboxes.forEach((cb) => (cb.checked = true));
+			if (search) search.value = '';
+			applyFilters();
+		});
+
+		viewBtns.forEach((btn) => {
+			btn.addEventListener('click', () => {
+				const view = btn.dataset.view;
+				viewBtns.forEach((b) => b.classList.toggle('is-active', b === btn));
+				viewPanes.forEach((p) =>
+					p.classList.toggle('is-active', p.dataset.viewPane === view),
+				);
+			});
+		});
+
+		updateCounts();
+	})();
+</script>

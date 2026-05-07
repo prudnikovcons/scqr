@@ -1,0 +1,10 @@
+vendor: OpenAI
+family: GPT-Rosalind
+name: GPT-Rosalind
+releaseDate: 2026-04-15
+releaseType: frontier-closed
+modality: [text]
+sourceUrl: https://openai.com/blog/
+articleSlug: 2026-05-01-rynok-nachal-prodavat-ogranicheniya
+notes: Внутренняя сильная модель OpenAI с ограниченным доступом из-за рисков двойного назначения в биологии и кибербезопасности.
+status: restricted

@@ -1,0 +1,8 @@
+vendor: Cohere
+family: Command R
+name: Command R+ 2
+releaseDate: 2025-10-08
+releaseType: frontier-open
+modality: [text, code]
+sourceUrl: https://cohere.com/blog
+notes: Корпоративная RAG-ориентированная модель Cohere; Канадский фронтир со ставкой на enterprise data sovereignty.

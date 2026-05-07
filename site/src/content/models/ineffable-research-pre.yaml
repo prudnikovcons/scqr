@@ -1,0 +1,10 @@
+vendor: Other
+family: Ineffable
+name: Ineffable Research (pre)
+releaseDate: 2026-04-27
+releaseType: other
+modality: [text]
+sourceUrl: https://techcrunch.com/2026/04/27/deepminds-david-silver-just-raised-1-1b-to-build-an-ai-that-learns-without-human-data/
+articleSlug: 2026-05-01-silver-stavit-na-konec-data-hungry-epohi
+notes: Лаборатория Дэвида Силвера, основанная в 2026-м с раундом $1.1 млрд при оценке $5.1 млрд. Публичных моделей пока нет; ставка на post-data парадигму через self-play.
+status: restricted

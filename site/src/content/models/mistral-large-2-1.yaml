@@ -1,0 +1,8 @@
+vendor: Mistral
+family: Mistral Large
+name: Mistral Large 2.1
+releaseDate: 2025-08-14
+releaseType: frontier-open
+modality: [text, code]
+sourceUrl: https://mistral.ai/news/
+notes: Европейский фронтирный конкурент с открытыми весами; популярен в EU-юрисдикциях из-за data sovereignty.

@@ -1,0 +1,8 @@
+vendor: Anthropic
+family: Claude Sonnet
+name: Claude Sonnet 4.6
+releaseDate: 2026-02-17
+releaseType: frontier-closed
+modality: [text, image, code]
+sourceUrl: https://www.anthropic.com/news
+notes: Текущий рабочий конь Anthropic для корпоративного API; основной кандидат для масштабных агентских внедрений.

@@ -1,0 +1,8 @@
+vendor: Sber
+family: GigaChat
+name: GigaChat 2 Pro
+releaseDate: 2026-03-20
+releaseType: russian
+modality: [text, image, code, agent]
+sourceUrl: https://developers.sber.ru/portal/products/gigachat-api
+notes: Второе поколение GigaChat с расширенным reasoning и агентскими сценариями. Ставит планку для российского корпоративного рынка.

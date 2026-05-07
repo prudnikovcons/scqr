@@ -1,0 +1,8 @@
+vendor: DeepSeek
+family: DeepSeek-V3
+name: DeepSeek-V3.2-Exp
+releaseDate: 2025-09-29
+releaseType: frontier-open
+modality: [text, code]
+sourceUrl: https://www.deepseek.com/
+notes: Экспериментальный билд V3.2 для обкатки новой архитектуры.

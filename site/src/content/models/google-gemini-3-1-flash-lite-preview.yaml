@@ -1,0 +1,8 @@
+vendor: Google
+family: Gemini Flash
+name: Gemini 3.1 Flash-Lite Preview
+releaseDate: 2026-03-03
+releaseType: frontier-closed
+modality: [text, image]
+sourceUrl: https://blog.google/technology/google-deepmind/
+notes: Удешевлённый вариант Flash для high-volume сценариев.

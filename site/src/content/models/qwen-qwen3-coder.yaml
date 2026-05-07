@@ -1,0 +1,8 @@
+vendor: Qwen / Alibaba
+family: Qwen Coder
+name: Qwen3-Coder
+releaseDate: 2025-07-22
+releaseType: frontier-open
+modality: [text, code]
+sourceUrl: https://qwenlm.github.io/blog/
+notes: Кодинг-вариант Qwen3 с открытыми весами; популярен в китайских и индийских dev-командах.

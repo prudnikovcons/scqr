@@ -1,0 +1,9 @@
+vendor: OpenAI
+family: Privacy Filter
+name: Privacy Filter
+releaseDate: 2026-04-24
+releaseType: frontier-open
+modality: [text]
+sourceUrl: https://openai.com/blog/
+articleSlug: 2026-04-24-privacy-filter-zakryvaet-odnu-dyru-iz-pyati
+notes: Локальная on-device модель с открытыми весами для удаления PII перед отправкой в облачный ИИ. Открыла рынок защитного слоя.

@@ -1,0 +1,8 @@
+vendor: Google
+family: Gemini Flash
+name: Gemini 3 Flash
+releaseDate: 2025-12-17
+releaseType: frontier-closed
+modality: [text, image, video]
+sourceUrl: https://blog.google/technology/google-deepmind/
+notes: Третья итерация Flash, баланс между качеством и стоимостью.

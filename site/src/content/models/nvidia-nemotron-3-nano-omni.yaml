@@ -1,0 +1,9 @@
+vendor: NVIDIA
+family: Nemotron
+name: Nemotron 3 Nano Omni
+releaseDate: 2026-05-01
+releaseType: frontier-open
+modality: [text, image, audio, video, code, agent]
+sourceUrl: https://developer.nvidia.com/blog/nvidia-nemotron-3-nano-omni-powers-multimodal-agent-reasoning-in-a-single-efficient-open-model/
+articleSlug: 2026-05-01-nemotron-3-nano-omni-stek-szhimaetsya
+notes: Первая мультимодальная модель NVIDIA с одной унифицированной архитектурой для экранов, документов, аудио, видео и текста.
