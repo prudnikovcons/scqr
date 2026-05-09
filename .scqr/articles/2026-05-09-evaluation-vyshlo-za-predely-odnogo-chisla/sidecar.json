@@ -1,0 +1,15 @@
+{
+  "slug": "2026-05-09-evaluation-vyshlo-za-predely-odnogo-chisla",
+  "createdAt": "2026-05-09T11:00:00.000Z",
+  "updatedAt": "2026-05-09T11:00:00.000Z",
+  "activeFormat": "analysis",
+  "coverPrompt": "См. .scqr/codex-inbox/cover-evaluation-multi-endpoint.md — обложка готовится отдельно через Codex pipeline.",
+  "tgPost": "📊 Бенчмарк перестал быть одним числом. Эпоха насыщения reasoning-метрик закрылась за апрель 2026-го\n\n5 мая Грег Бёрнем (Epoch AI) выпустил «RIP Classic Reasoning Benchmarks»: GPQA «clearly saturated», на GraphWalks Claude Mythos дотянулся до 80% (год назад было <40%). Тезис одной строкой: «Just relax one of the elements: text only, easy to grade, short time horizon, expert human superiority».\n\n6 мая HuggingFace добавил «benchmaxxer repellant» в Open ASR Leaderboard — private hold-out от Appen и DataoceanAI. Эпиграф — закон Гудхарта: «When a measure becomes a target, it ceases to be a good measure».\n\n7 мая ARC Research / alignment.org поднял уровень до mechanistic estimation — анализ внутренних активаций. Параллельно Zvi разбирает system card к GPT-5.5: ограничений в карточке стало больше, чем способностей.\n\n4 независимых сигнала на одной неделе. Рынок AI evaluation вышел за пределы одного числа. Дальше multi-endpoint: long-horizon agentic, alignment-checks, anti-benchmaxxing, model card disclosures.\n\nПараллель — 10 октября 1962 года, Kefauver-Harris Amendment в США. До этого FDA одобряла лекарства по одной метрике — безопасности. После — нужна phase 1/2/3, эффективность, informed consent. Реклама силы превратилась в раскрытие профиля безопасности.\n\nДля российского рынка: лаборатория, которая первой опубликует системную model card по западным стандартам, получит экспортное преимущество на 12–18 месяцев.\n\n👉 https://ai.scqr.ru/2026-05-09-evaluation-vyshlo-za-predely-odnogo-chisla/?utm_source=tg\n\n#AI_evaluation #Epoch_AI #benchmaxxing #model_card #Kefauver_Harris",
+  "sourceLinks": [
+    "https://epochai.substack.com/p/rip-classic-reasoning-benchmarks",
+    "https://huggingface.co/blog/open-asr-leaderboard-private-data",
+    "https://www.alignment.org/blog/mechanistic-estimation-for-wide-random-mlps/",
+    "https://thezvi.substack.com/p/gpt-55-the-system-card",
+    "https://en.wikipedia.org/wiki/Kefauver%E2%80%93Harris_Amendment"
+  ]
+}
