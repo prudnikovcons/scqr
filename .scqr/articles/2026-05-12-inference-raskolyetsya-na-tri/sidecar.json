@@ -1,0 +1,11 @@
+{
+  "slug": "2026-05-12-inference-raskolyetsya-na-tri",
+  "createdAt": "2026-05-12T10:30:00.000Z",
+  "updatedAt": "2026-05-12T10:30:00.000Z",
+  "activeFormat": "analysis",
+  "coverPrompt": "См. .scqr/codex-inbox/cover-inference-shift.md — обложка готовится отдельно через Codex pipeline.",
+  "tgPost": "⚡ Inference расколется на три. Бен Томпсон фиксирует следующую развилку\n\n11 мая Stratechery: AI-вычисления разделятся на три категории с радикально разными требованиями.\n\nTraining — самая капиталоёмкая, остаётся на cutting-edge кремнии. NVIDIA H200/B100 + собственные Trainium/TPU.\n\nAnswer inference (где человек ждёт ответ) — критичен low latency. Cerebras WSE-3: 44 ГБ SRAM при 21 ПБ/с (vs H100 80 ГБ HBM при 3,35 ТБ/с — 6-кратная разница bandwidth). Cerebras после IPO с $115–125 до $150–160.\n\nAgentic inference (где человека в петле нет) — самая большая категория. Latency не важна, можно медленнее, дешевле, на старом железе. Возвращение H100/A100/V100 из training-flow. Китайские Huawei Ascend через посредников.\n\nDataцентры вне Земли становятся пригодными — старое железо в космосе работает дольше.\n\nПараллель — GPU 2000-х. До 2007 рисование пикселей и AI-вычисления были параллельны, требовали одинаковой архитектуры. NVIDIA не делала GPU для AI; она делала GPU, который оказался хорош для AI. Через 7 лет — раскол на специализированные TPU. Сейчас тот же раскол происходит внутри AI-сегмента.\n\nДля России: agentic-сегмент допускает «good enough» железо, открывает ценовой коридор через посредников. Год назад это было нерационально.\n\nNVIDIA Dynamo (6 мая) — инструмент именно под раскол. Первые рабочие агентские платформы на Dynamo появятся в Q3–Q4 2026.\n\n👉 https://ai.scqr.ru/2026-05-12-inference-raskolyetsya-na-tri/?utm_source=tg\n\n#inference #Cerebras #NVIDIA #compute_infrastructure #agentic",
+  "sourceLinks": [
+    "https://stratechery.com/2026/the-inference-shift/"
+  ]
+}
