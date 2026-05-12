@@ -18,9 +18,10 @@ readingTime: 2
 publicUrl: "/2026-05-07-microsoft-ubrala-copilot-iz-xbox/"
 heroAlt: "Редакционная обложка SCQR: пустая полка с табличкой «Снят с производства», на фоне — диаграмма команды, в которой стрелки переходят с одной должности на другую."
 heroStyle: "editorial_still_life"
-heroImage: ../../assets/editorial/secondary-illusions-hero.svg
+heroImage: ../../assets/editorial/contributed/2026-05-07/2026-05-07-microsoft-ubrala-copilot-iz-xbox.png
 heroSource: "user-supplied"
 ---
+
 
 5 мая Аша Шарма, новый CEO Microsoft Gaming, объявила два решения одновременно. Первое — Microsoft сворачивает Copilot for Xbox: мобильная версия закрывается, разработка для консолей прекращается. В марте 2026-го компания планировала выпустить ассистента на текущем поколении Xbox-железа уже к концу этого года — теперь полный разворот, через год после того, как Copilot for Gaming показывался как центральный элемент AI-стратегии Microsoft в игровом сегменте. Второе — реорганизация Xbox-руководства: четыре исполнителя из Microsoft CoreAI переходят в Xbox-периметр. Среди них Джаред Палмер, ранее VP product в CoreAI и senior VP в GitHub, — будет вести инжиниринг, developer tools и инфраструктуру; Тим Аллен, VP design, ранее руководивший дизайном в Instacart, — возглавит дизайн Xbox.
 

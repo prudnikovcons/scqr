@@ -18,9 +18,10 @@ readingTime: 4
 publicUrl: "/2026-05-07-agenty-poluchili-koshelki/"
 heroAlt: "Редакционная обложка SCQR: между двух агентов парит подсвеченный канал транзакции, мимо человека-оператора, который остаётся в зоне разрешения, а не исполнения."
 heroStyle: "editorial_still_life"
-heroImage: ../../assets/editorial/secondary-innovations-hero.svg
+heroImage: ../../assets/editorial/contributed/2026-05-07/2026-05-07-agenty-poluchili-koshelki.png
 heroSource: "user-supplied"
 ---
+
 
 7 мая Amazon выпустил в preview Amazon Bedrock AgentCore Payments — функциональность, при которой агент может находить платный ресурс, договариваться о доступе и проводить платёж внутри одной рассуждающей петли, без выхода на человека. Партнёр по криптографическим рельсам — Coinbase, с протоколом x402 и инфраструктурой стейблкоин-кошельков CDP. Партнёр по фиатным платежам — Stripe, через инфраструктуру Privy для кошельков. Preview доступен в четырёх регионах AWS: US East, US West, Франкфурт, Сидней. Цена не указана; на стадии preview её обычно и не заявляют, всё считается потом по фактическому потреблению.
 

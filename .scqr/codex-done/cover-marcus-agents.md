@@ -5,10 +5,12 @@ style: coral-navy
 target_path: D:\CODEX\gitscqr\scqr\site\src\assets\editorial\contributed\2026-05-09\2026-05-09-marcus-prav-agenty-lomayutsya.png
 size: 1536x1024
 priority: high
-status: pending
+status: "done"
 created_at: 2026-05-09T13:45:00Z
 note: семья D — тревога, разлом цепи инструментов; контра-нарратив AgentCore Payments
+completed_at: "2026-05-09T19:22:12.409Z"
 ---
+
 
 # Обложка: «Маркус прав: агенты ломаются»
 

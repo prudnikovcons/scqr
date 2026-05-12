@@ -1,7 +1,7 @@
 {
   "slug": "2026-05-09-stern-ushla-iz-wsj-tret-volna-dezagregatsii",
   "createdAt": "2026-05-09T16:00:00.000Z",
-  "updatedAt": "2026-05-09T16:00:00.000Z",
+  "updatedAt": "2026-05-09T19:22:12.623Z",
   "activeFormat": "column",
   "coverPrompt": "См. .scqr/codex-inbox/cover-stern-disaggregation.md — обложка готовится отдельно через Codex pipeline.",
   "tgPost": "✍️ Joanna Stern ушла из WSJ через 12 лет. Третья волна дезагрегации tech-журналистики\n\nJoanna Stern в феврале 2026 ушла из Wall Street Journal после 12 лет работы. Запустила собственное медиа New Things — newsletter, видео, события, подкаст. Книга «I Am Not a Robot: My Year Using AI to Do (Almost) Everything» в мае. Партнёрский deal с NBC News как контрибьютором. 7 мая у Бена Томпсона на Stratechery вышло часовое интервью.\n\nЭто не «один кейс», это третья волна одной траектории.\n\n2003 — первая. Walt Mossberg запустил AllThingsD под Dow Jones.\n\n2014 — вторая. Recode становится самостоятельным; Swisher выходит на собственный бренд. К 2022-му она уже на собственном «Pivot».\n\n2020–2026 — третья. Casey Newton → Platformer. Eric Newcomer → Newcomer.co. Десять-пятнадцать ведущих tech-журналистов одновременно. Stern — следующая.\n\nПараллель уходит ещё дальше — 1931 год, Walter Lippmann, синдикат «Today and Tomorrow» в 250 изданиях. Один аналитик, несколько каналов. 95 лет спустя интернет вернул эту модель в tech-сегменте.\n\nКогда крупные tech-журналисты уходят — в больших изданиях исчезает мотивационная структура для глубокой длинной работы. Подписочная модель + прямой контакт с аудиторией работают лучше для аналитики, чем рекламная модель газеты.\n\nДля русскоязычного рынка: 5–6 независимых tech-аналитиков сейчас (Сиолошная, эйай ньюз, Малоизвестное интересное, Метаверсище, gonzo-обзоры). Stern-тренд показывает место ещё для 10–20 — реализуется в течение 24 месяцев, не потому что аудитория готова, а потому что мотивационная структура крупных русских изданий такая же.\n\nP.S. Stern про AI как «co-founder» — журналистика c AI как сотрудником. Через 2 года норма во всём independent-сегменте.\n\n👉 https://ai.scqr.ru/2026-05-09-stern-ushla-iz-wsj-tret-volna-dezagregatsii/?utm_source=tg\n\n#tech_журналистика #дезагрегация_медиа #Stern #Lippmann #SCQR_стратегия",
@@ -11,5 +11,6 @@
     "https://www.hollywoodreporter.com/business/digital/nbc-news-tech-joanna-stern-creator-deals-1236536460/",
     "https://deadline.com/2026/03/joanna-stern-nbc-news-contributor-1236758096/",
     "https://stratechery.com/2026/an-interview-with-joanna-stern-about-living-with-ai/"
-  ]
+  ],
+  "ogUrl": "/editorial/og/2026-05-09/2026-05-09-stern-ushla-iz-wsj-tret-volna-dezagregatsii.png"
 }

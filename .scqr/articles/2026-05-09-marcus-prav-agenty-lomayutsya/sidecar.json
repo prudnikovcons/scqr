@@ -1,7 +1,7 @@
 {
   "slug": "2026-05-09-marcus-prav-agenty-lomayutsya",
   "createdAt": "2026-05-09T13:30:00.000Z",
-  "updatedAt": "2026-05-09T13:30:00.000Z",
+  "updatedAt": "2026-05-09T19:22:12.395Z",
   "activeFormat": "column",
   "coverPrompt": "См. .scqr/codex-inbox/cover-marcus-agents.md — обложка готовится отдельно через Codex pipeline.",
   "tgPost": "🔧 Маркус прав: 91% агентов уязвимы к tool-chaining-атакам\n\nГари Маркус 5 мая выпустил «Breaking: Autonomous Agents are a Shitshow» — крепкий, наотмашь, в его стиле «не переоценивайте». На этот раз с цифрами из исследования Owen Sakawa.\n\n847 production-агентов в healthcare, finance, customer service, кодинге. 91% уязвимы к tool-chaining-атакам. 89,4% дают drift от целевой задачи через ~30 шагов. 94% memory-augmented агентов уязвимы к poisoning. Кейс OpenClaw / Moltbook: 770 000 живых агентов скомпрометированы через одну database-уязвимость.\n\nЭто та же неделя, на которой 7 мая AWS открывал AgentCore Payments. Маркус и AWS — две стороны одного рынка. Инфраструктура (AWS, Stripe, Coinbase) и реальные сбои (Маркус, Sakawa, METR Long-Horizon) растут параллельно.\n\nПараллель — Lighthill Report 1973 года. Британский парламент попросил сэра Джеймса Лайтхилла оценить AI-research — он нашёл то же самое: small-domain ОК, scale-up ломается из-за combinatorial explosion. Через год AI Winter 1974–1980. Сейчас мы посередине той же кривой.\n\nДля российского контекста: первая работа уровня Sakawa, обмерившая production-агентов в РФ, автоматически становится отраслевым стандартом — потому что заполнит пустоту. Окно 6–12 месяцев.\n\nМаркус-критика на этот раз попадает точнее обычного: он критикует не модели, а продуктовую обвязку — агенты, цепочки инструментов, длинные сессии, memory. Здесь его аргумент исторически устойчив: software-engineering reliability на распределённых системах ломалась десятилетиями.\n\n👉 https://ai.scqr.ru/2026-05-09-marcus-prav-agenty-lomayutsya/?utm_source=tg\n\n#Marcus #агенты #reliability #AgentCore #Lighthill #AI_Winter",
@@ -9,5 +9,6 @@
     "https://garymarcus.substack.com/p/breaking-autonomous-agents-are-a",
     "https://en.wikipedia.org/wiki/Lighthill_report",
     "https://en.wikipedia.org/wiki/AI_winter"
-  ]
+  ],
+  "ogUrl": "/editorial/og/2026-05-09/2026-05-09-marcus-prav-agenty-lomayutsya.png"
 }
