@@ -18,9 +18,10 @@ readingTime: 4
 publicUrl: "/2026-05-09-marcus-prav-agenty-lomayutsya/"
 heroAlt: "Редакционная обложка SCQR: цепочка инструментов, в одном из звеньев — разлом; рядом счётчик с тремя крупными цифрами, под ним мелким шрифтом контекст."
 heroStyle: "editorial_still_life"
-heroImage: ../../assets/editorial/secondary-illusions-hero.svg
+heroImage: ../../assets/editorial/contributed/2026-05-09/2026-05-09-marcus-prav-agenty-lomayutsya.png
 heroSource: "user-supplied"
 ---
+
 
 Гари Маркус 5 мая 2026 года опубликовал на Marcus on AI текст «Breaking: Autonomous Agents are a Shitshow» — крепкий, наотмашь, в его привычном стиле «не переоценивайте, я говорил». На этот раз с цифрами, которые сложно отмахнуть.
 

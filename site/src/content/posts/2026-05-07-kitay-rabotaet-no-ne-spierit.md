@@ -18,9 +18,10 @@ readingTime: 3
 publicUrl: "/2026-05-07-kitay-rabotaet-no-ne-spierit/"
 heroAlt: "Редакционная обложка SCQR: студия открыта, на полу аккуратные коробки моделей, рядом — компас, который указывает не на одну сторону, а на свой собственный круг направлений."
 heroStyle: "editorial_still_life"
-heroImage: ../../assets/editorial/secondary-theories-hero.svg
+heroImage: ../../assets/editorial/contributed/2026-05-07/2026-05-07-kitay-rabotaet-no-ne-spierit.png
 heroSource: "user-supplied"
 ---
+
 
 Натан Ламберт, исследователь и автор блога Interconnects, провёл около 36 часов в Пекине, обходя главные китайские AI-лаборатории — Moonshot, Tsinghua University, Z.ai, Meituan, Xiaomi, 01.ai, Alibaba, Ant Group. С DeepSeek и ByteDance он не встречался лично, но эти две компании постоянно фигурировали в разговорах. Возвращается он с шестью наблюдениями, которые мало похожи на то, что рассказывает о Китае стандартная западная AI-пресса.
 

@@ -18,9 +18,10 @@ readingTime: 5
 publicUrl: "/2026-05-09-evaluation-vyshlo-za-predely-odnogo-chisla/"
 heroAlt: "Редакционная обложка SCQR: одна цифра разламывается на восемь параметров; шкала вместо одной превращается в радар-диаграмму; внизу — лабораторный стол с пробирками."
 heroStyle: "editorial_still_life"
-heroImage: ../../assets/editorial/secondary-theories-hero.svg
+heroImage: ../../assets/editorial/contributed/2026-05-09/2026-05-09-evaluation-vyshlo-za-predely-odnogo-chisla.png
 heroSource: "user-supplied"
 ---
+
 
 5 мая 2026-го Грег Бёрнем выпустил в Epoch AI Substack материал «RIP Classic Reasoning Benchmarks». Тон — почти панегирик: классические текстовые reasoning-бенчмарки исчерпаны. GPQA, по словам автора, «clearly saturated». На GraphWalks Claude Mythos дотащился до 80% — год назад там было меньше 40%. И главный методологический вывод формулируется одной строкой: «Just relax one of the elements: text only, easy to grade, short time horizon, and expert human superiority». Чтобы делать осмысленный новый бенчмарк в 2026-м, нужно отказаться хотя бы от одного из четырёх классических свойств.
 

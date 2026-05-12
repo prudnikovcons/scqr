@@ -18,9 +18,10 @@ readingTime: 4
 publicUrl: "/2026-05-09-stern-ushla-iz-wsj-tret-volna-dezagregatsii/"
 heroAlt: "Редакционная обложка SCQR: газетная стопка слева, отдельный newsletter и микрофон справа; стрелка из стопки в индивидуальный канал, в фоне три волны разной высоты по годам."
 heroStyle: "editorial_still_life"
-heroImage: ../../assets/editorial/secondary-trajectories-hero.svg
+heroImage: ../../assets/editorial/contributed/2026-05-09/2026-05-09-stern-ushla-iz-wsj-tret-volna-dezagregatsii.png
 heroSource: "user-supplied"
 ---
+
 
 Joanna Stern в феврале 2026 года объявила в X: «After 12 years at The Wall Street Journal, I'm leaving. Twelve! I'm starting my own consumer-tech media company, building a new home with the same mission I've always had: help real people navigate the tech (and AI) changing their lives». Двенадцать лет — это не «попробую новое»; это уход из вершины индустрии. Stern — главный consumer-tech репортёр WSJ, обладатель Loeb-приза, лицо тестов iPhone, Apple Watch, Samsung-флагманов на пиковом trafficе. Уйти из WSJ в её позиции — это всегда история про деньги, мотивацию или трещину в мотивационной структуре издания. По её собственному рассказу — последнее.
 

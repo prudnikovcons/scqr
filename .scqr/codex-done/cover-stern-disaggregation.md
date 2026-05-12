@@ -5,10 +5,12 @@ style: amber-indigo
 target_path: D:\CODEX\gitscqr\scqr\site\src\assets\editorial\contributed\2026-05-09\2026-05-09-stern-ushla-iz-wsj-tret-volna-dezagregatsii.png
 size: 1536x1024
 priority: high
-status: pending
+status: "done"
 created_at: 2026-05-09T16:15:00Z
 note: семья B — медиа-индустрия, документально-историческая; три волны 2003/2014/2026
+completed_at: "2026-05-09T19:22:12.625Z"
 ---
+
 
 # Обложка: «Stern ушла из WSJ. Третья волна дезагрегации»
 

@@ -5,11 +5,13 @@ style: lilac-lime
 target_path: D:\CODEX\gitscqr\scqr\site\src\assets\editorial\contributed\2026-05-07\2026-05-07-agenty-poluchili-koshelki.png
 size: 1536x1024
 priority: high
-status: "pending"
+status: "done"
 created_at: 2026-05-07T19:45:00Z
 note: семья A — рынковый сдвиг, агентская инфраструктура, M2M-коммерция; оптимистичный сигнальный тон
-started_at: "2026-05-07T17:33:22.366Z"
+started_at: "2026-05-09T19:21:41.611Z"
+completed_at: "2026-05-09T19:22:11.893Z"
 ---
+
 
 # Обложка: «Агенты получили кошельки»
 

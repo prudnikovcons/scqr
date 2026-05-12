@@ -5,10 +5,12 @@ style: coral-navy
 target_path: D:\CODEX\gitscqr\scqr\site\src\assets\editorial\contributed\2026-05-07\2026-05-07-microsoft-ubrala-copilot-iz-xbox.png
 size: 1536x1024
 priority: high
-status: pending
+status: "done"
 created_at: 2026-05-07T22:15:00Z
 note: семья D — отмена продукта, корпоративная перестройка, шок-разворот; тревожный навигационный тон
+completed_at: "2026-05-09T19:22:12.702Z"
 ---
+
 
 # Обложка: «Microsoft закрыла Copilot для Xbox через год после анонса»
 

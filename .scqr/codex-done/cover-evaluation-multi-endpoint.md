@@ -5,10 +5,12 @@ style: teal-cyan
 target_path: D:\CODEX\gitscqr\scqr\site\src\assets\editorial\contributed\2026-05-09\2026-05-09-evaluation-vyshlo-za-predely-odnogo-chisla.png
 size: 1536x1024
 priority: high
-status: pending
+status: "done"
 created_at: 2026-05-09T11:30:00Z
 note: семья C — лабораторно-методологический; разлом одного числа на радар-диаграмму с восемью осями
+completed_at: "2026-05-09T19:22:12.204Z"
 ---
+
 
 # Обложка: «Бенчмарк перестал быть одним числом»
 

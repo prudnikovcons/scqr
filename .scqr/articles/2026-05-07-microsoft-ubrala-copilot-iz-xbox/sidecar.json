@@ -1,7 +1,7 @@
 {
   "slug": "2026-05-07-microsoft-ubrala-copilot-iz-xbox",
   "createdAt": "2026-05-07T22:00:00.000Z",
-  "updatedAt": "2026-05-07T22:00:00.000Z",
+  "updatedAt": "2026-05-09T19:22:12.700Z",
   "activeFormat": "news",
   "coverPrompt": "См. .scqr/codex-inbox/cover-xbox-copilot.md — обложка готовится отдельно через Codex pipeline.",
   "tgPost": "🎮 Microsoft закрыла Copilot для Xbox через год после анонса\n\n5 мая Аша Шарма, новый CEO Microsoft Gaming, объявила: разработка Copilot для Xbox останавливается, мобильная версия сворачивается. В марте 2026-го планировали выкатить ассистента на консоли к концу года — теперь полный разворот.\n\nПараллельно — реорганизация Xbox-руководства: четверо из Microsoft CoreAI переходят на Xbox-периметр. Джаред Палмер (бывший VP product CoreAI, ранее senior VP в GitHub) — инжиниринг и инфраструктура. Тим Аллен (VP design, ранее Instacart) — дизайн.\n\nСтратегия Шармы: «Xbox должен двигаться быстрее, восстанавливать связь с сообществом, убирать трение». Структура объявления симптоматичная — продукт сворачивается одновременно с приходом новой команды. Это не усиление, это перестройка с нуля.\n\nMSFT отреагировал ростом — рынок предпочитает «концентрированную AI-стратегию вокруг CoreAI», а не «AI везде в каждом продукте».\n\nТезис: у крупных AI-вшивок в зрелые продукты есть срок годности — год-два. Если функция не нашла органичной аудитории, её закрывают. Копилот в Xbox — не первый и не последний.\n\nДля России: контракты на AI-функции из roadmap'а зарубежных вендоров требуют клаузу про ребейт или замену в случае отзыва. Это становится стандартом в 2026-м конце.\n\n👉 https://ai.scqr.ru/2026-05-07-microsoft-ubrala-copilot-iz-xbox/?utm_source=tg\n\n#Microsoft #Xbox #Copilot #CoreAI #срок_годности_AI #отмена_продукта",
@@ -11,5 +11,6 @@
     "https://www.windowscentral.com/gaming/xbox/xbox-ends-copilot-on-console-and-the-reasoning-reveals-how-asha-sharma-wants-to-reshape-the-platform",
     "https://gameinformer.com/2026/05/05/microsoft-copilot-will-no-longer-come-to-consoles-says-xbox-ceo",
     "https://www.tipranks.com/news/microsoft-stock-msft-jumps-as-xbox-ceo-asha-sharma-kills-copilot-for-consoles"
-  ]
+  ],
+  "ogUrl": "/editorial/og/2026-05-07/2026-05-07-microsoft-ubrala-copilot-iz-xbox.png"
 }
