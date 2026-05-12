@@ -1,0 +1,11 @@
+{
+  "slug": "2026-05-12-acemoglu-protiv-big-tech-narrative",
+  "createdAt": "2026-05-12T13:00:00.000Z",
+  "updatedAt": "2026-05-12T13:00:00.000Z",
+  "activeFormat": "column",
+  "coverPrompt": "См. .scqr/codex-inbox/cover-acemoglu-critique.md — обложка готовится отдельно через Codex pipeline.",
+  "tgPost": "🎓 Acemoglu vs Big Tech. Нобелевский экономист объясняет, почему AI даст только «small productivity bump»\n\nДарон Аджемоглу (Нобель 2024, MIT) в свежем интервью MIT Technology Review 11 мая называет три вещи, за которыми стоит следить в AI.\n\n1) AI-агенты — насколько реально гибки между задачами. Человек жонглирует ~30 задачами, AI хорошо в небольшой части. «It's okay at automating certain tasks, but some jobs will be perfectly fine».\n\n2) AI-софт для конечных пользователей. Параллель — Word/PowerPoint 1990-х: сделали ПК полезным для каждого. «We have not seen the development of apps based on AI that have the same usability».\n\n3) Найм экономистов в tech-компании. OpenAI, Anthropic, DeepMind активно расширяют economist-отделы. «What I hope we won't get is that they're interested in economists just to further their viewpoints or further the hype».\n\nГлавный аргумент: «I think that's just a losing proposition» — про agents-as-replacement. Эмпирика: «studies repeatedly find that AI is not affecting employment rates or layoffs». Никакой революции на рынке труда пока не видно.\n\nИсторическая параллель: нефть в 1970-х, табак в 1980–90-х, финансы в 2000-х — крупные индустрии нанимали экономистов, чтобы продвигать выгодный для себя нарратив. Структурное наблюдение, не моральная оценка.\n\nДля России: корпоративный сегмент по структуре давно живёт в режиме «точечная автоматизация задач, не замещение функций». С Аджемоглу-перспективой это более рационально, чем американский enterprise-hype.\n\n👉 https://ai.scqr.ru/2026-05-12-acemoglu-protiv-big-tech-narrative/?utm_source=tg\n\n#Acemoglu #productivity #AI_критика #Big_Tech",
+  "sourceLinks": [
+    "https://www.technologyreview.com/2026/05/11/1137090/three-things-in-ai-to-watch-according-to-a-nobel-winning-economist/"
+  ]
+}
