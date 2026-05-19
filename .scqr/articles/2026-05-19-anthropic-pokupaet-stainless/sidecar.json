@@ -1,0 +1,11 @@
+{
+  "slug": "2026-05-19-anthropic-pokupaet-stainless",
+  "createdAt": "2026-05-19T13:30:00.000Z",
+  "updatedAt": "2026-05-19T13:30:00.000Z",
+  "activeFormat": "analysis",
+  "coverPrompt": "См. .scqr/codex-inbox/cover-anthropic-stainless.md — обложка готовится отдельно через Codex pipeline.",
+  "tgPost": "🔧 Anthropic купил Stainless за $300M+. У OpenAI, Google и Cloudflare появилась инфраструктурная зависимость от конкурента\n\n18 мая Anthropic объявил приобретение Stainless — нью-йоркского стартапа, который с 2022 года автоматизирует создание и поддержку SDK для API. По The Information сумма $300+ млн.\n\nКлиенты Stainless: OpenAI, Google, Cloudflare, Replicate, Runway, Anthropic. По сути это карта инфраструктурных зависимостей AI-индустрии. После сделки hosted-сервис Stainless для конкурентов будет закрыт.\n\nЧто Stainless делает: берёт OpenAPI-спецификацию и превращает её в production-ready SDK на Python/TypeScript/Kotlin/Go/Java одновременно. Автоматически обновляет при изменении API; держит обратную совместимость. Для AI-вендора это разница между 2 инженерами-полугодовиками поддержки SDK и одним пайплайном.\n\nПараллель: Apple в 2008 купила P.A. Semi за $278M — никто не понимал зачем. Через 2 года — A4 chip в iPad. Через 12 — Apple Silicon. Apple покупала способность отвязаться от Intel-зависимости. Anthropic в 2026-м покупает способность контролировать слой между API и разработчиками.\n\nСтратегически: Anthropic последовательно строит vertical integration. Project Glasswing (cybersec), отказ Минобороны (политическая позиция), теперь Stainless (SDK-инфра). OpenAI и Google строят горизонтально через партнёрства; Anthropic — вертикально.\n\nДля России: внутренние SDK-команды и собственные SDK-цепочки становятся стратегическим активом. Окно 12–18 месяцев для экспорта инструментов в Турцию, ЮВА, ЛА.\n\n👉 https://ai.scqr.ru/2026-05-19-anthropic-pokupaet-stainless/?utm_source=tg\n\n#Anthropic #Stainless #SDK #M&A #vertical_integration",
+  "sourceLinks": [
+    "https://techcrunch.com/2026/05/18/anthropic-has-acquired-the-dev-tools-startup-used-by-openai-google-and-cloudflare/"
+  ]
+}
