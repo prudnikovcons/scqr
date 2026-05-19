@@ -1,0 +1,11 @@
+{
+  "slug": "2026-05-19-willison-pyat-minut-shest-mesyatsev-llm",
+  "createdAt": "2026-05-19T15:30:00.000Z",
+  "updatedAt": "2026-05-19T15:30:00.000Z",
+  "activeFormat": "column",
+  "coverPrompt": "См. .scqr/codex-inbox/cover-willison-5min.md — обложка готовится отдельно через Codex pipeline.",
+  "tgPost": "⏱️ Саймон Уиллисон уместил 6 месяцев LLM в 5 минут на PyCon US\n\n19 мая Уиллисон опубликовал аннотированные слайды lightning talk с PyCon US 2026. 20 слайдов, 15 секунд на каждый — самый сжатый профессиональный обзор индустрии.\n\nЧто Уиллисон подсветил как ключевое:\n\n1. Agentic browsing стал нормой. ChatGPT/Claude/локальные модели с web access — базовая конфигурация. Без web-access агент в 2026-м теряет половину полезности.\n\n2. MCP (Model Context Protocol) стал стандартом подключения инструментов. Anthropic/OpenAI/Google все приняли. Снимает один из крупных vendor-lock-in рисков.\n\n3. Локальные модели на ноутбуке стали useful. Ollama/LM Studio/MLX — реально полезные. Cloud-вендоры публично не признают, но для разработчика это уже произошло.\n\nЧто НЕ вошло: productivity-дискуссия Acemoglu, cyber arms race, регуляторика, политика. Это product-перспектива, не институциональная.\n\nПараллель — Walter Cronkite и его news-обзоры. В медиа было сотни голосов; для среднего американца Cronkite функционировал как навигация «что важно сегодня». Уиллисон играет ту же роль для LLM-сегмента.\n\nДля русскоязычной аудитории: каждые 6 месяцев Уиллисон-обзор заменяет 40-50 часов чтения tech-блогов. Аналога такого формата в русском tech-сегменте пока нет. Ниша пустая.\n\n👉 https://ai.scqr.ru/2026-05-19-willison-pyat-minut-shest-mesyatsev-llm/?utm_source=tg\n\n#Simon_Willison #PyCon #LLM_overview #MCP #agentic_browsing",
+  "sourceLinks": [
+    "https://simonwillison.net/2026/May/19/5-minute-llms/"
+  ]
+}

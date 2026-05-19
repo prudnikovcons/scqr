@@ -1,0 +1,13 @@
+{
+  "slug": "2026-05-19-gemini-stanovitsya-novym-copilot",
+  "createdAt": "2026-05-19T18:00:00.000Z",
+  "updatedAt": "2026-05-19T18:00:00.000Z",
+  "activeFormat": "column",
+  "coverPrompt": "См. .scqr/codex-inbox/cover-gemini-copilot.md — обложка готовится отдельно через Codex pipeline.",
+  "tgPost": "✨ Gemini рискует повторить путь Copilot. The Verge ставит Google в неудобную позицию\n\n19 мая The Verge: «Gemini is in danger of going full Copilot». Sparkle-иконка Gemini теперь в каждом Workspace-приложении — Docs, Sheets, Slides, Drive, Gmail, Calendar, Chat. После марта 2026 это полная интеграция.\n\nКонкретные интеграции:\n— Docs: Match writing style, Match doc format, генерация черновика\n— Sheets: генерация таблиц, Fill with Gemini\n— Slides: генерация слайдов под тему презентации\n— Drive: AI Overview в search, Ask Gemini in Drive\n\nИ именно тогда, когда Microsoft публично сворачивает аналогичную стратегию, Google ускоряет.\n\nПараллель — наш материал 7 мая «Microsoft закрыла Copilot для Xbox». Аша Шарма открыто сказала: «AI везде в каждом продукте» — неудачная стратегия. Через 12 дней Google делает противоположный ход.\n\nСтруктурно: продуктовая инфляция AI-фичей в зрелые потребительские инструменты — типичная ошибка крупного tech-вендора в первые 2-3 года новой технологии. Microsoft сделал в 2024-2025, сворачивает в 2026. Google делает в 2026, будет сворачивать в 2027-2028.\n\nДля корпоративного покупателя: подписка на Google Workspace AI должна заранее закладывать 24-месячный rollback-риск. Клауза о замене или ребейте — стандарт.\n\nЧерез 2 недели WWDC — увидим что Apple оставил из обещанных AI-функций. Три гиганта в одной фазе цикла с разной скоростью.\n\n👉 https://ai.scqr.ru/2026-05-19-gemini-stanovitsya-novym-copilot/?utm_source=tg\n\n#Gemini #Google_Workspace #Copilot #AI_fatigue #продуктовая_инфляция",
+  "sourceLinks": [
+    "https://www.theverge.com/tech/931752/google-io-2026-gemini-icon-docs-workspace",
+    "https://blog.google/products-and-platforms/products/workspace/gemini-workspace-updates-march-2026/",
+    "https://workspaceupdates.googleblog.com/2026/04/new-gemini-capabilities-in-google-docs-help-you-go-from-blank-page-to-brilliance.html"
+  ]
+}

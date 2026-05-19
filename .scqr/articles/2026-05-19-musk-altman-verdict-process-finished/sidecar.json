@@ -1,0 +1,13 @@
+{
+  "slug": "2026-05-19-musk-altman-verdict-process-finished",
+  "createdAt": "2026-05-19T11:00:00.000Z",
+  "updatedAt": "2026-05-19T11:00:00.000Z",
+  "activeFormat": "analysis",
+  "coverPrompt": "См. .scqr/codex-inbox/cover-musk-altman-verdict.md — обложка готовится отдельно через Codex pipeline.",
+  "tgPost": "⚖️ Суд Musk v. Altman закончился процедурно. Главный вопрос об OpenAI остался без ответа\n\n18 мая 2026 калифорнийское жюри из 9 человек единогласно за 2 часа отклонило иск Илона Маска против Сэма Альтмана и OpenAI — по statute of limitations, не по существу.\n\nПосле почти месяца процесса с показаниями Маска, Альтмана, Грега Брокмана и техдиректора Microsoft — суд по существу не сказал ничего. Аргументы о том, что OpenAI отступил от изначальной миссии non-profit, не получили юридической оценки.\n\nMarcus формулирует точно: «AI trial of the century ends with a procedural whimper».\n\nТри вопроса остаются без ответа:\n— Насколько OpenAI отступил от миссии «AGI to benefit humanity» в момент 2019-го\n— Какие компромиссы были сделаны при привлечении Microsoft-инвестиций\n— Насколько прозрачен был совет директоров в момент ноября 2023-го\n\nПараллель — Microsoft v. Apple 1988-1994 про авторские права на интерфейс Mac. Формальный исход без установленной исторической правды. Та же ситуация с Musk-Altman.\n\nДля рынка: тёмный non-profit-риск с контрактов OpenAI снят. Через 12 месяцев каждый enterprise-контракт будет иметь на строку меньше про non-profit-disclaimer.\n\nДля российского контекста: миссионные споры в AI-стартапах должны решаться договором и due diligence, не судом — statute of limitations работает.\n\n👉 https://ai.scqr.ru/2026-05-19-musk-altman-verdict-process-finished/?utm_source=tg\n\n#Musk #Altman #OpenAI #verdict #procedural_whimper",
+  "sourceLinks": [
+    "https://garymarcus.substack.com/p/the-ai-trial-of-the-century-ends",
+    "https://www.theverge.com/ai-artificial-intelligence/932464/musk-v-altman-proved-that-ai-is-led-by-the-wrong-people",
+    "https://techcrunch.com/2026/05/18/elon-musk-has-lost-his-lawsuit-against-sam-altman-and-openai/"
+  ]
+}
