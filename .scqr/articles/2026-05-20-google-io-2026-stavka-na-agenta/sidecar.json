@@ -1,0 +1,16 @@
+{
+  "slug": "2026-05-20-google-io-2026-stavka-na-agenta",
+  "createdAt": "2026-05-20T13:00:00.000Z",
+  "updatedAt": "2026-05-20T13:00:00.000Z",
+  "activeFormat": "analysis",
+  "coverPrompt": "См. .scqr/codex-inbox/cover-google-io-2026.md — обложка готовится отдельно через Codex pipeline.",
+  "tgPost": "🎯 Google I/O 2026: Pichai поставил $190 миллиардов на ставку, противоположную Microsoft\n\n20 мая в Shoreline Amphitheatre Сундар Пичай за 2 часа объявил agentic эру Google. Главные точки:\n\n— Gemini Spark — персональный 24/7-агент на dedicated VM в Google Cloud за $100/мес в AI Ultra. Работает фоном, когда вы закрыли ноутбук. Trusted testers — эта неделя, Beta — следующая.\n\n— Gemini 3.5 Flash — в 4 раза быстрее frontier-конкурентов при половине стоимости. Обходит 3.1 Pro по большинству бенчмарков.\n\n— Gemini Omni Flash — видеогенерация из любой модальности. В Gemini app, Google Flow, YouTube Shorts уже сегодня.\n\n— Antigravity 2.0 — standalone desktop app. Прямой конкурент Cursor / Claude Code / Codex Security.\n\n— Android XR audio glasses от Samsung, Warby Parker, Gentle Monster — осень 2026.\n\n— Capex 2026: $180-190 млрд. В 6 раз больше 2022-го. TPU 8t для training, TPU 8i для inference.\n\n— 3,2 квадриллиона токенов через Gemini в месяц. Семикратный рост YoY.\n\nЛичная позиция SCQR: Google делает ставку, противоположную Microsoft. MSFT в мае-2026 централизовал AI вокруг CoreAI и публично сворачивал Copilot-инфляцию. Google делает прямо обратное — AI везде, агрессивно, плотно. \n\nMicrosoft рациональнее в моменте, Google рискованнее в горизонте. Если рынок принимает agentic-форму — Google выигрывает 2027-2028 с уникальным стеком (облако + чипы + модели + браузер + ОС + поиск + очки в одной связке). Если откат к AI-fatigue — Google заплатит $200+ млрд capex без структурного результата.\n\nДля России: Spark и Antigravity косвенно повлияют на «язык» агентов в 2027-2028. Antigravity 2.0 — на GitHub, доступен российским разработчикам локально.\n\n👉 https://ai.scqr.ru/2026-05-20-google-io-2026-stavka-na-agenta/?utm_source=tg\n\n#Google_IO_2026 #Gemini_Spark #Antigravity #Android_XR #agentic_era",
+  "sourceLinks": [
+    "https://blog.google/innovation-and-ai/sundar-pichai-io-2026/",
+    "https://www.tomsguide.com/news/live/google-io-2026-live-news-updates",
+    "https://www.androidcentral.com/phones/live/google-i-o-2026-live-blog-android-17-android-xr-glasses-and-all-the-gemini-ai-news",
+    "https://thenextweb.com/news/google-io-2026-gemini-intelligence-android-xr-glasses",
+    "https://www.techradar.com/news/live/google-io-2026-live",
+    "https://stratechery.com/2026/an-interview-with-google-cloud-ceo-thomas-kurian-about-the-agentic-moment/"
+  ]
+}
